@@ -1,0 +1,5 @@
+.git/
+.vs/
+FlipnoteDesktop/bin/
+FlipnoteDesktop/obj/
+FlipnoteDesktop/FlipnoteDesktop.csproj.user

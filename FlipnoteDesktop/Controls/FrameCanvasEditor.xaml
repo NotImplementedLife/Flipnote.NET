@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="FlipnoteDesktop.Controls.FrameCanvasEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDesktop.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="Gray"
+             PreviewKeyDown="UserControl_PreviewKeyDown"
+             Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Background="LightGray">
+            
+        </DockPanel>
+        <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid Name="Body" Width="550" Height="400">
+                <Grid Name="Container" Width="512" Height="384" >
+                    <Grid.Effect>
+                        <DropShadowEffect BlurRadius="0.5"/>
+                    </Grid.Effect>
+                    <Canvas Name="DrawingSurface" Width="512" Height="384" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                PreviewMouseDown="DrawingSurface_PreviewMouseDown"
+                                PreviewMouseMove="DrawingSurface_PreviewMouseMove"/>
+                    <Viewbox Name="Grid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1200" Height="900" IsHitTestVisible="False">
+                        <Canvas Width="2560" Height="1920">
+                            <Canvas.Background>
+                                <DrawingBrush TileMode="Tile" Viewport="-10,-10,10,10" 
+                                     ViewportUnits="Absolute">
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing>
+                                            <GeometryDrawing.Geometry>
+                                                <RectangleGeometry Rect="0,0,10,10"/>
+                                            </GeometryDrawing.Geometry>
+                                            <GeometryDrawing.Pen>
+                                                <Pen Brush="#55000000" Thickness="0.5"/>
+                                            </GeometryDrawing.Pen>
+                                        </GeometryDrawing>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Canvas.Background>
+                        </Canvas>
+                    </Viewbox>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <TextBlock>Mouse position = <Run Name="DbgCanvasPos">(X,Y)</Run></TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>
