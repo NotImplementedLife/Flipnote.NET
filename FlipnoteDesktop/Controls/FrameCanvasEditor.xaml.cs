@@ -25,6 +25,8 @@ namespace FlipnoteDesktop.Controls
         {
             InitializeComponent();
             SetMeasures(Zoom);
+            Image.Source = new WriteableBitmap(256, 192, 96, 96, PixelFormats.Indexed2, new BitmapPalette(new List<Color>
+                { Colors.White, Colors.Black, Colors.Red, Colors.Blue}));
         }
 
         public static DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof(int), typeof(FrameCanvasEditor),
@@ -36,10 +38,30 @@ namespace FlipnoteDesktop.Controls
             set => SetValue(ZoomProperty, value);
         }
 
+        void UpdateImage()
+        {
+            (Image.Source as WriteableBitmap).WritePixels(new System.Windows.Int32Rect(0, 0, 256, 192), pixels, 64, 0);
+        }
+
+        byte[] pixels = new byte[64 * 192];
+        private void SetPixel(int x,int y,int val)
+        {
+            int b = 256 * y + x;
+            int p = 3 - b % 4;
+            b /= 4;
+            pixels[b] &= (byte)(~(0b11 << (2 * p)));
+            pixels[b] |= (byte)(val << (2 * p));
+        }
 
         private void SetMeasures(int zoom)
         {
-            double dy = 0;
+            int prevZoom = (int)Container.Width / 256;
+            var pos = Mouse.GetPosition(Body);
+            var pX = Body.ActualWidth / 2 - pos.X;
+            var pY = Body.ActualHeight / 2 - pos.Y;
+            double scale = (double)zoom / prevZoom;
+
+            DbgCanvasPos.Text = $"({pX}, {pY})";
             Body.Width = zoom * (256 + 50);
             Body.Height = zoom * (192 + 50);
             Container.Width = zoom * 256;
@@ -49,12 +71,9 @@ namespace FlipnoteDesktop.Controls
             Grid.Width = zoom * 256;
             Grid.Height = zoom * 192;
 
-            DrawingSurface.Children.Clear();
-            for (int x = 0; x < 256; x++)
-                for (int y = 0; y < 192; y++) 
-                    if(CanvasData[x,y])
-                        SetCanvasPixel(x, y);
-
+            /// BUGGY !!!
+            if (ScrollViewer.ScrollableWidth > 0) ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.HorizontalOffset - pX * scale);
+            if (ScrollViewer.ScrollableHeight > 0) ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset - pY * scale);
         }
 
         private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -67,8 +86,10 @@ namespace FlipnoteDesktop.Controls
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Add) Zoom++;
-            else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Subtract && Zoom > 1) Zoom--;
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Add)
+                ZoomIn();
+            else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Subtract)
+                ZoomOut();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -81,10 +102,32 @@ namespace FlipnoteDesktop.Controls
 
         private void DrawingSurface_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            SetCanvasPixel(canvasX, canvasY);
+            SetPixel(canvasX, canvasY,1);
+            UpdateImage();
         }
 
         int canvasX = 0, canvasY = 0;
+
+        private void UserControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers != ModifierKeys.Control)
+                return;
+            if (e.Delta > 0)
+                ZoomIn();
+            else if (e.Delta < 0)
+                ZoomOut();
+        }
+
+        void ZoomIn()
+        {
+            Zoom++;
+        }
+
+        void ZoomOut()
+        {
+            if (Zoom > 1)
+                Zoom--;
+        }
 
         private void DrawingSurface_PreviewMouseMove(object sender, MouseEventArgs e)
         {
@@ -92,22 +135,11 @@ namespace FlipnoteDesktop.Controls
             canvasX = (int)(pos.X / Zoom);
             canvasY = (int)(pos.Y / Zoom);
             DbgCanvasPos.Text = $"({canvasX}, {canvasY})";
-            if(Mouse.LeftButton == MouseButtonState.Pressed)
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                SetCanvasPixel(canvasX,canvasY);
+                SetPixel(canvasX, canvasY, 1);
+                UpdateImage();
             }
-        }
-
-        void SetCanvasPixel(int x,int y)
-        {
-            CanvasData[x, y] = true;
-            var sq = new Rectangle();
-            sq.Fill = new SolidColorBrush(Colors.Black);
-            sq.Width = Zoom;
-            sq.Height = Zoom;
-            Canvas.SetLeft(sq, Zoom * x);
-            Canvas.SetTop(sq, Zoom * y);
-            DrawingSurface.Children.Add(sq);
-        }
+        }        
     }
 }

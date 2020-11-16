@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="Gray"
              PreviewKeyDown="UserControl_PreviewKeyDown"
+             PreviewMouseWheel="UserControl_PreviewMouseWheel"
              Loaded="UserControl_Loaded">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,9 +23,11 @@
                     <Grid.Effect>
                         <DropShadowEffect BlurRadius="0.5"/>
                     </Grid.Effect>
-                    <Canvas Name="DrawingSurface" Width="512" Height="384" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    <StackPanel Name="DrawingSurface" Width="512" Height="384" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center"
                                 PreviewMouseDown="DrawingSurface_PreviewMouseDown"
-                                PreviewMouseMove="DrawingSurface_PreviewMouseMove"/>
+                                PreviewMouseMove="DrawingSurface_PreviewMouseMove">
+                        <Image Name="Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                    </StackPanel>
                     <Viewbox Name="Grid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1200" Height="900" IsHitTestVisible="False">
                         <Canvas Width="2560" Height="1920">
                             <Canvas.Background>
@@ -36,7 +39,7 @@
                                                 <RectangleGeometry Rect="0,0,10,10"/>
                                             </GeometryDrawing.Geometry>
                                             <GeometryDrawing.Pen>
-                                                <Pen Brush="#55000000" Thickness="0.5"/>
+                                                <Pen Brush="#55004400" Thickness="0.5"/>
                                             </GeometryDrawing.Pen>
                                         </GeometryDrawing>
                                     </DrawingBrush.Drawing>
