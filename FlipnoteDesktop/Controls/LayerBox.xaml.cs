@@ -34,7 +34,10 @@ namespace FlipnoteDesktop.Controls
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var index = ComboBox.SelectedIndex;
-            switch(index)
+            changedFromControl = true;
+            Value = index;
+            changedFromControl = false;
+            switch (index)
             {
                 case 1: (DataContext as UserControl).Foreground = Brushes.Red; break;
                 case 2: (DataContext as UserControl).Foreground = Brushes.Blue; break;
@@ -47,9 +50,13 @@ namespace FlipnoteDesktop.Controls
         public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(int), typeof(LayerBox),
             new FrameworkPropertyMetadata(0, new PropertyChangedCallback(ValuePropertyChanged)));
 
+        private bool changedFromControl = false;
         private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as LayerBox).ComboBox.SelectedIndex = (int)e.NewValue;
+            var lb = d as LayerBox;
+            if (!lb.changedFromControl)
+                lb.ComboBox.SelectedIndex = (int)e.NewValue;
+            lb.ValueChanged?.Invoke(lb);
         }
 
         private static void LayerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -75,5 +82,8 @@ namespace FlipnoteDesktop.Controls
                 SetValue(ValueProperty, value);                                
             }
         }
+
+        public delegate void OnValueChanged(object o);
+        public event OnValueChanged ValueChanged;       
     }
 }

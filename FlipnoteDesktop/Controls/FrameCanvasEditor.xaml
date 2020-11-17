@@ -15,9 +15,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Background="White" LastChildFill="False">
-            <local:LayerBox Width="50" Layer="1" Margin="3 2 3 2" Value="0"></local:LayerBox>
-            <local:LayerBox Width="50" Layer="2" Margin="3 2 3 2" Value="1"></local:LayerBox>
-            <CheckBox Style="{DynamicResource LayerSelector}" Checked="CheckBox_Checked"/>
+            <local:LayerBox x:Name="LayerBox1" Width="50" Layer="1" Margin="3 2 3 2" Value="0" ValueChanged="LayerBox1_ValueChanged"></local:LayerBox>
+            <local:LayerBox x:Name="LayerBox2" Width="50" Layer="2" Margin="3 2 3 2" Value="1" ValueChanged="LayerBox2_ValueChanged"></local:LayerBox>
+            <CheckBox Name="LayerSelector" Style="{DynamicResource LayerSelector}" Checked="LayerSelector_Checked"/>
         </DockPanel>
         <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid Name="Body" Width="550" Height="400">
@@ -28,7 +28,7 @@
                     <StackPanel Name="DrawingSurface" Width="512" Height="384" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center"
                                 PreviewMouseDown="DrawingSurface_PreviewMouseDown"
                                 PreviewMouseMove="DrawingSurface_PreviewMouseMove">
-                        <Image Name="Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        <Image Name="Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderOptions.BitmapScalingMode="NearestNeighbor" SnapsToDevicePixels="True"/>
                     </StackPanel>
                     <Viewbox Name="Grid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1200" Height="900" IsHitTestVisible="False">
                         <Canvas Width="2560" Height="1920">

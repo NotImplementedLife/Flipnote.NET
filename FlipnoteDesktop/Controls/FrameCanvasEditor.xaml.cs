@@ -38,19 +38,51 @@ namespace FlipnoteDesktop.Controls
             set => SetValue(ZoomProperty, value);
         }
 
-        void UpdateImage()
-        {
-            (Image.Source as WriteableBitmap).WritePixels(new System.Windows.Int32Rect(0, 0, 256, 192), pixels, 64, 0);
+        void UpdateImage(bool forceBuild=false)
+        {            
+            if(forceBuild)
+            {
+                for(int x=0;x<256;x++)
+                    for(int y=0;y<192;y++)
+                    {
+                        if (CanvasData1[x, y])
+                            SetImagePixel(x, y, layer1Cl);
+                        else if (CanvasData2[x, y])
+                            SetImagePixel(x, y, layer2Cl);
+                        else SetImagePixel(x, y, 0);
+                    }
+            }
+            if (Image != null)
+            {
+                (Image.Source as WriteableBitmap).WritePixels(new Int32Rect(0, 0, 256, 192), pixels, 64, 0);
+            }
         }
 
         byte[] pixels = new byte[64 * 192];
-        private void SetPixel(int x,int y,int val)
+        private void SetImagePixel(int x,int y,int val)
         {
             int b = 256 * y + x;
             int p = 3 - b % 4;
             b /= 4;
             pixels[b] &= (byte)(~(0b11 << (2 * p)));
             pixels[b] |= (byte)(val << (2 * p));
+        }
+
+        private void SetPixel(int x,int y)
+        {
+            if(LayerSelector.IsChecked!=true)
+            {
+                CanvasData1[x, y] = true;
+                SetImagePixel(x, y, layer1Cl);
+            }
+            else
+            {
+                CanvasData2[x, y] = true;
+                if(!CanvasData1[x,y])
+                {
+                    SetImagePixel(x, y, layer2Cl);
+                }
+            }
         }
 
         private void SetMeasures(int zoom)
@@ -98,11 +130,12 @@ namespace FlipnoteDesktop.Controls
             ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.ScrollableWidth / 2);
         }
 
-        bool[,] CanvasData = new bool[256, 192];
+        bool[,] CanvasData1 = new bool[256, 192];
+        bool[,] CanvasData2 = new bool[256, 192];
 
         private void DrawingSurface_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            SetPixel(canvasX, canvasY,1);
+            SetPixel(canvasX, canvasY);
             UpdateImage();
         }
 
@@ -142,7 +175,7 @@ namespace FlipnoteDesktop.Controls
             DbgCanvasPos.Text = $"({canvasX}, {canvasY})";
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                SetPixel(canvasX, canvasY, 1);
+                SetPixel(canvasX, canvasY);
                 UpdateImage();
             }
         }        
@@ -158,6 +191,52 @@ namespace FlipnoteDesktop.Controls
         public void ShowGrid()
         {
             Grid.Visibility = Visibility.Visible;
+        }
+
+        private void LayerSelector_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        int layer1Cl = 1;
+        int layer2Cl = 1;
+
+        private void LayerBox1_ValueChanged(object o)
+        {
+            switch(LayerBox1.Value)
+            {                
+                case 0:
+                    layer1Cl = 1;
+                    UpdateImage(true);
+                    break;
+                case 1:
+                    layer1Cl = 2;
+                    UpdateImage(true);
+                    break;
+                case 2:
+                    layer1Cl = 3;
+                    UpdateImage(true);
+                    break;
+            }
+        }
+
+        private void LayerBox2_ValueChanged(object o)
+        {
+            switch (LayerBox2.Value)
+            {
+                case 0:
+                    layer2Cl = 1;
+                    UpdateImage(true);
+                    break;
+                case 1:
+                    layer2Cl = 2;
+                    UpdateImage(true);
+                    break;
+                case 2:
+                    layer2Cl = 3;
+                    UpdateImage(true);
+                    break;
+            }
         }
 
         public void HideGrid()
