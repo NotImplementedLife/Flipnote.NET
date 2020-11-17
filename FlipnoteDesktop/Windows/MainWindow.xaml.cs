@@ -24,12 +24,24 @@ namespace FlipnoteDesktop.Windows
     {
         public MainWindow()
         {
-            InitializeComponent();                              
+            InitializeComponent();
+            ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
         }
        
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             
-        }        
+        }
+
+        private void ToggleGridVisibility_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FrameCanvasEditor.ToggleGridVisibility();
+            ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
+        }
+    }
+
+    static class MainWindowCommands
+    {
+        public static RoutedCommand ToggleGridVisibility = new RoutedCommand();
     }
 }

@@ -62,11 +62,23 @@
     <Compile Include="Controls\FrameCanvasEditor.xaml.cs">
       <DependentUpon>FrameCanvasEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LayerBox.xaml.cs">
+      <DependentUpon>LayerBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SimpleFlipnotePlayer.xaml.cs">
       <DependentUpon>SimpleFlipnotePlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\FlipnoteDesktopLogo.xaml.cs">
       <DependentUpon>FlipnoteDesktopLogo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\Layer1Icon.xaml.cs">
+      <DependentUpon>Layer1Icon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\Layer2Icon.xaml.cs">
+      <DependentUpon>Layer2Icon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\PenIcon.xaml.cs">
+      <DependentUpon>PenIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Data\Flipnote.cs" />
@@ -77,11 +89,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\LayerBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SimpleFlipnotePlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Drawable\FlipnoteDesktopLogo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\Layer1Icon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\Layer2Icon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\PenIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\FocusVisual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\LayerBoxTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\LayerSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

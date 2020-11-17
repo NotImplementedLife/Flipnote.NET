@@ -14,8 +14,10 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0" Background="LightGray">
-            
+        <DockPanel Grid.Row="0" Background="White" LastChildFill="False">
+            <local:LayerBox Width="50" Layer="1" Margin="3 2 3 2" Value="0"></local:LayerBox>
+            <local:LayerBox Width="50" Layer="2" Margin="3 2 3 2" Value="1"></local:LayerBox>
+            <CheckBox Style="{DynamicResource LayerSelector}" Checked="CheckBox_Checked"/>
         </DockPanel>
         <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid Name="Body" Width="550" Height="400">

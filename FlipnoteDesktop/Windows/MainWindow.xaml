@@ -10,6 +10,12 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Loaded="Window_Loaded">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:MainWindowCommands.ToggleGridVisibility" Executed="ToggleGridVisibility_Executed"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="G" Modifiers="Ctrl" Command="local:MainWindowCommands.ToggleGridVisibility"/>
+    </Window.InputBindings>
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -20,8 +26,12 @@
                     <Separator/>
                     <MenuItem Header="_Exit"/>
                 </MenuItem>
+                <MenuItem Header="_View">
+                    <MenuItem Name="ShowGridMenuItem"
+                        Header="_Show Grid" Command="local:MainWindowCommands.ToggleGridVisibility" InputGestureText="Ctrl+G" IsCheckable="True"/>
+                </MenuItem>
             </Menu>
-            <controls:FrameCanvasEditor Zoom="5"/>
+            <controls:FrameCanvasEditor x:Name="FrameCanvasEditor" Zoom="5"/>
         </DockPanel>
     </Grid>
 </Window>

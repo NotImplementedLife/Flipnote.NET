@@ -129,6 +129,11 @@ namespace FlipnoteDesktop.Controls
                 Zoom--;
         }
 
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         private void DrawingSurface_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(DrawingSurface);
@@ -141,5 +146,23 @@ namespace FlipnoteDesktop.Controls
                 UpdateImage();
             }
         }        
+
+        public void ToggleGridVisibility()
+        {
+            if (Grid.Visibility == Visibility.Visible)
+                HideGrid();
+            else
+                ShowGrid();
+        }
+
+        public void ShowGrid()
+        {
+            Grid.Visibility = Visibility.Visible;
+        }
+
+        public void HideGrid()
+        {
+            Grid.Visibility = Visibility.Collapsed;
+        }
     }
 }
