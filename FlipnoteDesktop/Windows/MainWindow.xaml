@@ -12,13 +12,15 @@
         Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="local:MainWindowCommands.ToggleGridVisibility" Executed="ToggleGridVisibility_Executed"/>
+        <CommandBinding Command="local:MainWindowCommands.SwitchActiveLayer" Executed="SwitchActiveLayer_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="G" Modifiers="Ctrl" Command="local:MainWindowCommands.ToggleGridVisibility"/>
+        <KeyBinding Key="L" Modifiers="Ctrl" Command="local:MainWindowCommands.SwitchActiveLayer"/>
     </Window.InputBindings>
     <Grid>
         <DockPanel>
-            <Menu DockPanel.Dock="Top">
+            <Menu DockPanel.Dock="Top" Background="White" BorderBrush="#F97300" BorderThickness="0,0,0,1">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New"/>
                     <MenuItem Header="_Open"/>
@@ -26,12 +28,15 @@
                     <Separator/>
                     <MenuItem Header="_Exit"/>
                 </MenuItem>
+                <MenuItem Header="Edit">
+                    <MenuItem Header="_Switch Active Layer" Command="local:MainWindowCommands.SwitchActiveLayer" InputGestureText="Ctrl+L"/>
+                </MenuItem>
                 <MenuItem Header="_View">
                     <MenuItem Name="ShowGridMenuItem"
                         Header="_Show Grid" Command="local:MainWindowCommands.ToggleGridVisibility" InputGestureText="Ctrl+G" IsCheckable="True"/>
                 </MenuItem>
             </Menu>
-            <controls:FrameCanvasEditor x:Name="FrameCanvasEditor" Zoom="5"/>
+            <controls:FrameCanvasEditor x:Name="FrameCanvasEditor" Zoom="2"/>
         </DockPanel>
     </Grid>
 </Window>

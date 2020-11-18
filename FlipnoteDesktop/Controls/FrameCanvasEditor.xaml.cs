@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlipnoteDesktop.Environment.Canvas;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,7 +28,11 @@ namespace FlipnoteDesktop.Controls
             SetMeasures(Zoom);
             Image.Source = new WriteableBitmap(256, 192, 96, 96, PixelFormats.Indexed2, new BitmapPalette(new List<Color>
                 { Colors.White, Colors.Black, Colors.Red, Colors.Blue}));
+            DrawingTool = new PenTool();
+            DrawingTool.Attach(this);
         }
+
+        public DrawingTool DrawingTool;
 
         public static DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof(int), typeof(FrameCanvasEditor),
             new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(OnZoomChanged)));
@@ -38,7 +43,7 @@ namespace FlipnoteDesktop.Controls
             set => SetValue(ZoomProperty, value);
         }
 
-        void UpdateImage(bool forceBuild=false)
+        internal void UpdateImage(bool forceBuild=false)
         {            
             if(forceBuild)
             {
@@ -58,6 +63,7 @@ namespace FlipnoteDesktop.Controls
             }
         }
 
+        
         byte[] pixels = new byte[64 * 192];
         private void SetImagePixel(int x,int y,int val)
         {
@@ -68,12 +74,14 @@ namespace FlipnoteDesktop.Controls
             pixels[b] |= (byte)(val << (2 * p));
         }
 
-        private void SetPixel(int x,int y)
+        internal void SetPixel(int x,int y)
         {
-            if(LayerSelector.IsChecked!=true)
+            if (!(0 <= x && x <= 255 && 0 <= y && y <= 191))
+                return;
+            if (LayerSelector.IsChecked!=true)
             {
-                CanvasData1[x, y] = true;
-                SetImagePixel(x, y, layer1Cl);
+                CanvasData1[x, y] = true;                
+                    SetImagePixel(x, y, layer1Cl);
             }
             else
             {
@@ -81,6 +89,23 @@ namespace FlipnoteDesktop.Controls
                 if(!CanvasData1[x,y])
                 {
                     SetImagePixel(x, y, layer2Cl);
+                }
+            }
+        }
+
+        internal void ErasePixel(int x, int y)
+        {
+            if (LayerSelector.IsChecked != true)
+            {
+                CanvasData1[x, y] = false;
+                SetImagePixel(x, y, CanvasData2[x, y] ? layer2Cl : 0);
+            }
+            else
+            {
+                CanvasData2[x, y] = false;
+                if (!CanvasData1[x, y])
+                {
+                    SetImagePixel(x, y, 0);
                 }
             }
         }
@@ -102,6 +127,8 @@ namespace FlipnoteDesktop.Controls
             DrawingSurface.Height = zoom * 192;
             Grid.Width = zoom * 256;
             Grid.Height = zoom * 192;
+            //ExtensionPanel.Width = zoom * 256;
+            //ExtensionPanel.Height = zoom * 192;
 
             /// BUGGY !!!
             if (ScrollViewer.ScrollableWidth > 0) ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.HorizontalOffset - pX * scale);
@@ -133,13 +160,8 @@ namespace FlipnoteDesktop.Controls
         bool[,] CanvasData1 = new bool[256, 192];
         bool[,] CanvasData2 = new bool[256, 192];
 
-        private void DrawingSurface_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            SetPixel(canvasX, canvasY);
-            UpdateImage();
-        }
 
-        int canvasX = 0, canvasY = 0;
+        internal int canvasX = 0, canvasY = 0;
 
         private void UserControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -167,17 +189,17 @@ namespace FlipnoteDesktop.Controls
             
         }
 
+        private void DrawingSurface_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
+
         private void DrawingSurface_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(DrawingSurface);
             canvasX = (int)(pos.X / Zoom);
             canvasY = (int)(pos.Y / Zoom);
-            DbgCanvasPos.Text = $"({canvasX}, {canvasY})";
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                SetPixel(canvasX, canvasY);
-                UpdateImage();
-            }
+            DbgCanvasPos.Text = $"({canvasX}, {canvasY})";           
         }        
 
         public void ToggleGridVisibility()

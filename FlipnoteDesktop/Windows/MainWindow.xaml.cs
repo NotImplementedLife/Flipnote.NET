@@ -38,10 +38,16 @@ namespace FlipnoteDesktop.Windows
             FrameCanvasEditor.ToggleGridVisibility();
             ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
         }
+
+        private void SwitchActiveLayer_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FrameCanvasEditor.LayerSelector.IsChecked = !(FrameCanvasEditor.LayerSelector.IsChecked == true);
+        }
     }
 
     static class MainWindowCommands
     {
         public static RoutedCommand ToggleGridVisibility = new RoutedCommand();
+        public static RoutedCommand SwitchActiveLayer = new RoutedCommand();
     }
 }
