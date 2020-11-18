@@ -21,7 +21,7 @@ namespace FlipnoteDesktop.Environment.Canvas
 
         public bool GetPixelAt(int x,int y)
         {
-            return Pixels[x % Rows, y % Cols];
+            return Pixels[y % Rows, x % Cols];
         }
     }
 }

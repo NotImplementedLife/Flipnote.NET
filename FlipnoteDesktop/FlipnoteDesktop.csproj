@@ -62,11 +62,29 @@
     <Compile Include="Controls\FrameCanvasEditor.xaml.cs">
       <DependentUpon>FrameCanvasEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FramesList.xaml.cs">
+      <DependentUpon>FramesList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LayerBox.xaml.cs">
       <DependentUpon>LayerBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NumericInput.xaml.cs">
+      <DependentUpon>NumericInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PatternSelector.xaml.cs">
+      <DependentUpon>PatternSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SimpleFlipnotePlayer.xaml.cs">
       <DependentUpon>SimpleFlipnotePlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\DoubleTriangleLeftIcon.xaml.cs">
+      <DependentUpon>DoubleTriangleLeftIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\DoubleTriangleRightIcon.xaml.cs">
+      <DependentUpon>DoubleTriangleRightIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\DownPointingTriangle.xaml.cs">
+      <DependentUpon>DownPointingTriangle.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\FlipnoteDesktopLogo.xaml.cs">
       <DependentUpon>FlipnoteDesktopLogo.xaml</DependentUpon>
@@ -77,14 +95,22 @@
     <Compile Include="Drawable\Layer2Icon.xaml.cs">
       <DependentUpon>Layer2Icon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Drawable\PaperIcon.xaml.cs">
+      <DependentUpon>PaperIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\PatternSample.xaml.cs">
+      <DependentUpon>PatternSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Drawable\PenIcon.xaml.cs">
       <DependentUpon>PenIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Drawable\UpPointingTriangle.xaml.cs">
+      <DependentUpon>UpPointingTriangle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Environment\Canvas\DrawingTool.cs" />
-    <Compile Include="Environment\Canvas\BrushTool.cs" />
     <Compile Include="Environment\Canvas\Pattern.cs" />
     <Compile Include="Environment\Canvas\Patterns.cs" />
-    <Compile Include="Environment\Canvas\PenTool.cs" />
+    <Compile Include="Environment\Canvas\BrushTool.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Data\Flipnote.cs" />
     <Compile Include="Windows\SplashWindow.xaml.cs">
@@ -94,11 +120,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\FramesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LayerBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\NumericInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PatternSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SimpleFlipnotePlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\DoubleTriangleLeftIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\DoubleTriangleRightIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\DownPointingTriangle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,7 +164,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Drawable\PaperIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\PatternSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\PenIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\UpPointingTriangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ExpansionToggleButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -126,7 +192,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\PaperColorSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\LayerSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\SimpleButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

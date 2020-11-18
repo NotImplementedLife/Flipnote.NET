@@ -36,6 +36,7 @@ namespace FlipnoteDesktop.Environment.Canvas
                 Target.DrawingSurface.PreviewMouseDown -= OnMouseDown;
                 Target.DrawingSurface.PreviewMouseMove -= OnMouseMove;
                 Target.DrawingSurface.PreviewMouseUp -= OnMouseUp;
+                Target.ToolOptions.Children.Clear();
                 Detached.Invoke(this);
                 Target = null;                
             }

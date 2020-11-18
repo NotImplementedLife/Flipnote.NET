@@ -28,7 +28,7 @@ namespace FlipnoteDesktop.Controls
             SetMeasures(Zoom);
             Image.Source = new WriteableBitmap(256, 192, 96, 96, PixelFormats.Indexed2, new BitmapPalette(new List<Color>
                 { Colors.White, Colors.Black, Colors.Red, Colors.Blue}));
-            DrawingTool = new PenTool();
+            DrawingTool = new BrushTool();
             DrawingTool.Attach(this);
         }
 
@@ -54,7 +54,7 @@ namespace FlipnoteDesktop.Controls
                             SetImagePixel(x, y, layer1Cl);
                         else if (CanvasData2[x, y])
                             SetImagePixel(x, y, layer2Cl);
-                        else SetImagePixel(x, y, 0);
+                        else SetImagePixel(x, y, IsPaperWhite ? 0 : 1);
                     }
             }
             if (Image != null)
@@ -98,14 +98,14 @@ namespace FlipnoteDesktop.Controls
             if (LayerSelector.IsChecked != true)
             {
                 CanvasData1[x, y] = false;
-                SetImagePixel(x, y, CanvasData2[x, y] ? layer2Cl : 0);
+                SetImagePixel(x, y, CanvasData2[x, y] ? layer2Cl : IsPaperWhite ? 0 : 1);
             }
             else
             {
                 CanvasData2[x, y] = false;
                 if (!CanvasData1[x, y])
                 {
-                    SetImagePixel(x, y, 0);
+                    SetImagePixel(x, y, IsPaperWhite ? 0 : 1);
                 }
             }
         }
@@ -182,17 +182,7 @@ namespace FlipnoteDesktop.Controls
         {
             if (Zoom > 1)
                 Zoom--;
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void DrawingSurface_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
+        }       
 
         private void DrawingSurface_PreviewMouseMove(object sender, MouseEventArgs e)
         {
@@ -213,12 +203,7 @@ namespace FlipnoteDesktop.Controls
         public void ShowGrid()
         {
             Grid.Visibility = Visibility.Visible;
-        }
-
-        private void LayerSelector_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+        }       
 
         int layer1Cl = 1;
         int layer2Cl = 1;
@@ -228,7 +213,7 @@ namespace FlipnoteDesktop.Controls
             switch(LayerBox1.Value)
             {                
                 case 0:
-                    layer1Cl = 1;
+                    layer1Cl = IsPaperWhite ? 1 : 0;
                     UpdateImage(true);
                     break;
                 case 1:
@@ -247,7 +232,7 @@ namespace FlipnoteDesktop.Controls
             switch (LayerBox2.Value)
             {
                 case 0:
-                    layer2Cl = 1;
+                    layer2Cl = IsPaperWhite ? 1 : 0;
                     UpdateImage(true);
                     break;
                 case 1:
@@ -259,6 +244,38 @@ namespace FlipnoteDesktop.Controls
                     UpdateImage(true);
                     break;
             }
+        }
+
+        private bool _IsPaperWhite = true;
+        public bool IsPaperWhite
+        {
+            get => _IsPaperWhite;
+            set
+            {
+                _IsPaperWhite = value;
+                if (value)
+                {
+                    if (layer1Cl == 0) layer1Cl = 1;
+                    if (layer2Cl == 0) layer2Cl = 1;
+                }
+                else
+                {
+                    if (layer1Cl == 1) layer1Cl = 0;
+                    if (layer2Cl == 1) layer2Cl = 0;
+                }
+            }
+        }
+
+        private void PaperColorSelector_Checked(object sender, RoutedEventArgs e)
+        {
+            IsPaperWhite = false;
+            UpdateImage(true);
+        }
+
+        private void PaperColorSelector_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsPaperWhite = true;
+            UpdateImage(true);
         }
 
         public void HideGrid()

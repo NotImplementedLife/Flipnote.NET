@@ -8,6 +8,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/FocusVisual.xaml"/>
                 <ResourceDictionary Source="/Styles/LayerSelector.xaml"/>
+                <ResourceDictionary Source="/Styles/PaperColorSelector.xaml"/>
+                <ResourceDictionary Source="/Styles/SimpleButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/ExpansionToggleButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
