@@ -14,11 +14,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0" Background="White">
-            <local:LayerBox x:Name="LayerBox1" Width="50" Height="30" Layer="1" Margin="3 2 3 2" Value="BlackWhite" ValueChanged="LayerBox1_ValueChanged"></local:LayerBox>
-            <local:LayerBox x:Name="LayerBox2" Width="50" Height="30" Layer="2" Margin="3 2 3 2" Value="Red" ValueChanged="LayerBox2_ValueChanged"></local:LayerBox>
-            <CheckBox Name="LayerSelector" Height="30" Style="{DynamicResource LayerSelector}" Margin="3 2 3 2"/>
+            <local:LayerBox x:Name="LayerBox1" Width="50" Height="30" Layer="1" Margin="3 2 3 2" Value="BlackWhite" ValueChanged="LayerBox1_ValueChanged"
+                            ToolTip="First layer color"/>
+            <local:LayerBox x:Name="LayerBox2" Width="50" Height="30" Layer="2" Margin="3 2 3 2" Value="Red" ValueChanged="LayerBox2_ValueChanged"
+                            ToolTip="Second layer color"
+                            />
+            <CheckBox Name="LayerSelector" Height="30" Style="{DynamicResource LayerSelector}" Margin="3 2 3 2"
+                      ToolTip="Current active layer"/>
             <CheckBox Name="PaperColorSelector" Height="30" Style="{DynamicResource PaperColorSelector}" Margin="3 2 3 2"
-                      Checked="PaperColorSelector_Checked" Unchecked="PaperColorSelector_Unchecked"/>
+                      Checked="PaperColorSelector_Checked" Unchecked="PaperColorSelector_Unchecked"
+                      ToolTip="Paper background"/>
             <StackPanel Margin="3 2 3 2" Name="ToolOptions" Orientation="Horizontal" Height="30"/>
         </WrapPanel>
         <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">

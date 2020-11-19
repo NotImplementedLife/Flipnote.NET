@@ -10,7 +10,7 @@
         <Canvas Width="20" Height="20">
             <Path Fill="{Binding ElementName=Control,Path=Foreground,Mode=TwoWay}" StrokeStartLineCap="Triangle" StrokeEndLineCap="Triangle"
                       StrokeThickness="1" ClipToBounds="True" 
-                      Data="M3,7L7,7L7,3L13,3L13,7L17,7L17,13L13,13L13,17L7,17L7,13L3,13Z"/>
+                      Data="M3,8L8,8L8,3L12,3L12,8L17,8L17,12L12,12L12,17L8,17L8,12L3,12Z"/>
         </Canvas>
     </Viewbox>
 </UserControl>

@@ -25,19 +25,13 @@ namespace FlipnoteDesktop.Windows
     {
         public MainWindow()
         {
-            InitializeComponent();
-            var f = new DecodedFrame();
-            f.IsPaperWhite = true;
-            for (int x = 0; x < 256; x++)
-                for (int y = 0; y < 96; y++)
-                    f.SetImagePixel(x, y, 2);
-            f.CreateThumbnail();
-
+            InitializeComponent();                        
             FramesList.List.ItemsSource = new List<DecodedFrame>
             {
-                f
+                new DecodedFrame()
             };
-            FrameCanvasEditor.Frame = f;
+            FramesList.List.SelectedIndex = 0;
+
         }
 
         ToggleButton _ToggleBtnRef = null;
@@ -64,7 +58,7 @@ namespace FlipnoteDesktop.Windows
             var btn = sender as ToggleButton;
             if(btn.IsChecked!=true)
             {
-                RightTabControl.SelectedIndex = 0;
+                RightTabControl.SelectedIndex = 0;                
             }
             else
             {

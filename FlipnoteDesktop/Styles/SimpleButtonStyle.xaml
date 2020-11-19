@@ -5,5 +5,10 @@
         <Setter Property="Foreground" Value="#F97300"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="#F97300"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="LightGray"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

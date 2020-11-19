@@ -83,6 +83,9 @@
     <Compile Include="Drawable\AddIcon.xaml.cs">
       <DependentUpon>AddIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Drawable\CopyFrameIcon.xaml.cs">
+      <DependentUpon>CopyFrameIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Drawable\DoubleTriangleLeftIcon.xaml.cs">
       <DependentUpon>DoubleTriangleLeftIcon.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Drawable\CopyFrameIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\DoubleTriangleLeftIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +218,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\SimpleButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ToolTipStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

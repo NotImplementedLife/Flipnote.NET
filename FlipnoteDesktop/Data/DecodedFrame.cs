@@ -22,6 +22,16 @@ namespace FlipnoteDesktop.Data
             Layer2Color = LayerColor.Red;
         }
 
+        public DecodedFrame(DecodedFrame src)
+        {
+            Array.Copy(src.Layer1Data, Layer1Data, 256 * 192);
+            Array.Copy(src.Layer2Data, Layer2Data, 256 * 192);
+            IsPaperWhite = src.IsPaperWhite;
+            Layer1Color = src.Layer1Color;
+            Layer2Color = src.Layer2Color;
+            SetImage(null, true);
+        }
+
         private LayerColor _Layer1Color;
         public LayerColor Layer1Color
         {
@@ -129,7 +139,7 @@ namespace FlipnoteDesktop.Data
                         else SetImagePixel(x, y, IsPaperWhite ? 0 : 1);
                     }
             }
-            bmp.WritePixels(new Int32Rect(0, 0, 256, 192), pixels, 64, 0);
+            bmp?.WritePixels(new Int32Rect(0, 0, 256, 192), pixels, 64, 0);
             CreateThumbnail();
         }
 
