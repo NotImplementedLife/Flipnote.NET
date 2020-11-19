@@ -132,7 +132,7 @@
                                                 <TabPanel Grid.Row="1" x:Name="HeaderPanel" Panel.ZIndex="1" Margin="4,0" IsItemsHost="True" 
                                                           KeyboardNavigation.TabIndex="1" Background="Transparent" />
                                             </Grid>
-                                            <Border x:Name="Border" Grid.Column="1" BorderThickness="1" KeyboardNavigation.TabNavigation="Local" KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2"
+                                            <Border x:Name="Border" Grid.Column="1" BorderThickness="1" KeyboardNavigation.TabNavigation="Local" KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2"                                                    
                                                     Visibility="{Binding IsChecked, ElementName=TabControlToggle,Converter={StaticResource VisibleIfTrueConverter}}"
                                                     Width="230"
                                                     Background="White"
@@ -147,10 +147,12 @@
                     </TabControl.Style>
                     <TabItem Header="" Visibility="Collapsed"/>
                     <TabItem Header="Frames" PreviewMouseDown="TabItem_MouseDown">
-                        <TextBlock Text="Some item 1" />
+                        <controls:FramesList x:Name="FramesList">
+                            
+                        </controls:FramesList>
                     </TabItem>
                     <TabItem Header="Properties" PreviewMouseDown="TabItem_MouseDown">
-                        <TextBlock Text="Some item 2" />
+                        <TextBlock Text="Here come properties..." />
                     </TabItem>
                 </TabControl>
             </Grid>

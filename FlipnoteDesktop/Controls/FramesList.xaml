@@ -7,6 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="300">
     <Grid>
-            
+        <ListView Margin="10" Name="List">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},
+                                   Path=(ItemsControl.AlternationIndex)}" Grid.Column="0"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Border BorderBrush="Gray" BorderThickness="1" Grid.Column="1">
+                            <Image Source="{Binding Thumbnail}" Width="128" Height="96"/>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>

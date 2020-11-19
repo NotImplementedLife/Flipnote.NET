@@ -1,6 +1,7 @@
 ﻿using FlipnoteDesktop.Windows;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,9 +29,9 @@ namespace FlipnoteDesktop.Windows
         }
 
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
-        {
+        {           
             Task.Run(() =>
-            {
+            {               
                 Thread.Sleep(3000);
                 Dispatcher.Invoke(() =>
                 {                    
@@ -38,6 +39,6 @@ namespace FlipnoteDesktop.Windows
                     Close();                    
                 });
             });
-        }
+        }       
     }
 }

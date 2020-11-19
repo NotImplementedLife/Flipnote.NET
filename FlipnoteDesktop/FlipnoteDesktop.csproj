@@ -77,6 +77,8 @@
     <Compile Include="Controls\SimpleFlipnotePlayer.xaml.cs">
       <DependentUpon>SimpleFlipnotePlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\DecodedFrame.cs" />
+    <Compile Include="Data\LayerColor.cs" />
     <Compile Include="Drawable\DoubleTriangleLeftIcon.xaml.cs">
       <DependentUpon>DoubleTriangleLeftIcon.xaml</DependentUpon>
     </Compile>

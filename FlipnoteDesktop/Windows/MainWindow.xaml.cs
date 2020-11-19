@@ -26,13 +26,25 @@ namespace FlipnoteDesktop.Windows
         public MainWindow()
         {
             InitializeComponent();
-            ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;            
+            var f = new DecodedFrame();
+            f.IsPaperWhite = true;
+            for (int x = 0; x < 256; x++)
+                for (int y = 0; y < 96; y++)
+                    f.SetImagePixel(x, y, 2);
+            f.CreateThumbnail();
+
+            FramesList.List.ItemsSource = new List<DecodedFrame>
+            {
+                f
+            };
+            FrameCanvasEditor.Frame = f;
         }
 
         ToggleButton _ToggleBtnRef = null;
        
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
             _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;            
         }
 

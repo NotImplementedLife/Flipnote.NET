@@ -1,4 +1,5 @@
-﻿using FlipnoteDesktop.Environment.Canvas;
+﻿using FlipnoteDesktop.Data;
+using FlipnoteDesktop.Environment.Canvas;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,8 +27,7 @@ namespace FlipnoteDesktop.Controls
         {
             InitializeComponent();
             SetMeasures(Zoom);
-            Image.Source = new WriteableBitmap(256, 192, 96, 96, PixelFormats.Indexed2, new BitmapPalette(new List<Color>
-                { Colors.White, Colors.Black, Colors.Red, Colors.Blue}));
+            Image.Source = new WriteableBitmap(256, 192, 96, 96, PixelFormats.Indexed2, DecodedFrame.Palette);
             DrawingTool = new BrushTool();
             DrawingTool.Attach(this);
         }
@@ -43,72 +43,32 @@ namespace FlipnoteDesktop.Controls
             set => SetValue(ZoomProperty, value);
         }
 
-        internal void UpdateImage(bool forceBuild=false)
-        {            
-            if(forceBuild)
+        private DecodedFrame _Frame = new DecodedFrame() { IsPaperWhite = true };
+        public DecodedFrame Frame
+        {
+            get => _Frame;
+            set
             {
-                for(int x=0;x<256;x++)
-                    for(int y=0;y<192;y++)
-                    {
-                        if (CanvasData1[x, y])
-                            SetImagePixel(x, y, layer1Cl);
-                        else if (CanvasData2[x, y])
-                            SetImagePixel(x, y, layer2Cl);
-                        else SetImagePixel(x, y, IsPaperWhite ? 0 : 1);
-                    }
+                _Frame = value;
+                UpdateImage(true);
             }
+        }
+
+        internal void UpdateImage(bool forceRedraw=false)
+        {                       
             if (Image != null)
             {
-                (Image.Source as WriteableBitmap).WritePixels(new Int32Rect(0, 0, 256, 192), pixels, 64, 0);
+                Frame.SetImage(Image.Source as WriteableBitmap, forceRedraw);
+                //(Image.Source as WriteableBitmap).WritePixels(new Int32Rect(0, 0, 256, 192), pixels, 64, 0);
             }
         }
 
+        public int SelectedLayer { get => LayerSelector.IsChecked == true ? 2 : 1; }
+
+        public void SetPixel(int x, int y) => Frame.SetPixel(SelectedLayer, x, y);
+        public void ErasePixel(int x, int y) => Frame.ErasePixel(SelectedLayer, x, y);
         
-        byte[] pixels = new byte[64 * 192];
-        private void SetImagePixel(int x,int y,int val)
-        {
-            int b = 256 * y + x;
-            int p = 3 - b % 4;
-            b /= 4;
-            pixels[b] &= (byte)(~(0b11 << (2 * p)));
-            pixels[b] |= (byte)(val << (2 * p));
-        }
-
-        internal void SetPixel(int x,int y)
-        {
-            if (!(0 <= x && x <= 255 && 0 <= y && y <= 191))
-                return;
-            if (LayerSelector.IsChecked!=true)
-            {
-                CanvasData1[x, y] = true;                
-                    SetImagePixel(x, y, layer1Cl);
-            }
-            else
-            {
-                CanvasData2[x, y] = true;
-                if(!CanvasData1[x,y])
-                {
-                    SetImagePixel(x, y, layer2Cl);
-                }
-            }
-        }
-
-        internal void ErasePixel(int x, int y)
-        {
-            if (LayerSelector.IsChecked != true)
-            {
-                CanvasData1[x, y] = false;
-                SetImagePixel(x, y, CanvasData2[x, y] ? layer2Cl : IsPaperWhite ? 0 : 1);
-            }
-            else
-            {
-                CanvasData2[x, y] = false;
-                if (!CanvasData1[x, y])
-                {
-                    SetImagePixel(x, y, IsPaperWhite ? 0 : 1);
-                }
-            }
-        }
+        byte[] pixels = new byte[64 * 192];     
 
         private void SetMeasures(int zoom)
         {
@@ -155,11 +115,7 @@ namespace FlipnoteDesktop.Controls
         {
             ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight / 2);
             ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.ScrollableWidth / 2);
-        }
-
-        bool[,] CanvasData1 = new bool[256, 192];
-        bool[,] CanvasData2 = new bool[256, 192];
-
+        }  
 
         internal int canvasX = 0, canvasY = 0;
 
@@ -203,25 +159,25 @@ namespace FlipnoteDesktop.Controls
         public void ShowGrid()
         {
             Grid.Visibility = Visibility.Visible;
-        }       
-
-        int layer1Cl = 1;
-        int layer2Cl = 1;
+        }              
 
         private void LayerBox1_ValueChanged(object o)
         {
             switch(LayerBox1.Value)
             {                
                 case 0:
-                    layer1Cl = IsPaperWhite ? 1 : 0;
+                    //Frame.Layer1ColorInt = Frame.IsPaperWhite ? 1 : 0;
+                    Frame.Layer1Color = LayerColor.BlackWhite;
                     UpdateImage(true);
                     break;
                 case 1:
-                    layer1Cl = 2;
+                    //Frame.Layer1ColorInt = 2;
+                    Frame.Layer1Color = LayerColor.Red;
                     UpdateImage(true);
                     break;
                 case 2:
-                    layer1Cl = 3;
+                    //Frame.Layer1ColorInt = 3;
+                    Frame.Layer1Color = LayerColor.Blue;
                     UpdateImage(true);
                     break;
             }
@@ -231,50 +187,32 @@ namespace FlipnoteDesktop.Controls
         {
             switch (LayerBox2.Value)
             {
-                case 0:
-                    layer2Cl = IsPaperWhite ? 1 : 0;
+                case 0:                    
+                    Frame.Layer2Color = LayerColor.BlackWhite;
                     UpdateImage(true);
                     break;
-                case 1:
-                    layer2Cl = 2;
+                case 1:                    
+                    Frame.Layer2Color = LayerColor.Red;
                     UpdateImage(true);
                     break;
-                case 2:
-                    layer2Cl = 3;
+                case 2:                    
+                    Frame.Layer2Color = LayerColor.Blue;
                     UpdateImage(true);
                     break;
             }
         }
 
-        private bool _IsPaperWhite = true;
-        public bool IsPaperWhite
-        {
-            get => _IsPaperWhite;
-            set
-            {
-                _IsPaperWhite = value;
-                if (value)
-                {
-                    if (layer1Cl == 0) layer1Cl = 1;
-                    if (layer2Cl == 0) layer2Cl = 1;
-                }
-                else
-                {
-                    if (layer1Cl == 1) layer1Cl = 0;
-                    if (layer2Cl == 1) layer2Cl = 0;
-                }
-            }
-        }
+       
 
         private void PaperColorSelector_Checked(object sender, RoutedEventArgs e)
         {
-            IsPaperWhite = false;
+            Frame.IsPaperWhite = false;
             UpdateImage(true);
         }
 
         private void PaperColorSelector_Unchecked(object sender, RoutedEventArgs e)
         {
-            IsPaperWhite = true;
+            Frame.IsPaperWhite = true;
             UpdateImage(true);
         }
 
