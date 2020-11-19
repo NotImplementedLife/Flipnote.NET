@@ -79,12 +79,18 @@ namespace FlipnoteDesktop.Controls
             {
                 lst.Remove(List.SelectedItems[i] as DecodedFrame);
             }
+            bool addedFrame = false;
             if (lst.Count == 0)
             {
                 lst.Add(new DecodedFrame());
-            }
-            List.SelectedIndex = index < lst.Count ? index : 0;
+                addedFrame = true;
+            } 
             List.Items.Refresh();
+            List.SelectedIndex = index < lst.Count ? index : 0;
+            if (addedFrame)
+            {
+                SingleFrameSelected?.Invoke(this, List.SelectedItem as DecodedFrame);
+            }
         }
     }
 }
