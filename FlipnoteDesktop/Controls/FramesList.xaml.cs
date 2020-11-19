@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlipnoteDesktop.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,29 @@ namespace FlipnoteDesktop.Controls
         {
             InitializeComponent();
         }
+
+        private void AddFrameButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(List.SelectedItems.Count==0)
+            {                
+                (List.ItemsSource as List<DecodedFrame>).Add(new DecodedFrame()
+                {
+                    IsPaperWhite=true,
+                });
+                List.Items.Refresh();
+
+            }
+        }
+
+        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(List.SelectedItems.Count==1)
+            {
+                SingleFrameSelected?.Invoke(this, List.SelectedItem as DecodedFrame);
+            }
+        }
+
+        public delegate void OnSingleFrameSelected(object o, DecodedFrame frame);
+        public event OnSingleFrameSelected SingleFrameSelected;
     }
 }

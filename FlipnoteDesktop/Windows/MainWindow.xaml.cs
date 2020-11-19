@@ -80,11 +80,31 @@ namespace FlipnoteDesktop.Windows
                 TabControlToggle_Click(_ToggleBtnRef, null);
             }
         }
+
+        private void ZoomInCanvas_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FrameCanvasEditor.ZoomIn();
+        }
+
+        private void ZoomOutCanvas_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FrameCanvasEditor.ZoomOut();
+        }
+
+        private void FramesList_SingleFrameSelected(object o, DecodedFrame frame)
+        {
+            if(frame!=FrameCanvasEditor.Frame)
+            {
+                FrameCanvasEditor.Frame = frame;
+            }
+        }
     }
 
     static class MainWindowCommands
     {
         public static RoutedCommand ToggleGridVisibility = new RoutedCommand();
         public static RoutedCommand SwitchActiveLayer = new RoutedCommand();
+        public static RoutedCommand ZoomInCanvas = new RoutedCommand();
+        public static RoutedCommand ZoomOutCanvas = new RoutedCommand();
     }
 }

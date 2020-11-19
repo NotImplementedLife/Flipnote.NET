@@ -65,6 +65,7 @@
     <Compile Include="Controls\FramesList.xaml.cs">
       <DependentUpon>FramesList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\IndexConverter.cs" />
     <Compile Include="Controls\LayerBox.xaml.cs">
       <DependentUpon>LayerBox.xaml</DependentUpon>
     </Compile>
@@ -79,6 +80,9 @@
     </Compile>
     <Compile Include="Data\DecodedFrame.cs" />
     <Compile Include="Data\LayerColor.cs" />
+    <Compile Include="Drawable\AddIcon.xaml.cs">
+      <DependentUpon>AddIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Drawable\DoubleTriangleLeftIcon.xaml.cs">
       <DependentUpon>DoubleTriangleLeftIcon.xaml</DependentUpon>
     </Compile>
@@ -139,6 +143,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SimpleFlipnotePlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\AddIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

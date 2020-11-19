@@ -1,4 +1,5 @@
-﻿using FlipnoteDesktop.Drawable;
+﻿using FlipnoteDesktop.Data;
+using FlipnoteDesktop.Drawable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace FlipnoteDesktop.Controls
         {
             var index = ComboBox.SelectedIndex;
             changedFromControl = true;
-            Value = index;
+            Value = (LayerColor)index;
             changedFromControl = false;
             switch (index)
             {
@@ -47,8 +48,8 @@ namespace FlipnoteDesktop.Controls
 
         public static DependencyProperty LayerProperty = DependencyProperty.Register("Layer", typeof(int), typeof(LayerBox),
             new FrameworkPropertyMetadata(1, new PropertyChangedCallback(LayerPropertyChanged)));
-        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(int), typeof(LayerBox),
-            new FrameworkPropertyMetadata(0, new PropertyChangedCallback(ValuePropertyChanged)));
+        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(LayerColor), typeof(LayerBox),
+            new FrameworkPropertyMetadata(LayerColor.BlackWhite, new PropertyChangedCallback(ValuePropertyChanged)));
 
         private bool changedFromControl = false;
         private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -74,9 +75,9 @@ namespace FlipnoteDesktop.Controls
             set => SetValue(LayerProperty, value);
         }
 
-        public int Value
+        public LayerColor Value
         {
-            get => ComboBox.SelectedIndex;
+            get => (LayerColor)ComboBox.SelectedIndex;
             set
             {
                 SetValue(ValueProperty, value);                                

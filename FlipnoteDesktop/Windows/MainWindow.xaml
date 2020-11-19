@@ -15,10 +15,14 @@
     <Window.CommandBindings>
         <CommandBinding Command="local:MainWindowCommands.ToggleGridVisibility" Executed="ToggleGridVisibility_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.SwitchActiveLayer" Executed="SwitchActiveLayer_Executed"/>
+        <CommandBinding Command="local:MainWindowCommands.ZoomInCanvas" Executed="ZoomInCanvas_Executed"/>
+        <CommandBinding Command="local:MainWindowCommands.ZoomOutCanvas" Executed="ZoomOutCanvas_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="G" Modifiers="Ctrl" Command="local:MainWindowCommands.ToggleGridVisibility"/>
         <KeyBinding Key="L" Modifiers="Ctrl" Command="local:MainWindowCommands.SwitchActiveLayer"/>
+        <KeyBinding Key="Add" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomInCanvas"/>
+        <KeyBinding Key="Subtract" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomOutCanvas"/>
     </Window.InputBindings>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
@@ -146,13 +150,12 @@
                         </Style>
                     </TabControl.Style>
                     <TabItem Header="" Visibility="Collapsed"/>
-                    <TabItem Header="Frames" PreviewMouseDown="TabItem_MouseDown">
-                        <controls:FramesList x:Name="FramesList">
-                            
+                    <TabItem Header="Frames" PreviewMouseDown="TabItem_MouseDown" IsSelected="True">
+                        <controls:FramesList x:Name="FramesList" SingleFrameSelected="FramesList_SingleFrameSelected">
                         </controls:FramesList>
                     </TabItem>
                     <TabItem Header="Properties" PreviewMouseDown="TabItem_MouseDown">
-                        <TextBlock Text="Here come properties..." />
+                        <TextBlock Text="Here comes properties page..." />
                     </TabItem>
                 </TabControl>
             </Grid>

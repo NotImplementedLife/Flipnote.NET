@@ -4,10 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlipnoteDesktop.Controls"
+             xmlns:drawable="clr-namespace:FlipnoteDesktop.Drawable"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:IndexConverter x:Key="IndexConverter" />
+    </UserControl.Resources>
     <Grid>
-        <ListView Margin="10" Name="List">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Height="20" HorizontalAlignment="Right">
+            <Button Style="{DynamicResource ResourceKey=SimpleButton}" BorderThickness="0"
+                    Name="AddFrameButton"
+                    Click="AddFrameButton_Click">
+                <Button.Content>
+                    <drawable:AddIcon/>
+                </Button.Content>
+            </Button>
+        </WrapPanel>
+        <ListView Grid.Row="1" Margin="10" Name="List" BorderThickness="0" SelectionChanged="List_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch">
@@ -15,8 +32,9 @@
                             <ColumnDefinition Width="30"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},
-                                   Path=(ItemsControl.AlternationIndex)}" Grid.Column="0"
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                         AncestorType={x:Type ListViewItem}}, 
+                                         Converter={StaticResource IndexConverter}}" Grid.Column="0"
                                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <Border BorderBrush="Gray" BorderThickness="1" Grid.Column="1">
                             <Image Source="{Binding Thumbnail}" Width="128" Height="96"/>

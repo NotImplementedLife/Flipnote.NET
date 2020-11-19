@@ -50,6 +50,9 @@ namespace FlipnoteDesktop.Controls
             set
             {
                 _Frame = value;
+                LayerBox1.Value= Frame.Layer1Color;
+                LayerBox2.Value = Frame.Layer2Color;
+                PaperColorSelector.IsChecked = !Frame.IsPaperWhite;
                 UpdateImage(true);
             }
         }
@@ -102,15 +105,7 @@ namespace FlipnoteDesktop.Controls
             editor.SetMeasures(zoom);
 
         }
-
-        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Add)
-                ZoomIn();
-            else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Subtract)
-                ZoomOut();
-        }
-
+       
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight / 2);
@@ -129,12 +124,12 @@ namespace FlipnoteDesktop.Controls
                 ZoomOut();
         }
 
-        void ZoomIn()
+        public void ZoomIn()
         {
             Zoom++;
         }
 
-        void ZoomOut()
+        public void ZoomOut()
         {
             if (Zoom > 1)
                 Zoom--;
@@ -163,45 +158,15 @@ namespace FlipnoteDesktop.Controls
 
         private void LayerBox1_ValueChanged(object o)
         {
-            switch(LayerBox1.Value)
-            {                
-                case 0:
-                    //Frame.Layer1ColorInt = Frame.IsPaperWhite ? 1 : 0;
-                    Frame.Layer1Color = LayerColor.BlackWhite;
-                    UpdateImage(true);
-                    break;
-                case 1:
-                    //Frame.Layer1ColorInt = 2;
-                    Frame.Layer1Color = LayerColor.Red;
-                    UpdateImage(true);
-                    break;
-                case 2:
-                    //Frame.Layer1ColorInt = 3;
-                    Frame.Layer1Color = LayerColor.Blue;
-                    UpdateImage(true);
-                    break;
-            }
+            Frame.Layer1Color = LayerBox1.Value;
+            UpdateImage(true);
         }
 
         private void LayerBox2_ValueChanged(object o)
         {
-            switch (LayerBox2.Value)
-            {
-                case 0:                    
-                    Frame.Layer2Color = LayerColor.BlackWhite;
-                    UpdateImage(true);
-                    break;
-                case 1:                    
-                    Frame.Layer2Color = LayerColor.Red;
-                    UpdateImage(true);
-                    break;
-                case 2:                    
-                    Frame.Layer2Color = LayerColor.Blue;
-                    UpdateImage(true);
-                    break;
-            }
+            Frame.Layer2Color = LayerBox2.Value;
+            UpdateImage(true);
         }
-
        
 
         private void PaperColorSelector_Checked(object sender, RoutedEventArgs e)
