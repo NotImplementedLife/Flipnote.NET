@@ -78,13 +78,20 @@
     <Compile Include="Controls\SimpleFlipnotePlayer.xaml.cs">
       <DependentUpon>SimpleFlipnotePlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SpeedSelector.xaml.cs">
+      <DependentUpon>SpeedSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\DecodedFrame.cs" />
     <Compile Include="Data\LayerColor.cs" />
+    <Compile Include="Data\FlipnoteProperties.cs" />
     <Compile Include="Drawable\AddIcon.xaml.cs">
       <DependentUpon>AddIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\CopyFrameIcon.xaml.cs">
       <DependentUpon>CopyFrameIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\DeleteIcon.xaml.cs">
+      <DependentUpon>DeleteIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\DoubleTriangleLeftIcon.xaml.cs">
       <DependentUpon>DoubleTriangleLeftIcon.xaml</DependentUpon>
@@ -149,11 +156,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SpeedSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\AddIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Drawable\CopyFrameIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\DeleteIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

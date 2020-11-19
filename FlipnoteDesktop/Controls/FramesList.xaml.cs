@@ -30,11 +30,8 @@ namespace FlipnoteDesktop.Controls
         {
             var lst = List.ItemsSource as List<DecodedFrame>;
             if(List.SelectedItems.Count==0)
-            {                
-                lst.Add(new DecodedFrame()
-                {
-                    IsPaperWhite=true,
-                });
+            {
+                lst.Add(new DecodedFrame());
                 List.Items.Refresh();
             }
             else
@@ -72,6 +69,22 @@ namespace FlipnoteDesktop.Controls
                 List.SelectedIndex = index + 1;
                 List.Items.Refresh();
             }
-        }      
+        }
+
+        private void TossFrameButton_Click(object sender, RoutedEventArgs e)
+        {
+            var lst = List.ItemsSource as List<DecodedFrame>;            
+            int index = List.Items.IndexOf(List.SelectedItems[List.SelectedItems.Count - 1]);
+            for (int i=0,cnt=List.SelectedItems.Count;i<cnt;i++)
+            {
+                lst.Remove(List.SelectedItems[i] as DecodedFrame);
+            }
+            if (lst.Count == 0)
+            {
+                lst.Add(new DecodedFrame());
+            }
+            List.SelectedIndex = index < lst.Count ? index : 0;
+            List.Items.Refresh();
+        }
     }
 }

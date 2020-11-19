@@ -155,7 +155,16 @@
                         </controls:FramesList>
                     </TabItem>
                     <TabItem Header="Properties" PreviewMouseDown="TabItem_MouseDown">
-                        <TextBlock Text="Here comes properties page..." />
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Playback speed:" VerticalAlignment="Center"/>
+                                <controls:SpeedSelector Grid.Column="1" x:Name="PlayBackSpeed"/>
+                            </Grid>
+                        </StackPanel>
                     </TabItem>
                 </TabControl>
             </Grid>

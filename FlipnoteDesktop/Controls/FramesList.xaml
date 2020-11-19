@@ -35,6 +35,15 @@
                     <drawable:CopyFrameIcon/>
                 </Button.Content>
             </Button>
+
+            <Button Style="{DynamicResource ResourceKey=SimpleButton}" BorderThickness="0"
+                    Name="TossFrameButton"
+                    Click="TossFrameButton_Click"
+                    ToolTip="Toss frame">
+                <Button.Content>
+                    <drawable:DeleteIcon/>
+                </Button.Content>
+            </Button>
         </WrapPanel>
         <ListView Grid.Row="1" Margin="10" Name="List" BorderThickness="0" SelectionChanged="List_SelectionChanged"
                   VirtualizingPanel.IsVirtualizing="True">
