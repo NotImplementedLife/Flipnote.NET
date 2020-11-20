@@ -75,19 +75,19 @@ namespace FlipnoteDesktop.Data
                 int len = AnimationHeader.FrameOffsetTableSize / 4;
                 for (int i = 0; i < len; i++)                
                     AnimationHeader.Offsets[i] = r.ReadUInt32();
-                //File.WriteAllText("debug.log", string.Join("\r\n", AnimationHeader.Offsets.Select(i => i.ToString("X4"))));
+                
                 long framesPos0 = r.BaseStream.Position;
                 Frames = new _FrameData[len];                
                 long offset = 0x06A8 + AnimationHeader.FrameOffsetTableSize;
                 for (int i = 0; i < len; i++)
-                {
-                    //if (dbg) Debug.Write($"Frame {i} ");
+                {                    
                     r.BaseStream.Seek(offset + AnimationHeader.Offsets[i], SeekOrigin.Begin);
-                    Frames[i] = r.ReadPPMFrameData(0x06A8 + AnimationHeader.FrameOffsetTableSize);
-                    //if (dbg) Debug.WriteLine("");
-                    //Frames[i].Position -= framesPos0;
+                    Frames[i] = r.ReadPPMFrameData(0x06A8 + AnimationHeader.FrameOffsetTableSize);                    
                     Frames[i].AnimationIndex = Array.IndexOf(AnimationHeader.Offsets, Frames[i].Position);
-                    if (i > 0) Frames[i].Overwrite(Frames[i - 1]);
+                    if (i > 0)
+                    {
+                        Frames[i].Overwrite(Frames[i - 1]);                        
+                    }
                 }                
                 RenderFrame(0);
 
@@ -96,8 +96,7 @@ namespace FlipnoteDesktop.Data
                 SoundEffectFlags = new byte[Frames.Length];
                 for (int i = 0; i < Frames.Length; i++)
                 {
-                    SoundEffectFlags[i] = r.ReadByte();
-                    //Debug.WriteLine(SoundEffectFlags[i]);
+                    SoundEffectFlags[i] = r.ReadByte();                    
                 }
                 offset += Frames.Length;
                 /// make the next offset dividable by 4
@@ -136,7 +135,32 @@ namespace FlipnoteDesktop.Data
         public byte[] SoundEffectFlags;
         public _SoundHeader SoundHeader = new _SoundHeader();
         public _SoundData SoundData = new _SoundData();
-        
+
+        public List<DecodedFrame> GetDecodedFrameList()
+        {
+            var result = new List<DecodedFrame>();
+            for (int i = 0; i < Frames.Length; i++)
+            {
+                var df = new DecodedFrame();
+                for (int x = 0; x < 256; x++)
+                    for (int y = 0; y < 192; y++)
+                    {
+                        df.Layer1Data[x, y] = Frames[i].Layer1[y, x];
+                        df.Layer2Data[x, y] = Frames[i].Layer2[y, x];
+                    }              
+                int f = (Frames[i].FirstByteHeader & 0b00000110) >> 1;
+                if (f > 0)
+                    df.Layer1Color = (LayerColor)(f - 1);
+                f = (Frames[i].FirstByteHeader & 0b00011000) >> 3;
+                if (f > 0)
+                    df.Layer2Color = (LayerColor)(f - 1);
+                df.IsPaperWhite = (Frames[i].FirstByteHeader & 1) == 1;
+                df.SetImage(null, true);
+                result.Add(df);
+            }
+
+            return result;
+        }
 
         public System.Drawing.Bitmap Thumbnail
         {
@@ -248,7 +272,7 @@ namespace FlipnoteDesktop.Data
             public string ParentFilenameStr() => fn(ParentFilename);
             public string CurrentFilenameStr() => fn(CurrentFilename);     
            
-        }
+        }        
 
         public class _AnimationHeader
         {
@@ -294,10 +318,10 @@ namespace FlipnoteDesktop.Data
             {
                 get
                 {
-                    int flag1 = (FirstByteHeader & 0b00011000) >> 3;
-                    if (flag1 == 2) return Colors.Red;
-                    if (flag1 == 3) return Colors.Blue;
-                    if (flag1 == 1)
+                    int flag2 = (FirstByteHeader & 0b00011000) >> 3;
+                    if (flag2 == 2) return Colors.Red;
+                    if (flag2 == 3) return Colors.Blue;
+                    if (flag2 == 1)
                         return (FirstByteHeader & 1) == 1 ? Colors.Black : Colors.White;
                     return Colors.Transparent;
                 }
@@ -318,9 +342,11 @@ namespace FlipnoteDesktop.Data
             }
 
             public void Overwrite(_FrameData frame)
-            {
+            {                
                 if ((FirstByteHeader & 0b10000000) != 0)
+                {                    
                     return;
+                }                
                 for(int y=0;y<192;y++)
                 {
                     if (y - TranslateY < 0) continue;
@@ -342,7 +368,7 @@ namespace FlipnoteDesktop.Data
                     for (int y = 0; y < 192; y++)
                         bmp.SetPixel(x, y, Layer1[y, x] ? System.Drawing.Color.Black : System.Drawing.Color.White);
                 return bmp;
-            }
+            }         
         }
 
         public class _SoundHeader

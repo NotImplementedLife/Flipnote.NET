@@ -16,6 +16,7 @@ namespace FlipnoteDesktop
     /// </summary>
     public partial class App : Application
     {
+        public static string Path = System.AppDomain.CurrentDomain.BaseDirectory;
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             if (e.Args.Length == 1)

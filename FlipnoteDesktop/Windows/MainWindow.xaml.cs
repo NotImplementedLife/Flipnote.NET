@@ -1,4 +1,5 @@
 ﻿using FlipnoteDesktop.Data;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -92,10 +93,27 @@ namespace FlipnoteDesktop.Windows
                 FrameCanvasEditor.Frame = frame;
             }
         }
+
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                Filter = "Para Para Manga Koubou (*.ppm)|*.ppm",
+                Multiselect = false,
+                InitialDirectory=App.Path
+            };
+            if(ofd.ShowDialog()==true)
+            {
+                FramesList.List.ItemsSource = new Flipnote(ofd.FileName).GetDecodedFrameList();                
+                FramesList.List.Items.Refresh();
+                FramesList.List.SelectedIndex = 0;
+            }
+        }
     }
 
     static class MainWindowCommands
     {
+        //public static RoutedCommand
         public static RoutedCommand ToggleGridVisibility = new RoutedCommand();
         public static RoutedCommand SwitchActiveLayer = new RoutedCommand();
         public static RoutedCommand ZoomInCanvas = new RoutedCommand();

@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Name="ValueText">1</TextBlock>
         <Viewbox Stretch="Uniform" Grid.Column="2">
-            <Canvas  Name="Canvas" Width="80" Height="20" Margin="2" 
+            <Canvas  Name="Canvas" Width="80" Height="20" Margin="2" Background="Transparent"
                      PreviewMouseMove="Canvas_PreviewMouseMove"
                      MouseLeave="Canvas_MouseLeave"
                      MouseDown="Canvas_MouseDown">

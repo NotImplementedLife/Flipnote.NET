@@ -13,12 +13,14 @@
         WindowState="Maximized"
         Loaded="Window_Loaded">
     <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="Open_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ToggleGridVisibility" Executed="ToggleGridVisibility_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.SwitchActiveLayer" Executed="SwitchActiveLayer_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ZoomInCanvas" Executed="ZoomInCanvas_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ZoomOutCanvas" Executed="ZoomOutCanvas_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
         <KeyBinding Key="G" Modifiers="Ctrl" Command="local:MainWindowCommands.ToggleGridVisibility"/>
         <KeyBinding Key="L" Modifiers="Ctrl" Command="local:MainWindowCommands.SwitchActiveLayer"/>
         <KeyBinding Key="Add" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomInCanvas"/>
@@ -32,7 +34,7 @@
             <Menu DockPanel.Dock="Top" Background="White" BorderBrush="#F97300" BorderThickness="0,0,0,1">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New"/>
-                    <MenuItem Header="_Open"/>
+                    <MenuItem Header="_Open" Command="Open" InputGestureText="Ctrl+O"/>
                     <MenuItem Header="_Save"/>
                     <Separator/>
                     <MenuItem Header="_Exit"/>

@@ -22,8 +22,8 @@ namespace FlipnoteDesktop.Extensions
             fd.FirstByteHeader = r.ReadByte();
             if ((fd.FirstByteHeader & 0b01100000) != 0)
             {
-                fd.TranslateX = r.ReadByte();
-                fd.TranslateY = r.ReadByte();
+                fd.TranslateX = r.ReadSByte();
+                fd.TranslateY = r.ReadSByte();
             }            
             fd.Layer1LineEncoding = r.ReadBytes(48);
             fd.Layer2LineEncoding = r.ReadBytes(48);            
