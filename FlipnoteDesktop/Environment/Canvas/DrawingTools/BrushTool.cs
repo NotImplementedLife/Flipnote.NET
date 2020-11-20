@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace FlipnoteDesktop.Environment.Canvas
+namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
 {
     public class BrushTool : DrawingTool
     {
@@ -66,8 +66,7 @@ namespace FlipnoteDesktop.Environment.Canvas
 
         private void PatternInput_ValueChanged(object o)
         {
-            Pattern = PatternInput.Value;
-            Debug.WriteLine("Here");
+            Pattern = PatternInput.Value;            
         }
 
         private void SizeInput_ValueChanged(object o)

@@ -1,5 +1,6 @@
 ﻿using FlipnoteDesktop.Data;
 using FlipnoteDesktop.Environment.Canvas;
+using FlipnoteDesktop.Environment.Canvas.DrawingTools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

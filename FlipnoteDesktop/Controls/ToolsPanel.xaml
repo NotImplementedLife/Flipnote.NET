@@ -29,12 +29,16 @@
                         <drawable:PenIcon/>
                     </Button.Content>
                 </Button>
-                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0">
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="BrushTool"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
                     <Button.Content>
                         <drawable:BrushIcon/>
                     </Button.Content>
                 </Button>
-                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0">
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="EraserTool"                        
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
                     <Button.Content>
                         <drawable:EraserIcon/>
                     </Button.Content>

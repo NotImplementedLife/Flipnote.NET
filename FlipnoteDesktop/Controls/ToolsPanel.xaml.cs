@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlipnoteDesktop.Environment.Canvas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +45,22 @@ namespace FlipnoteDesktop.Controls
             {
                 Target.ForceToolBoxDrag(e.GetPosition(this));
             }           
+        }
+
+        public DrawingTool DrawingTool;        
+
+        private void ToolIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var tag = (sender as Button).Tag;            
+            if (tag != null)
+            {                
+                if (Target.DrawingTool != null)
+                {
+                    Target.DrawingTool.Detach();
+                }                                
+                Target.DrawingTool = Activator.CreateInstance(Type.GetType($"FlipnoteDesktop.Environment.Canvas.DrawingTools.{tag}")) as DrawingTool;
+                Target.DrawingTool.Attach(Target);                
+            }            
         }
 
         private void DragArea_MouseUp(object sender, MouseButtonEventArgs e)

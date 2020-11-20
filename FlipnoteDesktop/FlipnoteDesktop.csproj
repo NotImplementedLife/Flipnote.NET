@@ -136,9 +136,10 @@
       <DependentUpon>UpPointingTriangle.xaml</DependentUpon>
     </Compile>
     <Compile Include="Environment\Canvas\DrawingTool.cs" />
+    <Compile Include="Environment\Canvas\DrawingTools\EraserTool.cs" />
     <Compile Include="Environment\Canvas\Pattern.cs" />
     <Compile Include="Environment\Canvas\Patterns.cs" />
-    <Compile Include="Environment\Canvas\BrushTool.cs" />
+    <Compile Include="Environment\Canvas\DrawingTools\BrushTool.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Data\Flipnote.cs" />
     <Compile Include="Windows\SplashWindow.xaml.cs">
