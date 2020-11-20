@@ -16,6 +16,15 @@ namespace FlipnoteDesktop.Environment.Canvas
         public static readonly Pattern Row = new Pattern(new bool[2, 1] { { true }, { false } });
         public static readonly Pattern Binary = new Pattern(new bool[2, 2] { { true, false }, { false, true } });
         public static readonly Pattern Window = new Pattern(new bool[2, 4] { { true, true, true, true }, { true, false, true, false } });
+        public static readonly Pattern Bullets = new Pattern(new bool[6, 6]
+        {
+            {true,true,false,false,true,true },
+            {true,false,false,false,false,true },
+            {false,false,false,false,false,false },
+            {false,false,false,false,false,false },
+            {true,false,false,false,false,true },
+            {true,true,false,false,true,true },
+        });
 
         public static List<string> NamesList()
         {

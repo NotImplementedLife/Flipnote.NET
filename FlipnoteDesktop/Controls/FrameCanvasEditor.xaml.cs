@@ -30,6 +30,7 @@ namespace FlipnoteDesktop.Controls
             Image.Source = new WriteableBitmap(256, 192, 96, 96, PixelFormats.Indexed2, DecodedFrame.Palette);
             DrawingTool = new BrushTool();
             DrawingTool.Attach(this);
+            ToolBox.Target = this;
         }
 
         public DrawingTool DrawingTool;
@@ -50,15 +51,15 @@ namespace FlipnoteDesktop.Controls
             set
             {
                 _Frame = value;
-                LayerBox1.Value= Frame.Layer1Color;
+                LayerBox1.Value = Frame.Layer1Color;
                 LayerBox2.Value = Frame.Layer2Color;
                 PaperColorSelector.IsChecked = !Frame.IsPaperWhite;
                 UpdateImage(true);
             }
         }
 
-        internal void UpdateImage(bool forceRedraw=false)
-        {                       
+        internal void UpdateImage(bool forceRedraw = false)
+        {
             if (Image != null)
             {
                 Frame.SetImage(Image.Source as WriteableBitmap, forceRedraw);
@@ -70,8 +71,8 @@ namespace FlipnoteDesktop.Controls
 
         public void SetPixel(int x, int y) => Frame.SetPixel(SelectedLayer, x, y);
         public void ErasePixel(int x, int y) => Frame.ErasePixel(SelectedLayer, x, y);
-        
-        byte[] pixels = new byte[64 * 192];     
+
+        byte[] pixels = new byte[64 * 192];
 
         private void SetMeasures(int zoom)
         {
@@ -105,12 +106,12 @@ namespace FlipnoteDesktop.Controls
             editor.SetMeasures(zoom);
 
         }
-       
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight / 2);
             ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.ScrollableWidth / 2);
-        }  
+        }
 
         internal int canvasX = 0, canvasY = 0;
 
@@ -133,15 +134,20 @@ namespace FlipnoteDesktop.Controls
         {
             if (Zoom > 1)
                 Zoom--;
-        }       
+        }
 
         private void DrawingSurface_PreviewMouseMove(object sender, MouseEventArgs e)
         {
+            if(ToolBox.isDragging)
+            {
+                e.Handled = true;
+                return;
+            }
             var pos = e.GetPosition(DrawingSurface);
             canvasX = (int)(pos.X / Zoom);
             canvasY = (int)(pos.Y / Zoom);
-            DbgCanvasPos.Text = $"({canvasX}, {canvasY})";           
-        }        
+            DbgCanvasPos.Text = $"({canvasX}, {canvasY})";
+        }
 
         public void ToggleGridVisibility()
         {
@@ -154,7 +160,7 @@ namespace FlipnoteDesktop.Controls
         public void ShowGrid()
         {
             Grid.Visibility = Visibility.Visible;
-        }              
+        }
 
         private void LayerBox1_ValueChanged(object o)
         {
@@ -167,7 +173,7 @@ namespace FlipnoteDesktop.Controls
             Frame.Layer2Color = LayerBox2.Value;
             UpdateImage(true);
         }
-       
+
 
         private void PaperColorSelector_Checked(object sender, RoutedEventArgs e)
         {
@@ -179,6 +185,20 @@ namespace FlipnoteDesktop.Controls
         {
             Frame.IsPaperWhite = true;
             UpdateImage(true);
+        }        
+
+        private void ScrollViewer_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!ToolBox.isDragging) return;            
+            var pt = e.GetPosition(ToolBox);
+            Canvas.SetLeft(ToolBox,pt.X + Canvas.GetLeft(ToolBox) - ToolBox.dX);
+            Canvas.SetTop(ToolBox, pt.Y + Canvas.GetTop(ToolBox) - ToolBox.dY);            
+        }     
+        
+        public void ForceToolBoxDrag(Point pt)
+        {            
+            Canvas.SetLeft(ToolBox, pt.X + Canvas.GetLeft(ToolBox) - ToolBox.dX);
+            Canvas.SetTop(ToolBox, pt.Y + Canvas.GetTop(ToolBox) - ToolBox.dY);
         }
 
         public void HideGrid()

@@ -26,7 +26,8 @@
                       ToolTip="Paper background"/>
             <StackPanel Margin="3 2 3 2" Name="ToolOptions" Orientation="Horizontal" Height="30"/>
         </WrapPanel>
-        <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
+        <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}"
+                      PreviewMouseMove="ScrollViewer_PreviewMouseMove">
             <Grid Name="Body" Width="550" Height="400">
                 <Grid Name="Container" Width="512" Height="384" >
                     <Grid.Effect>
@@ -60,6 +61,9 @@
                 </Grid>
             </Grid>
         </ScrollViewer>
+        <Canvas Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ClipToBounds="True">
+            <local:ToolsPanel x:Name="ToolBox" Canvas.Top="30" Canvas.Left="10" Width="50" Height="170"/>
+        </Canvas>
         <StackPanel Grid.Row="1" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Top">
             <TextBlock>Mouse position = <Run Name="DbgCanvasPos">(X,Y)</Run></TextBlock>
         </StackPanel>

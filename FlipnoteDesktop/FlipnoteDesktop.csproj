@@ -81,11 +81,17 @@
     <Compile Include="Controls\SpeedSelector.xaml.cs">
       <DependentUpon>SpeedSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ToolsPanel.xaml.cs">
+      <DependentUpon>ToolsPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\DecodedFrame.cs" />
     <Compile Include="Data\LayerColor.cs" />
     <Compile Include="Data\FlipnoteProperties.cs" />
     <Compile Include="Drawable\AddIcon.xaml.cs">
       <DependentUpon>AddIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\BrushIcon.xaml.cs">
+      <DependentUpon>BrushIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\CopyFrameIcon.xaml.cs">
       <DependentUpon>CopyFrameIcon.xaml</DependentUpon>
@@ -101,6 +107,12 @@
     </Compile>
     <Compile Include="Drawable\DownPointingTriangle.xaml.cs">
       <DependentUpon>DownPointingTriangle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\DraggableIcon.xaml.cs">
+      <DependentUpon>DraggableIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\EraserIcon.xaml.cs">
+      <DependentUpon>EraserIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\FlipnoteDesktopLogo.xaml.cs">
       <DependentUpon>FlipnoteDesktopLogo.xaml</DependentUpon>
@@ -160,7 +172,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ToolsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\AddIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\BrushIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,6 +201,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Drawable\DownPointingTriangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\DraggableIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawable\EraserIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="FlipnoteDesktop.Drawable.EraserIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDesktop.Drawable"
+             mc:Ignorable="d" 
+                     d:DesignHeight="50" d:DesignWidth="50" Name="Control">
+    <Viewbox Stretch="Uniform">
+        <Canvas Width="2250" Height="2250">
+            <Path Fill="{Binding ElementName=Control, Path=Foreground, Mode=TwoWay}">
+                <Path.Data>
+                    <GeometryGroup FillRule="EvenOdd">
+                        <PathGeometry Figures="M0 1125 l0 -1125 1125 0 1125 0 0 1125 0 1125 -1125 0 -1125 0 0 -1125z"/>
+                        <PathGeometry Figures="M1 1963 c0 -165 4 -279 9 -268 4 11 111 122 237 246 252 250 266 259 388 259 110 0 146 -20 280 -151 107 -105 124 -118 154 -117 31 1 71 -37 607 -573 l574 -574 0 732 0 733 -1125 0 -1125 0 1 -287z"/>
+                        <PathGeometry Figures="M555 2081 c-25 -12 -117 -96 -243 -223 l-202 -203 165 -165 165 -165 265 265 265 265 -98 98 c-141 142 -220 173 -317 128z"/>
+                        <PathGeometry Figures="M0 813 l0 -813 1125 0 1125 0 0 372 0 373 -348 -348 c-271 -271 -353 -347 -372 -347 -20 0 -146 121 -599 574 -536 536 -573 576 -568 603 5 26 -10 43 -179 214 l-184 185 0 -813z"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Canvas>
+    </Viewbox>
+</UserControl>
