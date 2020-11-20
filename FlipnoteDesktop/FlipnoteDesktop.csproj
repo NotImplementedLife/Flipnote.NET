@@ -136,6 +136,7 @@
       <DependentUpon>UpPointingTriangle.xaml</DependentUpon>
     </Compile>
     <Compile Include="Environment\Canvas\DrawingTool.cs" />
+    <Compile Include="Environment\Canvas\DrawingTools\LineTool.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\EraserTool.cs" />
     <Compile Include="Environment\Canvas\Pattern.cs" />
     <Compile Include="Environment\Canvas\Patterns.cs" />

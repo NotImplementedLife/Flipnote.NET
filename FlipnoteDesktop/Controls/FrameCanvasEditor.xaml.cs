@@ -37,7 +37,7 @@ namespace FlipnoteDesktop.Controls
         public DrawingTool DrawingTool;
 
         public static DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof(int), typeof(FrameCanvasEditor),
-            new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(OnZoomChanged)));
+            new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(OnZoomPropertyChanged)));
 
         public int Zoom
         {
@@ -100,13 +100,16 @@ namespace FlipnoteDesktop.Controls
             if (ScrollViewer.ScrollableHeight > 0) ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset - pY * scale);
         }
 
-        private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnZoomPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editor = d as FrameCanvasEditor;
             var zoom = (int)e.NewValue;
             editor.SetMeasures(zoom);
-
+            editor.ZoomChanged?.Invoke(editor);
         }
+
+        public delegate void OnZoomChanged(object o);
+        public event OnZoomChanged ZoomChanged;
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

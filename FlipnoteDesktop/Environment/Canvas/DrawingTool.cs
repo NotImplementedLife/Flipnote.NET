@@ -26,6 +26,7 @@ namespace FlipnoteDesktop.Environment.Canvas
             Target.DrawingSurface.PreviewMouseMove += OnMouseMove;
             Target.DrawingSurface.PreviewMouseUp += OnMouseUp;
             Target.DrawingSurface.MouseLeave += OnMouseLeave;
+            Target.ZoomChanged += OnZoomChanged;            
             Attached?.Invoke(this);
         }        
 
@@ -36,7 +37,9 @@ namespace FlipnoteDesktop.Environment.Canvas
                 Target.DrawingSurface.PreviewMouseDown -= OnMouseDown;
                 Target.DrawingSurface.PreviewMouseMove -= OnMouseMove;
                 Target.DrawingSurface.PreviewMouseUp -= OnMouseUp;
+                Target.ZoomChanged -= OnZoomChanged;
                 Target.ToolOptions.Children.Clear();
+                Target.ExtensionPanel.Children.Clear();
                 Detached.Invoke(this);
                 Target = null;                
             }
@@ -49,5 +52,6 @@ namespace FlipnoteDesktop.Environment.Canvas
         protected virtual void OnMouseDown(object sender, MouseButtonEventArgs e) { }
         protected virtual void OnMouseMove(object sender, MouseEventArgs e) { }
         protected virtual void OnMouseUp(object sender, MouseEventArgs e) { }
+        protected virtual void OnZoomChanged(object sender) { }
     }
 }

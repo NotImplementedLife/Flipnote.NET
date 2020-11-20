@@ -31,6 +31,7 @@
                 </Button>
                 <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
                         Tag="BrushTool"
+                        ToolTip="Brush"
                         PreviewMouseDown="ToolIcon_PreviewMouseDown">
                     <Button.Content>
                         <drawable:BrushIcon/>
@@ -38,9 +39,18 @@
                 </Button>
                 <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
                         Tag="EraserTool"                        
+                        ToolTip="Eraser"
                         PreviewMouseDown="ToolIcon_PreviewMouseDown">
                     <Button.Content>
                         <drawable:EraserIcon/>
+                    </Button.Content>
+                </Button>
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="LineTool"          
+                        ToolTip="Line"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
+                    <Button.Content>
+                        <Path Stroke="#F97300" StrokeThickness="1" Data="M1 2L19 18"/>
                     </Button.Content>
                 </Button>
             </UniformGrid>
