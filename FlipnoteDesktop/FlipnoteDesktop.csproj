@@ -87,6 +87,7 @@
     <Compile Include="Data\DecodedFrame.cs" />
     <Compile Include="Data\LayerColor.cs" />
     <Compile Include="Data\FlipnoteProperties.cs" />
+    <Compile Include="Data\Utils.cs" />
     <Compile Include="Drawable\AddIcon.xaml.cs">
       <DependentUpon>AddIcon.xaml</DependentUpon>
     </Compile>

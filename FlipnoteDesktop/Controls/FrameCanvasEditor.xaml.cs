@@ -51,13 +51,20 @@ namespace FlipnoteDesktop.Controls
             get => _Frame;
             set
             {
-                _Frame = value;
-                LayerBox1.Value = Frame.Layer1Color;
-                LayerBox2.Value = Frame.Layer2Color;
-                PaperColorSelector.IsChecked = !Frame.IsPaperWhite;
-                UpdateImage(true);
+                if (_Frame != value)
+                {
+                    _Frame = value;
+                    LayerBox1.Value = Frame.Layer1Color;
+                    LayerBox2.Value = Frame.Layer2Color;
+                    PaperColorSelector.IsChecked = !Frame.IsPaperWhite;                    
+                    UpdateImage(true);
+                    FrameChanged?.Invoke(this);
+                }
             }
         }
+
+        public delegate void OnFrameChanged(object o);
+        public event OnFrameChanged FrameChanged;
 
         internal void UpdateImage(bool forceRedraw = false)
         {
@@ -72,6 +79,7 @@ namespace FlipnoteDesktop.Controls
 
         public void SetPixel(int x, int y) => Frame.SetPixel(SelectedLayer, x, y);
         public void ErasePixel(int x, int y) => Frame.ErasePixel(SelectedLayer, x, y);
+        public void SetPixels(bool[,] pixels) => Frame.SetLayerPixels(SelectedLayer, pixels);
 
         byte[] pixels = new byte[64 * 192];
 
@@ -115,10 +123,9 @@ namespace FlipnoteDesktop.Controls
         {
             ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight / 2);
             ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.ScrollableWidth / 2);
-        }
+        }        
 
-        internal int canvasX = 0, canvasY = 0;
-
+        #region Zoom Logic
         private void UserControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Keyboard.Modifiers != ModifierKeys.Control)
@@ -139,6 +146,14 @@ namespace FlipnoteDesktop.Controls
             if (Zoom > 1)
                 Zoom--;
         }
+        #endregion
+
+        public bool[,] CurrentLayerPixelData
+        {
+            get => Frame.GetLayerPixels(SelectedLayer);
+        }
+
+        internal int canvasX = 0, canvasY = 0;
 
         private void DrawingSurface_PreviewMouseMove(object sender, MouseEventArgs e)
         {
@@ -153,6 +168,7 @@ namespace FlipnoteDesktop.Controls
             DbgCanvasPos.Text = $"({canvasX}, {canvasY})";
         }
 
+        #region Show/Hide Grid Logic
         public void ToggleGridVisibility()
         {
             if (Grid.Visibility == Visibility.Visible)
@@ -165,6 +181,12 @@ namespace FlipnoteDesktop.Controls
         {
             Grid.Visibility = Visibility.Visible;
         }
+
+        public void HideGrid()
+        {
+            Grid.Visibility = Visibility.Collapsed;
+        }
+        #endregion
 
         private void LayerBox1_ValueChanged(object o)
         {
@@ -197,17 +219,25 @@ namespace FlipnoteDesktop.Controls
             var pt = e.GetPosition(ToolBox);
             Canvas.SetLeft(ToolBox,pt.X + Canvas.GetLeft(ToolBox) - ToolBox.dX);
             Canvas.SetTop(ToolBox, pt.Y + Canvas.GetTop(ToolBox) - ToolBox.dY);            
-        }     
-        
+        }
+
+        private void LayerSelector_Checked(object sender, RoutedEventArgs e)
+        {
+            SelectedLayerChanged?.Invoke(this);
+        }
+
+        private void LayerSelector_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SelectedLayerChanged?.Invoke(this);
+        }
+
+        public delegate void OnSelectedLayerChanged(object o);
+        public event OnSelectedLayerChanged SelectedLayerChanged;
+
         public void ForceToolBoxDrag(Point pt)
         {            
             Canvas.SetLeft(ToolBox, pt.X + Canvas.GetLeft(ToolBox) - ToolBox.dX);
             Canvas.SetTop(ToolBox, pt.Y + Canvas.GetTop(ToolBox) - ToolBox.dY);
-        }
-
-        public void HideGrid()
-        {
-            Grid.Visibility = Visibility.Collapsed;
-        }
+        }       
     }
 }

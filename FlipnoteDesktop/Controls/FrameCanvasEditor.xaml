@@ -20,6 +20,8 @@
                             ToolTip="Second layer color"
                             />
             <CheckBox Name="LayerSelector" Height="30" Style="{DynamicResource LayerSelector}" Margin="3 2 3 2"
+                      Checked="LayerSelector_Checked"
+                      Unchecked="LayerSelector_Unchecked"
                       ToolTip="Current active layer"/>
             <CheckBox Name="PaperColorSelector" Height="30" Style="{DynamicResource PaperColorSelector}" Margin="3 2 3 2"
                       Checked="PaperColorSelector_Checked" Unchecked="PaperColorSelector_Unchecked"

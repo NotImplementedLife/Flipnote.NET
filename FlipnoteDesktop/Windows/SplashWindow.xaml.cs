@@ -28,6 +28,9 @@ namespace FlipnoteDesktop.Windows
             Loaded += SplashWindow_Loaded;
         }
 
+        /// <summary>
+        /// Show logo for 3 seconds, then launch the MainWindow
+        /// </summary>      
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
         {           
             Task.Run(() =>

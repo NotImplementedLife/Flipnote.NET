@@ -64,6 +64,23 @@ namespace FlipnoteDesktop.Data
             }
         }
 
+        public bool[,] GetLayerPixels(int layer)
+        {
+            return layer == 1 ? Layer1Data : Layer2Data;
+        }
+
+        public void SetLayerPixels(int layer,bool[,] pixels)
+        {
+            if (layer == 1)
+            {
+                Array.Copy(pixels, Layer1Data, 256 * 192);                
+            }
+            else
+            {
+                Array.Copy(pixels, Layer2Data, 256 * 192);
+            }
+            SetImage(null, true);
+        }
 
         byte[] pixels = new byte[64 * 192];
 

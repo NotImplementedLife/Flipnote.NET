@@ -26,34 +26,36 @@ namespace FlipnoteDesktop.Windows
     {
         public MainWindow()
         {
-            InitializeComponent();                        
+            InitializeComponent();
+            // create a single blank frame
             FramesList.List.ItemsSource = new List<DecodedFrame>
             {
                 new DecodedFrame()
             };
             FramesList.List.SelectedIndex = 0;
 
-        }
-
-        ToggleButton _ToggleBtnRef = null;
+        }       
        
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
             _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;            
-        }
+        }              
 
-        private void ToggleGridVisibility_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            FrameCanvasEditor.ToggleGridVisibility();
-            ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
-        }
+        #region RightTabControl
 
-        private void SwitchActiveLayer_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            FrameCanvasEditor.LayerSelector.IsChecked = !(FrameCanvasEditor.LayerSelector.IsChecked == true);            
-        }        
-    
+        /// <summary>
+        /// A quick reference to the to the TabControlToggle.
+        /// Value is set inside Window_Loaded
+        /// </summary>
+        ToggleButton _ToggleBtnRef = null;
+
+        /// <summary>
+        /// Event raised by TabControlToggle.
+        /// When button checked (aka tab control expanded), the first tab gets focus.
+        /// When button unchecked (aka tab control collapsed), all tabs loose focus.
+        /// </summary>
+        /// <param name="sender">Must be TabControlToggle</param>        
         private void TabControlToggle_Click(object sender, RoutedEventArgs e)
         {            
             var btn = sender as ToggleButton;
@@ -67,6 +69,9 @@ namespace FlipnoteDesktop.Windows
             }
         }
 
+        /// <summary>
+        /// Expands tab control when one of the tabs is selected
+        /// </summary>       
         private void TabItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (_ToggleBtnRef.IsChecked != true)
@@ -74,6 +79,16 @@ namespace FlipnoteDesktop.Windows
                 _ToggleBtnRef.IsChecked = true;
                 TabControlToggle_Click(_ToggleBtnRef, null);
             }
+        }
+
+        #endregion
+
+        #region Commands
+
+        private void ToggleGridVisibility_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FrameCanvasEditor.ToggleGridVisibility();
+            ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
         }
 
         private void ZoomInCanvas_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -109,11 +124,19 @@ namespace FlipnoteDesktop.Windows
                 FramesList.List.SelectedIndex = 0;
             }
         }
+
+        private void SwitchActiveLayer_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FrameCanvasEditor.LayerSelector.IsChecked = !(FrameCanvasEditor.LayerSelector.IsChecked == true);
+        }
+        #endregion
     }
 
+    /// <summary>
+    /// Defines the routed commands used in the MainWindow
+    /// </summary>
     static class MainWindowCommands
-    {
-        //public static RoutedCommand
+    {        
         public static RoutedCommand ToggleGridVisibility = new RoutedCommand();
         public static RoutedCommand SwitchActiveLayer = new RoutedCommand();
         public static RoutedCommand ZoomInCanvas = new RoutedCommand();

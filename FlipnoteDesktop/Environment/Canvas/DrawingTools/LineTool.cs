@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -31,18 +32,18 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
             IsHitTestVisible = false,
             Stroke = Brushes.Green,
             Fill = Brushes.White,
-            Width = 3,
-            Height = 3,
-            Visibility = System.Windows.Visibility.Collapsed
+            Width = 10,
+            Height = 10,
+            Visibility = Visibility.Collapsed
         };
         Ellipse PreviewLineCapEnd = new Ellipse()
         {
             IsHitTestVisible = false,
             Stroke = Brushes.Green,
             Fill = Brushes.White,
-            Width = 3,
-            Height = 3,            
-            Visibility = System.Windows.Visibility.Collapsed
+            Width = 10,
+            Height = 10,            
+            Visibility = Visibility.Collapsed
         };
 
 
@@ -93,11 +94,21 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
         private void PatternInput_ValueChanged(object o)
         {
             Pattern = PatternInput.Value;
+            if (IsLineSet)
+            {
+                RestorePixels();
+                DrawLine();
+            }
         }
 
         private void SizeInput_ValueChanged(object o)
         {
             Size = SizeInput.Value;
+            if(IsLineSet)
+            {
+                RestorePixels();
+                DrawLine();
+            }
         }
 
         public void LineTool_Detached(object o)
@@ -119,53 +130,140 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
                         Target.SetPixel(_x, _y);
             }
             Target.UpdateImage();
+        }       
+
+        bool IsLineSet = false;
+        int X1, Y1, X2, Y2;
+
+        bool[,] pixelsBackup = new bool[256, 192];
+        int SelectedCap = 0;
+        bool MouseMoved = false;
+        bool MouseDown = false;
+
+        protected override void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            int x = Target.canvasX;
+            int y = Target.canvasY;
+            MouseMoved = false;
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                MouseDown = true;
+                int d = 10 / Target.Zoom + 1;
+                if(IsLineSet)
+                {
+                    if (Math.Abs(x - X1) <= d && Math.Abs(y - Y1) <= d)
+                    {
+                        SelectedCap = 1;
+                    }
+                    else if (Math.Abs(x - X2) <= d && Math.Abs(y - Y2) <= d) 
+                    {
+                        SelectedCap = 2;
+                    }
+                    else IsLineSet = false;
+                }
+                if (!IsLineSet)
+                {
+                    Array.Copy(Target.CurrentLayerPixelData, pixelsBackup, 256 * 192);
+                    X1 = x;
+                    Y1 = y;
+                    System.Windows.Controls.Canvas.SetLeft(PreviewLineCapStart, Target.Zoom * (x + .5) - 5);
+                    System.Windows.Controls.Canvas.SetTop(PreviewLineCapStart, Target.Zoom * (y + .5) - 5);
+                    PreviewLineCapStart.Visibility = Visibility.Visible;
+                    PreviewLineCapEnd.Visibility = Visibility.Collapsed;
+                    PreviewLine.Visibility = Visibility.Collapsed;                    
+                }                
+            }
         }
 
-        void ErasePoint(int x, int y)
+        void PutPoint(int x, int y, bool updateImage = true)
         {
             int maxX = x + Size / 2 - 1 + (Size & 1);
             int maxY = y + Size / 2 - 1 + (Size & 1);
             for (int _x = Math.Max(0, x - Size / 2); _x <= maxX; _x++)
             {
                 for (int _y = Math.Max(0, y - Size / 2); _y <= maxY; _y++)
-                    Target.ErasePixel(_x, _y);
+                    if (Pattern.GetPixelAt(_x, _y))
+                        Target.SetPixel(_x, _y);
             }
+            if (updateImage)
+                Target.UpdateImage();
+        }
+
+        void DrawLine()
+        {
+            var pts = LineTool.GetLinePixels(X1, Y1, X2, Y2);
+            for (int i = 0; i < pts.Count; i++)
+                PutPoint(pts[i].X, pts[i].Y, false);
             Target.UpdateImage();
         }
 
-        bool IsLineSet = false;
-        int X1, Y1, X2, Y2;
-
-        protected override void OnMouseDown(object sender, MouseButtonEventArgs e)
+        void RestorePixels()
         {
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            Target.SetPixels(pixelsBackup);           
+            //Array.Copy(pixelsBackup, Target.SelectedLayer == 1 ? Target.Frame.Layer1Data : Target.Frame.Layer2Data, 256 * 192);
+        }
+
+        protected override void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (MouseDown && Mouse.LeftButton == MouseButtonState.Pressed) 
             {
+                MouseMoved = true;
                 if (!IsLineSet)
                 {
-                    X1 = Target.canvasX;
-                    Y1 = Target.canvasY;
-                    System.Windows.Controls.Canvas.SetLeft(PreviewLineCapStart, Target.Zoom * (X1 + .5) - 3);
-                    System.Windows.Controls.Canvas.SetTop(PreviewLineCapStart, Target.Zoom * (Y1 + .5) - 3);
-                    PreviewLineCapStart.Visibility = System.Windows.Visibility.Visible;
-                    PreviewLineCapEnd.Visibility = System.Windows.Visibility.Collapsed;
-                    PreviewLine.Visibility = System.Windows.Visibility.Collapsed;
+                    X2 = Target.canvasX;
+                    Y2 = Target.canvasY;
+                    System.Windows.Controls.Canvas.SetLeft(PreviewLineCapEnd, Target.Zoom * (X2 + .5) - 5);
+                    System.Windows.Controls.Canvas.SetTop(PreviewLineCapEnd, Target.Zoom * (Y2 + .5) - 5);
+                    PreviewLine.Data = Geometry.Parse($"M{Target.Zoom * (X1 + .5f)} {Target.Zoom * (Y1 + .5f)}L{Target.Zoom * (X2 + .5f)} {Target.Zoom * (Y2 + .5f)}");
+                    RestorePixels();
+                    DrawLine();
+                    PreviewLineCapEnd.Visibility = Visibility.Visible;
+                    PreviewLine.Visibility = Visibility.Visible;
+                }
+                else if (SelectedCap != 0) 
+                {                    
+                    if(SelectedCap==1)
+                    {
+                        X1 = Target.canvasX;
+                        Y1 = Target.canvasY;
+                        System.Windows.Controls.Canvas.SetLeft(PreviewLineCapStart, Target.Zoom * (X1 + .5) - 5);
+                        System.Windows.Controls.Canvas.SetTop(PreviewLineCapStart, Target.Zoom * (Y1 + .5) - 5);
+                    }
+                    else
+                    {
+                        X2 = Target.canvasX;
+                        Y2 = Target.canvasY;
+                        System.Windows.Controls.Canvas.SetLeft(PreviewLineCapEnd, Target.Zoom * (X2 + .5) - 5);
+                        System.Windows.Controls.Canvas.SetTop(PreviewLineCapEnd, Target.Zoom * (Y2 + .5) - 5);
+                    }
+                    PreviewLine.Data = Geometry.Parse($"M{Target.Zoom * (X1 + .5f)} {Target.Zoom * (Y1 + .5f)}L{Target.Zoom * (X2 + .5f)} {Target.Zoom * (Y2 + .5f)}");
+                    RestorePixels();
+                    DrawLine();
                 }
             }
         }
-        protected override void OnMouseMove(object sender, MouseEventArgs e)
-        {
-            PreviewLineCapStart.Width = PreviewLineCapStart.Height = 6;
-            PreviewLineCapEnd.Width = PreviewLineCapEnd.Height = 6;
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
+
+        protected override void OnMouseUp(object sender, MouseEventArgs e)
+        {            
+            if(!IsLineSet)
             {
-                X2 = Target.canvasX;
-                Y2 = Target.canvasY;
-                System.Windows.Controls.Canvas.SetLeft(PreviewLineCapEnd, Target.Zoom * (X2 + .5) - 3);
-                System.Windows.Controls.Canvas.SetTop(PreviewLineCapEnd, Target.Zoom * (Y2 + .5) - 3);
-                PreviewLine.Data = Geometry.Parse($"M{Target.Zoom * (X1 + .5f)} {Target.Zoom * (Y1 + .5f)}L{Target.Zoom * (X2 + .5f)} {Target.Zoom * (Y2 + .5f)}");
-                PreviewLineCapEnd.Visibility = System.Windows.Visibility.Visible;
-                PreviewLine.Visibility = System.Windows.Visibility.Visible;
+                if (!MouseMoved)
+                {
+                    PreviewLineCapStart.Visibility = Visibility.Collapsed;
+                    PreviewLineCapEnd.Visibility = Visibility.Collapsed;
+                    PreviewLine.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    IsLineSet = true;
+                }
             }
+            else
+            {
+                SelectedCap = 0;
+            }
+            MouseDown = false;
+            MouseMoved = false;
         }
 
         protected override void OnMouseLeave(object sender, MouseEventArgs e)
@@ -179,11 +277,58 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
             float cX2 = Target.Zoom * (X2 + .5f);
             float cY2 = Target.Zoom * (Y2 + .5f);
 
-            System.Windows.Controls.Canvas.SetLeft(PreviewLineCapStart, cX1 - 3);
-            System.Windows.Controls.Canvas.SetTop(PreviewLineCapStart, cY1 - 3);
-            System.Windows.Controls.Canvas.SetLeft(PreviewLineCapEnd, cX2 - 3);
-            System.Windows.Controls.Canvas.SetTop(PreviewLineCapEnd, cY2 - 3);
+            System.Windows.Controls.Canvas.SetLeft(PreviewLineCapStart, cX1 - 5);
+            System.Windows.Controls.Canvas.SetTop(PreviewLineCapStart, cY1 - 5);
+            System.Windows.Controls.Canvas.SetLeft(PreviewLineCapEnd, cX2 - 5);
+            System.Windows.Controls.Canvas.SetTop(PreviewLineCapEnd, cY2 - 5);
             PreviewLine.Data = Geometry.Parse($"M{cX1} {cY1}L{cX2} {cY2}");
         }
+
+        protected override void OnSelectedLayerChanged(object sender)
+        {
+            // restore pixels to the original (previous) layer
+            Target.Frame.SetLayerPixels(2 - Target.SelectedLayer + 1, pixelsBackup);
+            // backup the current layer
+            Array.Copy(Target.CurrentLayerPixelData, pixelsBackup, 256 * 192);
+            if (IsLineSet)
+                DrawLine();
+
+        }
+
+        protected override void OnFrameChanged(object sender)
+        {
+            IsLineSet = false;
+            PreviewLine.Visibility = Visibility.Collapsed;
+            PreviewLineCapStart.Visibility = Visibility.Collapsed;
+            PreviewLineCapEnd.Visibility = Visibility.Collapsed;
+        }
+
+        // Bresenham
+        public static List<System.Drawing.Point> GetLinePixels(int x0,int y0,int x1,int y1)
+        {
+            var result = new List<System.Drawing.Point>();
+            int dx = Math.Abs(x1 - x0);
+            int sx = x0 < x1 ? 1 : -1;
+            int dy = -Math.Abs(y1 - y0);    
+            int sy = y0 < y1 ? 1 : -1;
+            int err = dx + dy;
+            while(true)
+            {
+                result.Add(new System.Drawing.Point(x0, y0));
+                if (x0 == x1 && y0 == y1) break;
+                int e2 = 2 * err;
+                if(e2>=dy)
+                {
+                    err += dy;
+                    x0 += sx;
+                }
+                if(e2<=dx)
+                {
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+            return result;
+        }        
     }
 }

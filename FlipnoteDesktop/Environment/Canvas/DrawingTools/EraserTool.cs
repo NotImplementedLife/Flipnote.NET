@@ -60,9 +60,9 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
             SizeInput = null;
         }
 
-        public int Size = 1;        
-        
-        void ErasePoint(int x, int y)
+        public int Size = 1;
+
+        void ErasePoint(int x, int y, bool updateImage = true)
         {
             int maxX = x + Size / 2 - 1 + (Size & 1);
             int maxY = y + Size / 2 - 1 + (Size & 1);
@@ -71,14 +71,26 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
                 for (int _y = Math.Max(0, y - Size / 2); _y <= maxY; _y++)
                     Target.ErasePixel(_x, _y);
             }
+            if (updateImage)
+                Target.UpdateImage();
+        }
+
+        void EraseLine(int x0, int y0, int x1, int y1)
+        {
+            var pts = LineTool.GetLinePixels(x0, y0, x1, y1);
+            for (int i = 1; i < pts.Count; i++)
+                ErasePoint(pts[i].X, pts[i].Y, false);
             Target.UpdateImage();
         }
 
+        int lastX, lastY;
         protected override void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
                 ErasePoint(Target.canvasX, Target.canvasY);
+                lastX = Target.canvasX;
+                lastY = Target.canvasY;
             }            
         }
         protected override void OnMouseMove(object sender, MouseEventArgs e)
@@ -91,13 +103,19 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
             PreviewRect.Fill = Brushes.White;
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                ErasePoint(Target.canvasX, Target.canvasY);
+                if (lastX >= 0)
+                    EraseLine(lastX, lastY, Target.canvasX, Target.canvasY);
+                else
+                    ErasePoint(Target.canvasX, Target.canvasY);
+                lastX = Target.canvasX;
+                lastY = Target.canvasY;
             }            
         }
 
         protected override void OnMouseLeave(object sender, MouseEventArgs e)
         {
             PreviewRect.Width = PreviewRect.Height = 0;
+            lastX = -1;
         }
     }
 }
