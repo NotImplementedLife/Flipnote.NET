@@ -18,22 +18,22 @@ using System.Windows.Shapes;
 namespace FlipnoteDesktop.Controls
 {
     /// <summary>
-    /// Interaction logic for PatternSelector.xaml
+    /// Interaction logic for PenPatternSelector.xaml
     /// </summary>
-    public partial class PatternSelector : UserControl
-    {        
-        public PatternSelector()
+    public partial class PenPatternSelector : UserControl
+    {
+        public PenPatternSelector()
         {
             InitializeComponent();
-            ComboBox.ItemsSource = Patterns.NamesList();            
+            ComboBox.ItemsSource = PenPatterns.NamesList();
         }
 
-        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(PatternSelector),
-          new FrameworkPropertyMetadata(Patterns.Mono, new PropertyChangedCallback(ValuePropertyChanged)));
+        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(PenPatternSelector),
+          new FrameworkPropertyMetadata(BrushPatterns.Mono, new PropertyChangedCallback(ValuePropertyChanged)));
 
         private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var o = d as PatternSelector;
+            var o = d as PenPatternSelector;
             o.ValueChanged?.Invoke(o);
         }
 
@@ -54,7 +54,7 @@ namespace FlipnoteDesktop.Controls
             DataContext = new PatternSample
             {
                 PatternName = (string)ComboBox.SelectedItem,
-                Padding = new Thickness(3)                
+                Padding = new Thickness(3)
             };
             Value = (DataContext as PatternSample).Pattern;
         }

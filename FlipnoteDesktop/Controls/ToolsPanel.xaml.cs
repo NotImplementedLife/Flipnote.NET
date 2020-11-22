@@ -47,11 +47,19 @@ namespace FlipnoteDesktop.Controls
             }           
         }
 
-        public DrawingTool DrawingTool;        
+        public DrawingTool DrawingTool;
+        private Button SelectedToolButton = null;
+
+        private static readonly Brush DefaultBtnBackground = new SolidColorBrush(Colors.Transparent);
+        private static readonly Brush DefaultBtnForeground = new SolidColorBrush(Color.FromRgb(249, 115, 0));
+        private static readonly Brush SelectedBtnBackground = new SolidColorBrush(Color.FromRgb(249, 115, 0));
+        private static readonly Brush SelectedBtnForeground = new SolidColorBrush(Colors.White);
+
 
         private void ToolIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var tag = (sender as Button).Tag;            
+            var btn = sender as Button;
+            var tag = btn.Tag;           
             if (tag != null)
             {                
                 if (Target.DrawingTool != null)
@@ -59,7 +67,15 @@ namespace FlipnoteDesktop.Controls
                     Target.DrawingTool.Detach();
                 }                                
                 Target.DrawingTool = Activator.CreateInstance(Type.GetType($"FlipnoteDesktop.Environment.Canvas.DrawingTools.{tag}")) as DrawingTool;
-                Target.DrawingTool.Attach(Target);                
+                Target.DrawingTool.Attach(Target);
+                if (SelectedToolButton != null)
+                {
+                    SelectedToolButton.Background = DefaultBtnBackground;
+                    SelectedToolButton.Foreground = DefaultBtnForeground;
+                }
+                SelectedToolButton = btn;
+                SelectedToolButton.Background = SelectedBtnBackground;
+                SelectedToolButton.Foreground = SelectedBtnForeground;
             }            
         }
 

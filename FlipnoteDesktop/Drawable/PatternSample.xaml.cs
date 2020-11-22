@@ -24,10 +24,12 @@ namespace FlipnoteDesktop.Drawable
     {
         public PatternSample()
         {
-            InitializeComponent();
+            InitializeComponent();            
             Image.Source = new WriteableBitmap(12, 12, 96, 96, PixelFormats.Indexed2,
                 new BitmapPalette(new List<Color> { Colors.White, Colors.Black }));           
         }
+
+        public bool IsPen;
 
         public static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(PatternSample),
             new PropertyMetadata("Default", new PropertyChangedCallback(PatternNamePropertyChanged)));
@@ -40,18 +42,18 @@ namespace FlipnoteDesktop.Drawable
 
         public Pattern Pattern
         {
-            get => typeof(Patterns).GetField(PatternName).GetValue(null) as Pattern;
+            get => typeof(BrushPatterns).GetField(PatternName).GetValue(null) as Pattern;
         }
 
         private static void PatternNamePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var o = d as PatternSample;
-            Pattern p = Patterns.Mono;
+            Pattern p = BrushPatterns.Mono;
             try
             {
                 if (e.NewValue is string)
                 {
-                    p = typeof(Patterns).GetField((string)e.NewValue).GetValue(null) as Pattern;                    
+                    p = typeof(BrushPatterns).GetField((string)e.NewValue).GetValue(null) as Pattern;                    
                 }
             }
             finally

@@ -78,8 +78,11 @@
     <Compile Include="Controls\NumericInput.xaml.cs">
       <DependentUpon>NumericInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PatternSelector.xaml.cs">
-      <DependentUpon>PatternSelector.xaml</DependentUpon>
+    <Compile Include="Controls\BrushPatternSelector.xaml.cs">
+      <DependentUpon>BrushPatternSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PenPatternSelector.xaml.cs">
+      <DependentUpon>PenPatternSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SimpleFlipnotePlayer.xaml.cs">
       <DependentUpon>SimpleFlipnotePlayer.xaml</DependentUpon>
@@ -145,8 +148,9 @@
     <Compile Include="Environment\Canvas\DrawingTools\LineTool.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\EraserTool.cs" />
     <Compile Include="Environment\Canvas\Pattern.cs" />
-    <Compile Include="Environment\Canvas\Patterns.cs" />
+    <Compile Include="Environment\Canvas\BrushPatterns.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\BrushTool.cs" />
+    <Compile Include="Environment\Canvas\PenPatterns.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Data\Flipnote.cs" />
     <Compile Include="Properties\VersionCounter.cs">
@@ -173,7 +177,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\PatternSelector.xaml">
+    <Page Include="Controls\BrushPatternSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PenPatternSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

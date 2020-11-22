@@ -48,9 +48,10 @@
                 <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
                         Tag="LineTool"          
                         ToolTip="Line"
+                        Name="LineToolButton"
                         PreviewMouseDown="ToolIcon_PreviewMouseDown">
                     <Button.Content>
-                        <Path Stroke="#F97300" StrokeThickness="1" Data="M1 2L19 18"/>
+                        <Path Stroke="{Binding ElementName=LineToolButton, Path=Foreground}" StrokeThickness="1" Data="M1 2L19 18"/>
                     </Button.Content>
                 </Button>
             </UniformGrid>

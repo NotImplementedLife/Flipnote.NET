@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlipnoteDesktop.Environment.Canvas
 {
-    public static class Patterns
+    public static class BrushPatterns
     {
         public static readonly Pattern Mono = new Pattern(new bool[1, 1] { { true } });
         public static readonly Pattern Dots = new Pattern(new bool[2, 2] { { true, false }, { false, false } });
@@ -28,7 +28,7 @@ namespace FlipnoteDesktop.Environment.Canvas
 
         public static List<string> NamesList()
         {
-            var fields = typeof(Patterns).GetFields(BindingFlags.Static | BindingFlags.Public);
+            var fields = typeof(BrushPatterns).GetFields(BindingFlags.Static | BindingFlags.Public);
             var result = new List<string>();
             foreach(var fi in fields)
             {

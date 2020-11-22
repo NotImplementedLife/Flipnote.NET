@@ -23,7 +23,7 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
         Rectangle PreviewRect = new Rectangle() { IsHitTestVisible = false };
 
         NumericInput SizeInput;
-        PatternSelector PatternInput;
+        BrushPatternSelector PatternInput;
 
         public void BrushTool_Attached(object o)
         {
@@ -37,7 +37,7 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
             SizeInput.Value = Size;
             SizeInput.ValueChanged += SizeInput_ValueChanged;
 
-            PatternInput = new PatternSelector
+            PatternInput = new BrushPatternSelector
             {
                 Height = 30,
                 Width = 50,
@@ -80,7 +80,7 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
         }
 
         public int Size = 1;        
-        public Pattern Pattern = Patterns.Mono;
+        public Pattern Pattern = BrushPatterns.Mono;
 
         void PutPoint(int x, int y, bool updateImage = true)
         {            
