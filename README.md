@@ -1,4 +1,6 @@
-![alt text](https://github.com/NotImplementedLife/Resources/blob/main/FlipnoteDesktop/images/logo-inv.png?raw=true)
+<p align="center">
+ <img src="https://github.com/NotImplementedLife/Resources/blob/main/FlipnoteDesktop/images/logo-inv.png?raw=true" alt="Flipnote Desktop logo" width="500"/>
+</p>
  
 # FlipnoteDesktop
 Enjoy pure nostalgia of the DSi times with a fan-made PC version of  Flipnote Studio.
