@@ -19,6 +19,28 @@ namespace FlipnoteDesktop.Data
 
         }
 
+        public static _Metadata ReadMetadata(string filename)
+        {
+            _Metadata metadata = new _Metadata();
+            using (BinaryReader r = new BinaryReader(File.Open(filename, FileMode.Open)))
+            {
+                r.BaseStream.Position = 0x10;
+                metadata.Lock = r.ReadUInt16();                
+                metadata.ThumbnailFrameIndex = r.ReadUInt16();                
+                metadata.RootAuthorName = r.ReadWChars(11);                
+                metadata.ParentAuthorName = r.ReadWChars(11);                
+                metadata.CurrentAuthorName = r.ReadWChars(11);                
+                metadata.ParentAuthorId = r.ReadBytes(8);                
+                metadata.CurrentAuthorId = r.ReadBytes(8);                
+                metadata.ParentFilename = r.ReadBytes(18);                
+                metadata.CurrentFilename = r.ReadBytes(18);                
+                metadata.RootAuthorId = r.ReadBytes(8);                
+                metadata.RootFileFragment = r.ReadBytes(8);
+                metadata.Timestamp = r.ReadUInt32();                                
+            }
+            return metadata;
+        }
+
         public Flipnote(string filename)
         {
             using (BinaryReader r = new BinaryReader(File.Open(filename, FileMode.Open)))
@@ -243,7 +265,7 @@ namespace FlipnoteDesktop.Data
             }            
             bmp.WritePixels(new System.Windows.Int32Rect(0, 0, 256, 192), pixels, stride, 0);           
             return bmp;
-        }
+        }        
 
         public class _Metadata
         {

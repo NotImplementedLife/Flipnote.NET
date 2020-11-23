@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="FlipnoteDesktop.Drawable.FolderIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDesktop.Drawable"
+             mc:Ignorable="d" 
+               d:DesignHeight="32" d:DesignWidth="32" Name="Control">
+    <Viewbox Stretch="Uniform">
+        <Grid Margin="5">
+        <Canvas Width="320" Height="320">
+            <Path Fill="White" Stroke="{Binding ElementName=Control,Path=Foreground,Mode=TwoWay}" StrokeStartLineCap="Triangle" StrokeEndLineCap="Triangle"
+                      StrokeThickness="5" ClipToBounds="True" 
+                      Data="M7 273 c-4 -3 -7 -53 -7 -110 l0 -103 79 0 c50 0 89 -5 107 -15 43 -22 111 -20 124 4 13 25 13 187 0 212 -10 17 -23 19 -154 19 -78 0 -146 -3 -149 -7z"/>
+
+            <Path Fill="{Binding ElementName=Control,Path=Foreground,Mode=TwoWay}" StrokeStartLineCap="Triangle" StrokeEndLineCap="Triangle"
+                      StrokeThickness="1" ClipToBounds="True" 
+                      Data="M0 196 c0 -84 2 -86 80 -86 44 0 52 -4 79 -36 25 -32 37 -37 82 -42 71 -7 79 6 79 129 0 48 -3 94 -6 103 -5 14 -29 16 -160 16 l-154 0 0 -74z"/>
+        </Canvas>
+        </Grid>
+    </Viewbox>
+</UserControl>

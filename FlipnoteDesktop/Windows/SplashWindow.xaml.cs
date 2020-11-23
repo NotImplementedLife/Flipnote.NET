@@ -1,4 +1,5 @@
-﻿using FlipnoteDesktop.Windows;
+﻿using FlipnoteDesktop.Extensions;
+using FlipnoteDesktop.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +35,26 @@ namespace FlipnoteDesktop.Windows
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
         {           
             Task.Run(() =>
-            {               
+            {
+                // check for .fsuserdata
+                if (File.Exists(".fsuserdata")) 
+                {
+                    try
+                    {                               
+                        using (BinaryReader r = new BinaryReader(File.Open(".fsuserdata", FileMode.Open)))
+                        {
+
+                            Dispatcher.Invoke(() => App.AuthorName = r.ReadWChars(11).Trim('\0'));                            
+                            Dispatcher.Invoke(() => App.AuthorId = r.ReadBytes(8));
+                            
+                        }                        
+                    }
+                    catch (Exception)
+                    {
+                        Dispatcher.Invoke(()=>MessageBox.Show("Could not load user data."));
+                    }
+                }
+                
                 Thread.Sleep(3000);
                 Dispatcher.Invoke(() =>
                 {                    

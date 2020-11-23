@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="/Styles/LayerSelector.xaml"/>
                 <ResourceDictionary Source="/Styles/PaperColorSelector.xaml"/>
                 <ResourceDictionary Source="/Styles/SimpleButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/SimpleTextBoxStyle.xaml"/>
                 <ResourceDictionary Source="/Styles/ExpansionToggleButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Styles/ToolTipStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

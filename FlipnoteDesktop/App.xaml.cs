@@ -21,6 +21,24 @@ namespace FlipnoteDesktop
         /// </summary>
         public static string Path = AppDomain.CurrentDomain.BaseDirectory;
 
+        private static string _AuthorName = null;
+        public static string AuthorName
+        {
+            get => _AuthorName;
+            set
+            {
+                if (_AuthorName != value)
+                {
+                    _AuthorName = value;
+                    AuthorNameChanged?.Invoke();
+                }
+            }
+        }
+        public static byte[] AuthorId = null;
+
+        public delegate void OnAuthorNameChanged();
+        public static event OnAuthorNameChanged AuthorNameChanged;
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             if (e.Args.Length == 1)

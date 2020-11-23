@@ -65,6 +65,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\FileSelector.xaml.cs">
+      <DependentUpon>FileSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FrameCanvasEditor.xaml.cs">
       <DependentUpon>FrameCanvasEditor.xaml</DependentUpon>
     </Compile>
@@ -126,6 +129,9 @@
     <Compile Include="Drawable\FlipnoteDesktopLogo.xaml.cs">
       <DependentUpon>FlipnoteDesktopLogo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Drawable\FolderIcon.xaml.cs">
+      <DependentUpon>FolderIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Drawable\Layer1Icon.xaml.cs">
       <DependentUpon>Layer1Icon.xaml</DependentUpon>
     </Compile>
@@ -158,9 +164,28 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>VersionCounter.tt</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FlipnoteUserIdGetterPages\CheckIdentityPage.xaml.cs">
+      <DependentUpon>CheckIdentityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FlipnoteUserIdGetterPages\ExtractFromFlipnotePage.xaml.cs">
+      <DependentUpon>ExtractFromFlipnotePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FlipnoteUserIdGetterPages\ExtractFromUserDataFilePage.xaml.cs">
+      <DependentUpon>ExtractFromUserDataFilePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FlipnoteUserIdGetterPages\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FlipnoteUserIdGetterWindow.xaml.cs">
+      <DependentUpon>FlipnoteUserIdGetterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\FileSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\FrameCanvasEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -237,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Drawable\FolderIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\Layer1Icon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -269,6 +298,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\FolderItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\LayerBoxTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -285,7 +318,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\SimpleTextBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\ToolTipStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FlipnoteUserIdGetterPages\CheckIdentityPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FlipnoteUserIdGetterPages\ExtractFromFlipnotePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FlipnoteUserIdGetterPages\ExtractFromUserDataFilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FlipnoteUserIdGetterPages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FlipnoteUserIdGetterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

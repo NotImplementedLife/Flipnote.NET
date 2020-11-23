@@ -18,6 +18,7 @@
         <CommandBinding Command="local:MainWindowCommands.SwitchActiveLayer" Executed="SwitchActiveLayer_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ZoomInCanvas" Executed="ZoomInCanvas_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ZoomOutCanvas" Executed="ZoomOutCanvas_Executed"/>
+        <CommandBinding Command="local:MainWindowCommands.GetFlipnoteUserId" Executed="GetFlipnoteUserId_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
@@ -25,6 +26,7 @@
         <KeyBinding Key="L" Modifiers="Ctrl" Command="local:MainWindowCommands.SwitchActiveLayer"/>
         <KeyBinding Key="Add" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomInCanvas"/>
         <KeyBinding Key="Subtract" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomOutCanvas"/>
+        <KeyBinding Key="U" Modifiers="Ctrl" Command="local:MainWindowCommands.GetFlipnoteUserId"/>
     </Window.InputBindings>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
@@ -45,6 +47,11 @@
                 <MenuItem Header="_View">
                     <MenuItem Name="ShowGridMenuItem"
                         Header="_Show Grid" Command="local:MainWindowCommands.ToggleGridVisibility" InputGestureText="Ctrl+G" IsCheckable="True"/>
+                </MenuItem>
+                <MenuItem Header="_Options">
+                    <MenuItem Name="FlipnoteUserMenuItem" 
+                              Header="Flipnote User" InputGestureText="(none)"
+                              Command="local:MainWindowCommands.GetFlipnoteUserId"/>
                 </MenuItem>
             </Menu>
             <Grid>

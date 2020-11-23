@@ -32,14 +32,30 @@ namespace FlipnoteDesktop.Windows
             {
                 new DecodedFrame()
             };
+            App.AuthorNameChanged += App_AuthorNameChanged;
             FramesList.List.SelectedIndex = 0;
+            if(App.AuthorName!=null)
+            {
+                FlipnoteUserMenuItem.InputGestureText = App.AuthorName;
+            }
+        }
 
-        }       
-       
+        private void App_AuthorNameChanged()
+        {            
+            if (App.AuthorName != null)
+            {
+                FlipnoteUserMenuItem.InputGestureText = App.AuthorName;
+            }
+            else
+            {
+                FlipnoteUserMenuItem.InputGestureText = "(none)";
+            }
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
-            _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;            
+            _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;                        
         }              
 
         #region RightTabControl
@@ -129,7 +145,15 @@ namespace FlipnoteDesktop.Windows
         {
             FrameCanvasEditor.LayerSelector.IsChecked = !(FrameCanvasEditor.LayerSelector.IsChecked == true);
         }
-        #endregion
+
+        private void GetFlipnoteUserId_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (new FlipnoteUserIdGetterWindow().ShowDialog() == true)
+            {
+
+            }
+        }
+        #endregion               
     }
 
     /// <summary>
@@ -141,5 +165,6 @@ namespace FlipnoteDesktop.Windows
         public static RoutedCommand SwitchActiveLayer = new RoutedCommand();
         public static RoutedCommand ZoomInCanvas = new RoutedCommand();
         public static RoutedCommand ZoomOutCanvas = new RoutedCommand();
+        public static RoutedCommand GetFlipnoteUserId = new RoutedCommand();
     }
 }
