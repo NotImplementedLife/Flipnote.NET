@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Reflection;
 
 namespace FlipnoteDesktop.Data
 {
@@ -57,7 +58,7 @@ namespace FlipnoteDesktop.Data
                 /// #000E
                 FormatVersion = r.ReadUInt16();
                 if (FormatVersion != 0x24)
-                    throw new FileFormatException("Format version does not match. This may be a sign that the file is corrupted");
+                    throw new FileFormatException("Format version is not 0x24"); // just in case..
                 /// #0010
                 Metadata.Lock = r.ReadUInt16();
                 /// #0012
@@ -124,7 +125,7 @@ namespace FlipnoteDesktop.Data
                 /// make the next offset dividable by 4
                 r.ReadBytes((int)((4 - offset % 4) % 4));
 
-                Debug.WriteLine(r.BaseStream.Position.ToString("X4"));
+                //Debug.WriteLine(r.BaseStream.Position.ToString("X4"));
                 SoundHeader.BGMTrackSize = r.ReadUInt32();
                 SoundHeader.SE1TrackSize = r.ReadUInt32();
                 SoundHeader.SE2TrackSize = r.ReadUInt32();
@@ -138,7 +139,7 @@ namespace FlipnoteDesktop.Data
                 SoundData.RawSE2 = r.ReadBytes((int)SoundHeader.SE2TrackSize);
                 SoundData.RawSE3 = r.ReadBytes((int)SoundHeader.SE3TrackSize);
 
-                Debug.WriteLine(r.BaseStream.Position.ToString("X8"));
+                //Debug.WriteLine(r.BaseStream.Position.ToString("X8"));
 
                 /// Next 0x80 bytes = RSA-1024 SHA-1 signature
                 /// Next 0x10 bytes are filled with 0
@@ -265,7 +266,50 @@ namespace FlipnoteDesktop.Data
             }            
             bmp.WritePixels(new System.Windows.Int32Rect(0, 0, 256, 192), pixels, stride, 0);           
             return bmp;
-        }        
+        }
+
+        public static Flipnote New(string authorName, byte[] authorId, List<DecodedFrame> frames)
+        {            
+            var f = new Flipnote();
+            f.FrameCount = (ushort)(frames.Count - 1);
+            f.FormatVersion = 0x24;
+
+            f.Metadata.RootAuthorId = new byte[8];
+            f.Metadata.ParentAuthorId = new byte[8];
+            f.Metadata.CurrentAuthorId = new byte[8];
+            Array.Copy(authorId, f.Metadata.RootAuthorId, 8);
+            Array.Copy(authorId, f.Metadata.ParentAuthorId, 8);
+            Array.Copy(authorId, f.Metadata.CurrentAuthorId, 8);
+            f.Metadata.RootAuthorName = authorName;
+            f.Metadata.ParentAuthorName = authorName;
+            f.Metadata.CurrentAuthorName = authorName;
+
+            string mac6 = string.Join("", authorId.Take(3).Reverse().Select(t => t.ToString("X2")));
+            var asm = Assembly.GetEntryAssembly().GetName().Version;
+            var dt = DateTime.UtcNow;
+            var H23 = asm.Major.ToString("X2");
+            var H45 = asm.Minor.ToString("X2");
+            var H67 = (dt.Year - 2009).ToString("X2");
+            var H89 = dt.Month * 31 + dt.Day;
+            var HABC = ((((dt.Hour * 3600 + dt.Minute * 60 + dt.Second) % 4096) >> 1) + (H89 > 255 ? 1 : 0)).ToString("X3");
+            // just a placeholder till I find out how Flipnote Studio actually generates file names 
+            string _13str = $"80{H23}{H45}{H67}{H89.ToString("X2")}{HABC}";
+            string nEdited = 1.ToString().PadLeft(3, '0');
+            var filename = $"{mac6}_{_13str}_{nEdited}.ppm";
+            Debug.WriteLine(filename);
+            return f;
+        }
+
+        static readonly string checksumDict = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        static char FilenameChecksumDigit(string filename)
+        {
+            int sumc = Convert.ToInt32("" + filename[0] + filename[1], 16);
+            for(int i=1;i<16;i++)
+            {
+                sumc = (sumc + (int)filename[i]) % 256;
+            }
+            return checksumDict[sumc % 36];
+        }
 
         public class _Metadata
         {
@@ -281,19 +325,12 @@ namespace FlipnoteDesktop.Data
             public byte[] RootAuthorId;
             public byte[] RootFileFragment;
             public uint Timestamp;
-            public ushort _0x9E; //unused
+            public ushort _0x9E; //unused                     
 
-            public string fn(byte[] a)
+            public DateTime Date
             {
-                return string.Join("", new byte[] { a[0], a[1], a[2] }.Select(b => b.ToString("X2"))) + "_" +
-                    string.Join("", new char[] { (char)a[3],(char)a[4],(char)a[5], (char)a[6], (char)a[7], (char)a[8],
-                    (char)a[9],(char)a[10],(char)a[11],(char)a[12],(char)a[13],(char)a[14],(char)a[15] }) + "_" +
-                    ((ushort)a[17] * 16 + a[16]).ToString("000");
+                get => new DateTime(2000, 1, 1).AddSeconds(Timestamp);                
             }
-
-            public string ParentFilenameStr() => fn(ParentFilename);
-            public string CurrentFilenameStr() => fn(CurrentFilename);     
-           
         }        
 
         public class _AnimationHeader

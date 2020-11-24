@@ -27,8 +27,8 @@ namespace FlipnoteDesktop.Windows
             ExtractFromFlipnotePage = new ExtractFromFlipnotePage { Window = this };
             ExtractFromUserDataFilePage = new ExtractFromUserDataFilePage { Window = this };
             CheckIdentityPage = new CheckIdentityPage { Window = this };
-            GoToHomePage();
-        }
+            GoToHomePage();            
+        }        
 
         public MainPage MainPage;
         public ExtractFromFlipnotePage ExtractFromFlipnotePage;

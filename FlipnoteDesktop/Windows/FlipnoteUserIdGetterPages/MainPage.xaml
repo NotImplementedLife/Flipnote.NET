@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages"
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="300"
-      Title="MainPage"     
+      Title="MainPage"         
       Background="White">
     <Page.Resources>
         <Style TargetType="Hyperlink">
@@ -19,13 +19,28 @@
             Text="Let us know your Flipnote Studio Id" 
             DockPanel.Dock="Top"
             FontSize="16"
-            Margin="0 0 0 16"
+            Margin="0 38 0 16"
             HorizontalAlignment="Center"/>
         <TextBlock
             Text="We provide you several methods:"
             DockPanel.Dock="Top"
             FontSize="14"/>
-        <Canvas Height="80" DockPanel.Dock="Bottom"/>
+        <TextBlock 
+            Name="CurrentUserData"
+            DockPanel.Dock="Bottom"
+            Margin="5"
+            TextAlignment="Center"
+            Foreground="#555555"           
+            TextWrapping="Wrap">          
+            <LineBreak/><LineBreak/>
+            Flipnote Studio Id : <Run Name="IdRun">FFFFFFFFFFFFFFFF</Run>
+            <LineBreak/>
+            Username : <Run Name="UserRun">%USERNAME%</Run>
+            <LineBreak/>
+            <LineBreak/>
+            <Run FontSize="10">The information above will be used to save your flipnotes.</Run>
+            <LineBreak/>
+        </TextBlock>
         <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">            
             <Hyperlink Name="ExtractFromPPMHyperLink" Click="ExtractFromPPMHyperLink_Click">
                 Show us one of your flipnotes and we'll extract everything we need
@@ -36,10 +51,6 @@
                 Already have an .fsuserdata file? Upload it right now
             </Hyperlink>
             <LineBreak/>
-            <LineBreak/>
-            <Hyperlink>
-                Do you know your Flipnote Studio Id by heart? Then just type it here
-            </Hyperlink>
         </TextBlock>
     </DockPanel>
 </Page>

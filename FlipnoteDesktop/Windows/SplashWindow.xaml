@@ -37,6 +37,9 @@
                     </VisualBrush>
                 </Canvas.Background>
             </Canvas>
+            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="LightGreen" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                       Name="BuildVersion"
+                       Margin="4">1.2.3</TextBlock>
         </Grid>
     </Border>
 </Window>

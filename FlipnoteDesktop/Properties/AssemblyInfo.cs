@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FlipnoteDesktop")]
-[assembly: AssemblyCopyright("Copyright ©N.I.L  2020")]
+[assembly: AssemblyCopyright("Copyright © N.I.L  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

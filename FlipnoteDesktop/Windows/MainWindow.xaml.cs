@@ -135,7 +135,8 @@ namespace FlipnoteDesktop.Windows
             };
             if(ofd.ShowDialog()==true)
             {
-                FramesList.List.ItemsSource = new Flipnote(ofd.FileName).GetDecodedFrameList();                
+                Flipnote = new Flipnote(ofd.FileName);
+                FramesList.List.ItemsSource = Flipnote.GetDecodedFrameList();                
                 FramesList.List.Items.Refresh();
                 FramesList.List.SelectedIndex = 0;
             }
@@ -148,12 +149,19 @@ namespace FlipnoteDesktop.Windows
 
         private void GetFlipnoteUserId_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (new FlipnoteUserIdGetterWindow().ShowDialog() == true)
-            {
+            new FlipnoteUserIdGetterWindow().ShowDialog();            
+        }
+        #endregion
 
+        Flipnote Flipnote = null;
+
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if(Flipnote==null)
+            {
+                Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);
             }
         }
-        #endregion               
     }
 
     /// <summary>

@@ -14,6 +14,7 @@
         Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="Open_Executed"/>
+        <CommandBinding Command="Save" Executed="Save_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ToggleGridVisibility" Executed="ToggleGridVisibility_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.SwitchActiveLayer" Executed="SwitchActiveLayer_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ZoomInCanvas" Executed="ZoomInCanvas_Executed"/>
@@ -22,6 +23,7 @@
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="Save"/>
         <KeyBinding Key="G" Modifiers="Ctrl" Command="local:MainWindowCommands.ToggleGridVisibility"/>
         <KeyBinding Key="L" Modifiers="Ctrl" Command="local:MainWindowCommands.SwitchActiveLayer"/>
         <KeyBinding Key="Add" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomInCanvas"/>
@@ -37,7 +39,7 @@
                 <MenuItem Header="_File">
                     <MenuItem Header="_New"/>
                     <MenuItem Header="_Open" Command="Open" InputGestureText="Ctrl+O"/>
-                    <MenuItem Header="_Save"/>
+                    <MenuItem Header="_Save" Command="Save" InputGestureText="Ctrl+S"/>
                     <Separator/>
                     <MenuItem Header="_Exit"/>
                 </MenuItem>

@@ -23,7 +23,24 @@ namespace FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages
         public MainPage()
         {
             InitializeComponent();
+            LoadUserData();
         }
+
+        private void LoadUserData()
+        {
+            if (App.AuthorName != null)
+            {
+                IdRun.Text = string.Join("", App.AuthorId.Reverse().Select(t => t.ToString("X2")));
+                UserRun.Text = App.AuthorName;
+                CurrentUserData.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CurrentUserData.Visibility = Visibility.Collapsed;
+            }
+        }
+
+
         public FlipnoteUserIdGetterWindow Window;
 
         private void ExtractFromPPMHyperLink_Click(object sender, RoutedEventArgs e)                  

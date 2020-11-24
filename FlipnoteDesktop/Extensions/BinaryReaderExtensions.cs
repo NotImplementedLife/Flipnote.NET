@@ -1,6 +1,7 @@
 ﻿using FlipnoteDesktop.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,18 @@ namespace FlipnoteDesktop.Extensions
         public static Flipnote._FrameData ReadPPMFrameData(this BinaryReader r, int cnt)
         {            
             var fd = new Flipnote._FrameData();
-            fd.Position = r.BaseStream.Position;         
-            fd.FirstByteHeader = r.ReadByte();
+            fd.Position = r.BaseStream.Position;
+            try
+            {
+                fd.FirstByteHeader = r.ReadByte();
+            }
+            catch(EndOfStreamException)
+            {
+                if (fd.Position == 4288480943)
+                    throw new Exception("Critical data corruption found. Are you trying a memory pit?");
+                else
+                    throw new Exception("Flipnote file is broken");
+            }
             if ((fd.FirstByteHeader & 0b01100000) != 0)
             {
                 fd.TranslateX = r.ReadSByte();

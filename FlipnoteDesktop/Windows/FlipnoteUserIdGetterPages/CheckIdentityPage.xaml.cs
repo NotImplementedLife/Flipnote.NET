@@ -51,8 +51,8 @@ namespace FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages
                 System.IO.File.WriteAllBytes(System.IO.Path.Combine(App.Path, ".fsuserdata"), bytes); 
                 Dispatcher.Invoke(() =>
                 {
-                    App.AuthorName = AuthorName.Trim('\0');
                     App.AuthorId = AuthorId;
+                    App.AuthorName = AuthorName.Trim('\0');                    
                     Window.Close();
                 });
             });
