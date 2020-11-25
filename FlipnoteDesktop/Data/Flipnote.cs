@@ -185,27 +185,48 @@ namespace FlipnoteDesktop.Data
             return result;
         }
 
+        public static List<Color> ThumbnailPalette = new List<Color>
+        {
+            (Color)ColorConverter.ConvertFromString("#FFFFFF"),
+            (Color)ColorConverter.ConvertFromString("#525252"),
+            (Color)ColorConverter.ConvertFromString("#FFFFFF"),
+            (Color)ColorConverter.ConvertFromString("#9C9C9C"),
+            (Color)ColorConverter.ConvertFromString("#FF4844"),
+            (Color)ColorConverter.ConvertFromString("#C8514F"),
+            (Color)ColorConverter.ConvertFromString("#FFADAC"),
+            (Color)ColorConverter.ConvertFromString("#00FF00"),
+            (Color)ColorConverter.ConvertFromString("#4840FF"),
+            (Color)ColorConverter.ConvertFromString("#514FB8"),
+            (Color)ColorConverter.ConvertFromString("#ADABFF"),
+            (Color)ColorConverter.ConvertFromString("#00FF00"),
+            (Color)ColorConverter.ConvertFromString("#B657B7"),
+            (Color)ColorConverter.ConvertFromString("#00FF00"),
+            (Color)ColorConverter.ConvertFromString("#00FF00"),
+            (Color)ColorConverter.ConvertFromString("#00FF00")
+        };
+
         public System.Drawing.Bitmap Thumbnail
         {
             get
             {
                 var palette = new System.Drawing.Color[]
                 {
-                        System.Drawing.Color.White,
-                        System.Drawing.Color.DarkGray,
-                        System.Drawing.Color.White,
-                        System.Drawing.Color.LightGray,
-                        System.Drawing.Color.Red,
-                        System.Drawing.Color.DarkRed,
-                        System.Drawing.Color.Pink,
-                        System.Drawing.Color.Green,
-                        System.Drawing.Color.Blue,
-                        System.Drawing.Color.DarkBlue,
-                        System.Drawing.Color.LightBlue,
-                        System.Drawing.Color.Magenta,
-                        System.Drawing.Color.Green,
-                        System.Drawing.Color.Green,
-                        System.Drawing.Color.Green,
+                        System.Drawing.ColorTranslator.FromHtml("#FFFFFF"),
+                        System.Drawing.ColorTranslator.FromHtml("#525252"),
+                        System.Drawing.ColorTranslator.FromHtml("#FFFFFF"),
+                        System.Drawing.ColorTranslator.FromHtml("#9C9C9C"),
+                        System.Drawing.ColorTranslator.FromHtml("#FF4844"),
+                        System.Drawing.ColorTranslator.FromHtml("#C8514F"),
+                        System.Drawing.ColorTranslator.FromHtml("#FFADAC"),                        
+                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
+                        System.Drawing.ColorTranslator.FromHtml("#4840FF"),
+                        System.Drawing.ColorTranslator.FromHtml("#514FB8"),
+                        System.Drawing.ColorTranslator.FromHtml("#ADABFF"),
+                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
+                        System.Drawing.ColorTranslator.FromHtml("#B657B7"),
+                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
+                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
+                        System.Drawing.ColorTranslator.FromHtml("#00FF00")                        
                 };
                 var bmp = new System.Drawing.Bitmap(64, 48);
                 int offset = 0;
@@ -216,7 +237,7 @@ namespace FlipnoteDesktop.Data
                             {
                                 int x = tx + px;
                                 int y = ty + l;
-                                bmp.SetPixel(x, y, palette[RawThumbnail[offset]&0x0F]);
+                                bmp.SetPixel(x, y, palette[RawThumbnail[offset] & 0x0F]);
                                 bmp.SetPixel(x+1, y, palette[(RawThumbnail[offset] >> 4) & 0x0F]);
                                 offset++;
                             }
@@ -268,6 +289,8 @@ namespace FlipnoteDesktop.Data
             return bmp;
         }
 
+        public string Filename;
+
         public static Flipnote New(string authorName, byte[] authorId, List<DecodedFrame> frames)
         {            
             var f = new Flipnote();
@@ -292,13 +315,98 @@ namespace FlipnoteDesktop.Data
             var H67 = (dt.Year - 2009).ToString("X2");
             var H89 = dt.Month * 31 + dt.Day;
             var HABC = ((((dt.Hour * 3600 + dt.Minute * 60 + dt.Second) % 4096) >> 1) + (H89 > 255 ? 1 : 0)).ToString("X3");
-            // just a placeholder till I find out how Flipnote Studio actually generates file names 
+            // just a placeholder till I find out how Flipnote Studio does actually generate file names             
             string _13str = $"80{H23}{H45}{H67}{H89.ToString("X2")}{HABC}";
-            string nEdited = 1.ToString().PadLeft(3, '0');
+            string nEdited = 0.ToString().PadLeft(3, '0');
             var filename = $"{mac6}_{_13str}_{nEdited}.ppm";
-            Debug.WriteLine(filename);
+            f.Filename = filename;
+
+            var rawfn = new byte[18];
+            for (int i = 0; i < 3; i++) 
+            {
+                rawfn[i] = byte.Parse("" + mac6[2 * i] + mac6[2 * i + 1], System.Globalization.NumberStyles.HexNumber);
+            }
+            for (int i = 3; i < 16; i++)
+            {
+                rawfn[i] = (byte)_13str[i - 3];
+            }
+            rawfn[16] = rawfn[17] = 0;
+
+            f.Metadata.ParentFilename = new byte[18];
+            f.Metadata.CurrentFilename = new byte[18];
+
+            Array.Copy(rawfn, f.Metadata.ParentFilename, 18);
+            Array.Copy(rawfn, f.Metadata.CurrentFilename, 18);
+
+            f.Metadata.RootFileFragment = new byte[8];
+            for (int i = 0; i < 3; i++)
+            {
+                f.Metadata.RootFileFragment[i] = 
+                    byte.Parse("" + mac6[2 * i] + mac6[2 * i + 1], System.Globalization.NumberStyles.HexNumber);
+            }
+            for (int i = 3; i < 8; i++) 
+            {
+                f.Metadata.RootFileFragment[i] =
+                    (byte)((byte.Parse("" + _13str[2 * (i - 3)], System.Globalization.NumberStyles.HexNumber) << 4)
+                          + byte.Parse("" + _13str[2 * (i - 3) + 1], System.Globalization.NumberStyles.HexNumber));
+            }
+            f.Metadata.Timestamp = (uint)((dt - new DateTime(2000, 1, 1, 0, 0, 0)).TotalSeconds);
+            f.RawThumbnail = new DecodedFrame().CreateThumbnailW64();
+
+            // write the animation data
+            // THIS PART MUST BE CHANGED
+
+            f.AnimationHeader.FrameOffsetTableSize = (ushort)(4 * frames.Count);
+            f.AnimationHeader.Flags = 0x43;
+            f.Frames = new _FrameData[frames.Count];
+            for (int i = 0; i < frames.Count; i++)
+            {
+                f.Frames[i] = frames[i].ToFrameData();
+            }
+
+
             return f;
         }
+
+        public void Save(string fn)
+        {
+            using (var w = new BinaryWriter(new FileStream(fn, FileMode.Create)))
+            {
+                w.Write(FileMagic);
+                w.Write(AnimationDataSize);                               
+                w.Write(SoundDataSize);
+                w.Write(FrameCount);
+                w.Write((ushort)0x0024);
+                w.Write(Metadata.Lock);
+                w.Write(Metadata.ThumbnailFrameIndex);
+                w.Write(Encoding.Unicode.GetBytes(Metadata.RootAuthorName.PadRight(11,'\0')));                
+                w.Write(Encoding.Unicode.GetBytes(Metadata.ParentAuthorName.PadRight(11, '\0')));
+                w.Write(Encoding.Unicode.GetBytes(Metadata.CurrentAuthorName.PadRight(11, '\0')));
+                w.Write(Metadata.ParentAuthorId);
+                w.Write(Metadata.CurrentAuthorId);
+                w.Write(Metadata.ParentFilename);
+                w.Write(Metadata.CurrentFilename);
+                w.Write(Metadata.RootAuthorId);
+                w.Write(Metadata.RootFileFragment);
+                w.Write(Metadata.Timestamp);
+                w.Write((ushort)0); //0x009E
+                w.Write(RawThumbnail);                
+
+                w.Write(AnimationHeader.FrameOffsetTableSize);
+                w.Write((ushort)0); // 0x06A2
+                w.Write(AnimationHeader.Flags);        
+        /*                               
+        /// #06A0
+        AnimationHeader.FrameOffsetTableSize = r.ReadUInt16();
+        /// #06A2
+        AnimationHeader._06A2 = r.ReadUInt16();
+        /// #06A6
+        AnimationHeader.Flags = r.ReadUInt32();*/
+
+    }
+        }
+
+
 
         static readonly string checksumDict = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         static char FilenameChecksumDigit(string filename)
@@ -396,8 +504,8 @@ namespace FlipnoteDesktop.Data
             public LineEncoding GetLineEncoding2(int index)
             {
                 int _byte = Layer2LineEncoding[index >> 2];
-                int pos = (index & 0x03) * 2;
-                return (LineEncoding)((_byte >> pos) & 0x03);
+                int pos = (index & 0x3) * 2;
+                return (LineEncoding)((_byte >> pos) & 0x3);
             }
 
             public void Overwrite(_FrameData frame)
@@ -420,14 +528,26 @@ namespace FlipnoteDesktop.Data
                 }
             }
 
-            public System.Drawing.Bitmap xFrame(int i)
+            /*public System.Drawing.Bitmap xFrame(int i)
             {
                 var bmp = new System.Drawing.Bitmap(256, 192);
                 for (int x = 0; x < 256; x++)
                     for (int y = 0; y < 192; y++)
                         bmp.SetPixel(x, y, Layer1[y, x] ? System.Drawing.Color.Black : System.Drawing.Color.White);
                 return bmp;
-            }         
+            } */        
+
+            public byte[] ToByte()
+            {
+                var res = new List<byte>();                
+                res.Add(FirstByteHeader);
+                // pack all lines with type 3 compression
+                for (int l = 0; l < 192; l++)
+                {
+                    
+                }
+                return res.ToArray();
+            }
         }
 
         public class _SoundHeader

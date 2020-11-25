@@ -180,7 +180,13 @@ namespace FlipnoteDesktop.Data
             }
         }
 
-        public static BitmapPalette Palette = new BitmapPalette(new List<Color> { Colors.White, Colors.Black, Colors.Red, Colors.Blue });
+        public static BitmapPalette Palette = new BitmapPalette(new List<Color>
+        {
+            Colors.White,
+            Colors.Black,
+            Color.FromRgb(255, 42, 42), // Red
+            Color.FromRgb( 10, 57,255)  // Blue
+        });
 
         public WriteableBitmap Thumbnail { get; } = new WriteableBitmap(128, 96, 96, 96, PixelFormats.Indexed8,
             new BitmapPalette(new List<Color>
@@ -503,6 +509,59 @@ namespace FlipnoteDesktop.Data
             if (nR == 4) return 1 << 2;
             if (nB == 4) return 1;            
             return (byte)((nw << 6) + (nb << 4) + (nR << 2) + nB);
+        }
+
+        public byte[] CreateThumbnailW64()
+        {
+            var res = new byte[1536];
+            /// TO DO : change with the actual frame thumbnail
+            for (int x = 0; x < 64; x++)
+                for (int y = 0; y < 48; y++)
+                    w64SetPixel(res, x, y, (8 * (y / 8) + x / 8) % 16);
+            return res;
+        }
+
+        private void w64SetPixel(byte[] raw,int x,int y,int val)
+        {
+            int offset = (8 * (y / 8) + (x / 8)) * 32 + 4 * (y % 8) + (x % 8) / 2;
+            int nibble = x & 1;
+            raw[offset] &= (byte)~(0x0F << (4 * nibble));
+            raw[offset] |= (byte)(val << (4 * nibble));
+        }
+
+        public Flipnote._FrameData ToFrameData()
+        {
+            var fd = new Flipnote._FrameData();
+            byte header = 0;
+            header |= 1 << 7; // no frame diffing
+            header |= (byte)(((int)Layer1Color) << 3);
+            header |= (byte)(((int)Layer2Color) << 1);
+            header |= (byte)(IsPaperWhite ? 1 : 0);
+            fd.FirstByteHeader = header;
+            // set all line encodings to Raw Line Data
+            // this will be changed in the future
+            for(int i=0;i<192;i++)
+            {
+                SetLineEncoding(fd.Layer1LineEncoding, i, 3);
+                SetLineEncoding(fd.Layer2LineEncoding, i, 3);
+            }
+            for (int x = 0; x < 256; x++)
+                for (int y = 0; y < 192; y++) 
+                {
+                    fd.Layer1[y, x] = Layer1Data[x, y];
+                    fd.Layer2[y, x] = Layer2Data[x, y];
+                }
+            return fd;
+        }
+
+        private void SetLineEncoding(byte[] arr,int index,int value)
+        {
+            int o = index >> 2;
+            int pos = (index & 0x3) * 2;
+            var b = arr[o];
+            b &= (byte)~(0x3 << pos);
+            b |= (byte)(value << pos);
+            arr[o] = b;
         }
     }
 }
