@@ -534,10 +534,12 @@ namespace FlipnoteDesktop.Data
             var fd = new Flipnote._FrameData();
             byte header = 0;
             header |= 1 << 7; // no frame diffing
-            header |= (byte)(((int)Layer1Color) << 3);
-            header |= (byte)(((int)Layer2Color) << 1);
+            header |= (byte)((Layer2ColorInt) << 3);
+            header |= (byte)((Layer1ColorInt) << 1);
             header |= (byte)(IsPaperWhite ? 1 : 0);
             fd.FirstByteHeader = header;
+            fd.Layer1LineEncoding = new byte[48];
+            fd.Layer2LineEncoding = new byte[48];
             // set all line encodings to Raw Line Data
             // this will be changed in the future
             for(int i=0;i<192;i++)

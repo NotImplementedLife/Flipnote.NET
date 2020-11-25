@@ -122,6 +122,9 @@ namespace FlipnoteDesktop.Data
                     SoundEffectFlags[i] = r.ReadByte();                    
                 }
                 offset += Frames.Length;
+
+                if (SoundDataSize == 0) return;
+
                 /// make the next offset dividable by 4
                 r.ReadBytes((int)((4 - offset % 4) % 4));
 
@@ -356,14 +359,20 @@ namespace FlipnoteDesktop.Data
             // write the animation data
             // THIS PART MUST BE CHANGED
 
+            uint animDataSize =(uint)(6 + 4 * frames.Count);
+
             f.AnimationHeader.FrameOffsetTableSize = (ushort)(4 * frames.Count);
-            f.AnimationHeader.Flags = 0x43;
-            f.Frames = new _FrameData[frames.Count];
+            f.AnimationHeader.Flags = 0x530000;
+            
+            f.Frames = new _FrameData[frames.Count];            
+
             for (int i = 0; i < frames.Count; i++)
             {
                 f.Frames[i] = frames[i].ToFrameData();
+                animDataSize += (uint)f.Frames[i].ToByte().Length;
             }
 
+            f.AnimationDataSize = animDataSize;
 
             return f;
         }
@@ -394,16 +403,26 @@ namespace FlipnoteDesktop.Data
 
                 w.Write(AnimationHeader.FrameOffsetTableSize);
                 w.Write((ushort)0); // 0x06A2
-                w.Write(AnimationHeader.Flags);        
-        /*                               
-        /// #06A0
-        AnimationHeader.FrameOffsetTableSize = r.ReadUInt16();
-        /// #06A2
-        AnimationHeader._06A2 = r.ReadUInt16();
-        /// #06A6
-        AnimationHeader.Flags = r.ReadUInt32();*/
+                w.Write(AnimationHeader.Flags);
 
-    }
+                List<byte[]> lst = new List<byte[]>();
+                for (int i = 0; i < Frames.Length; i++) 
+                {
+                    lst.Add(Frames[i].ToByte());
+                }
+
+                uint offset = 0;
+                for (int i = 0; i < Frames.Length; i++) 
+                {
+                    w.Write(offset);
+                    offset += (uint)lst[i].Length;
+                }
+
+                for (int i = 0; i < Frames.Length; i++)
+                {
+                    w.Write(lst[i]);
+                }           
+            }
         }
 
 
@@ -542,9 +561,35 @@ namespace FlipnoteDesktop.Data
                 var res = new List<byte>();                
                 res.Add(FirstByteHeader);
                 // pack all lines with type 3 compression
+                res.AddRange(Layer1LineEncoding);
+                res.AddRange(Layer2LineEncoding);
                 for (int l = 0; l < 192; l++)
                 {
-                    
+                    for (int i = 0; i < 32; i++) 
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++) 
+                        {
+                            int c = 8 * i + j;
+                            if (Layer1[l, c])
+                                chunk |= (byte)(1 << j);
+                        }
+                        res.Add(chunk);
+                    }
+                }
+                for (int l = 0; l < 192; l++)
+                {
+                    for (int i = 0; i < 32; i++)
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++)
+                        {
+                            int c = 8 * i + j;
+                            if (Layer2[l, c]) 
+                                chunk |= (byte)(1 << j);
+                        }
+                        res.Add(chunk);
+                    }
                 }
                 return res.ToArray();
             }
