@@ -10,6 +10,7 @@ using FlipnoteDesktop.Windows;
 using FlipnoteDesktop.Data;
 using System.IO;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace FlipnoteDesktop
 {
@@ -42,35 +43,35 @@ namespace FlipnoteDesktop
         public static event OnAuthorNameChanged AuthorNameChanged;
 
         private void Application_Startup(object sender, StartupEventArgs e)
-        {            
+        {                            
             if (e.Args.Length == 1)
-            {                
+            {
                 var filename = e.Args[0];
-                var flipnote = new Flipnote(filename);                
+                var flipnote = new Flipnote(filename);
                 double BorderWidth = (SystemParameters.MaximizedPrimaryScreenWidth - SystemParameters.FullPrimaryScreenWidth) / 2.0;
                 double TitleBarHeight = BorderWidth + SystemParameters.WindowCaptionHeight;
                 Window wnd = new Window
                 {
                     Title = "Flipnote Player",
                     Width = 512,
-                    Height = 384 + TitleBarHeight-2
+                    Height = 384 + TitleBarHeight - 2
                 };
-                SimpleFlipnotePlayer player = new SimpleFlipnotePlayer();                
+                SimpleFlipnotePlayer player = new SimpleFlipnotePlayer();
                 player.Source = flipnote;
                 wnd.Content = player;
-                wnd.Loaded += delegate(object o, RoutedEventArgs ev)
+                wnd.Loaded += delegate (object o, RoutedEventArgs ev)
                 {
                     player.Start();
                 };
                 wnd.Show();
-            }            
-            else if(e.Args.Length==0)
+            }
+            else if (e.Args.Length == 0)
             {
                 new SplashWindow().Show();
             }
             else
             {
-                
+
             }
 
         }        

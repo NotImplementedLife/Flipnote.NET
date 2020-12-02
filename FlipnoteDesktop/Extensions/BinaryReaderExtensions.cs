@@ -19,14 +19,14 @@ namespace FlipnoteDesktop.Extensions
         public static Flipnote._FrameData ReadPPMFrameData(this BinaryReader r, int cnt)
         {            
             var fd = new Flipnote._FrameData();
-            fd.Position = r.BaseStream.Position;
+            fd.StreamPosition = r.BaseStream.Position;
             try
             {
                 fd.FirstByteHeader = r.ReadByte();
             }
             catch(EndOfStreamException)
             {
-                if (fd.Position == 4288480943)
+                if (fd.StreamPosition == 4288480943)
                     throw new Exception("Critical data corruption found. Are you trying a memory pit?");
                 else
                     throw new Exception("Flipnote file is broken");

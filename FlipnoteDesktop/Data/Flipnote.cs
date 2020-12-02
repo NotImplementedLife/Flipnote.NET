@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace FlipnoteDesktop.Data
 {
@@ -58,7 +59,7 @@ namespace FlipnoteDesktop.Data
                 /// #000E
                 FormatVersion = r.ReadUInt16();
                 if (FormatVersion != 0x24)
-                    throw new FileFormatException("Format version is not 0x24"); // just in case..
+                    throw new FileFormatException("Wrong format version. It should be 0x24.");
                 /// #0010
                 Metadata.Lock = r.ReadUInt16();
                 /// #0012
@@ -106,29 +107,29 @@ namespace FlipnoteDesktop.Data
                 {                    
                     r.BaseStream.Seek(offset + AnimationHeader.Offsets[i], SeekOrigin.Begin);
                     Frames[i] = r.ReadPPMFrameData(0x06A8 + AnimationHeader.FrameOffsetTableSize);                    
-                    Frames[i].AnimationIndex = Array.IndexOf(AnimationHeader.Offsets, Frames[i].Position);
+                    Frames[i].AnimationIndex = Array.IndexOf(AnimationHeader.Offsets, Frames[i].StreamPosition);
                     if (i > 0)
                     {
                         Frames[i].Overwrite(Frames[i - 1]);                        
                     }
-                }                
-                RenderFrame(0);
+                }                               
+
+                if (SoundDataSize == 0) return;
 
                 offset = 0x6A0 + AnimationDataSize;
                 r.BaseStream.Seek(offset, SeekOrigin.Begin);
                 SoundEffectFlags = new byte[Frames.Length];
-                for (int i = 0; i < Frames.Length; i++)
-                {
+                for (int i = 0; i < Frames.Length; i++) 
+                {                    
                     SoundEffectFlags[i] = r.ReadByte();                    
                 }
                 offset += Frames.Length;
 
                 if (SoundDataSize == 0) return;
 
-                /// make the next offset dividable by 4
+                // make the next offset dividable by 4
                 r.ReadBytes((int)((4 - offset % 4) % 4));
-
-                //Debug.WriteLine(r.BaseStream.Position.ToString("X4"));
+                
                 SoundHeader.BGMTrackSize = r.ReadUInt32();
                 SoundHeader.SE1TrackSize = r.ReadUInt32();
                 SoundHeader.SE2TrackSize = r.ReadUInt32();
@@ -142,12 +143,20 @@ namespace FlipnoteDesktop.Data
                 SoundData.RawSE2 = r.ReadBytes((int)SoundHeader.SE2TrackSize);
                 SoundData.RawSE3 = r.ReadBytes((int)SoundHeader.SE3TrackSize);
 
-                //Debug.WriteLine(r.BaseStream.Position.ToString("X8"));
-
-                /// Next 0x80 bytes = RSA-1024 SHA-1 signature
-                /// Next 0x10 bytes are filled with 0
+                if (r.BaseStream.Position == r.BaseStream.Length)
+                {
+                    // file is RSA unsigned -> do something...
+                }
+                else
+                {
+                    // Next 0x80 bytes = RSA-1024 SHA-1 signature
+                    Signature = r.ReadBytes(0x80);
+                    // Next 0x10 bytes are filled with 0
+                }
             }
         }
+
+
 
         public readonly char[] FileMagic = new char[4] { 'P', 'A', 'R', 'A' };
         public uint AnimationDataSize;
@@ -161,6 +170,7 @@ namespace FlipnoteDesktop.Data
         public byte[] SoundEffectFlags;
         public _SoundHeader SoundHeader = new _SoundHeader();
         public _SoundData SoundData = new _SoundData();
+        public byte[] Signature;
 
         public List<DecodedFrame> GetDecodedFrameList()
         {
@@ -188,50 +198,31 @@ namespace FlipnoteDesktop.Data
             return result;
         }
 
-        public static List<Color> ThumbnailPalette = new List<Color>
+        // thumbnail palette colors (hex format)
+        public static List<string> ThumbnailPaletteHex = new List<string>
         {
-            (Color)ColorConverter.ConvertFromString("#FFFFFF"),
-            (Color)ColorConverter.ConvertFromString("#525252"),
-            (Color)ColorConverter.ConvertFromString("#FFFFFF"),
-            (Color)ColorConverter.ConvertFromString("#9C9C9C"),
-            (Color)ColorConverter.ConvertFromString("#FF4844"),
-            (Color)ColorConverter.ConvertFromString("#C8514F"),
-            (Color)ColorConverter.ConvertFromString("#FFADAC"),
-            (Color)ColorConverter.ConvertFromString("#00FF00"),
-            (Color)ColorConverter.ConvertFromString("#4840FF"),
-            (Color)ColorConverter.ConvertFromString("#514FB8"),
-            (Color)ColorConverter.ConvertFromString("#ADABFF"),
-            (Color)ColorConverter.ConvertFromString("#00FF00"),
-            (Color)ColorConverter.ConvertFromString("#B657B7"),
-            (Color)ColorConverter.ConvertFromString("#00FF00"),
-            (Color)ColorConverter.ConvertFromString("#00FF00"),
-            (Color)ColorConverter.ConvertFromString("#00FF00")
+            "#FFFFFF", "#525252", "#FFFFFF", "#9C9C9C",
+            "#FF4844", "#C8514F", "#FFADAC", "#00FF00",
+            "#4840FF", "#514FB8", "#ADABFF", "#00FF00",
+            "#B657B7", "#00FF00", "#00FF00", "#00FF00"
         };
+
+        // thumbnail palette colors
+        public static List<Color> ThumbnailPalette = ThumbnailPaletteHex
+            .Select(hex => (Color)ColorConverter.ConvertFromString(hex))
+            .ToList();
+
+        // actually should get rid of this one
+        public static System.Drawing.Color[] ThumbnailPaletteGDI = ThumbnailPaletteHex
+            .Select(hex => System.Drawing.ColorTranslator.FromHtml(hex))
+            .ToArray();
 
         public System.Drawing.Bitmap Thumbnail
         {
             get
             {
-                var palette = new System.Drawing.Color[]
-                {
-                        System.Drawing.ColorTranslator.FromHtml("#FFFFFF"),
-                        System.Drawing.ColorTranslator.FromHtml("#525252"),
-                        System.Drawing.ColorTranslator.FromHtml("#FFFFFF"),
-                        System.Drawing.ColorTranslator.FromHtml("#9C9C9C"),
-                        System.Drawing.ColorTranslator.FromHtml("#FF4844"),
-                        System.Drawing.ColorTranslator.FromHtml("#C8514F"),
-                        System.Drawing.ColorTranslator.FromHtml("#FFADAC"),                        
-                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
-                        System.Drawing.ColorTranslator.FromHtml("#4840FF"),
-                        System.Drawing.ColorTranslator.FromHtml("#514FB8"),
-                        System.Drawing.ColorTranslator.FromHtml("#ADABFF"),
-                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
-                        System.Drawing.ColorTranslator.FromHtml("#B657B7"),
-                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
-                        System.Drawing.ColorTranslator.FromHtml("#00FF00"),
-                        System.Drawing.ColorTranslator.FromHtml("#00FF00")                        
-                };
-                var bmp = new System.Drawing.Bitmap(64, 48);
+                var palette = ThumbnailPaletteGDI;
+                var bmp = new System.Drawing.Bitmap(64, 48);                                
                 int offset = 0;
                 for (int ty = 0; ty < 48; ty += 8)
                     for (int tx = 0; tx < 64; tx += 8)
@@ -313,16 +304,21 @@ namespace FlipnoteDesktop.Data
             string mac6 = string.Join("", authorId.Take(3).Reverse().Select(t => t.ToString("X2")));
             var asm = Assembly.GetEntryAssembly().GetName().Version;
             var dt = DateTime.UtcNow;
-            var H23 = asm.Major.ToString("X2");
-            var H45 = asm.Minor.ToString("X2");
-            var H67 = (dt.Year - 2009).ToString("X2");
-            var H89 = dt.Month * 31 + dt.Day;
-            var HABC = ((((dt.Hour * 3600 + dt.Minute * 60 + dt.Second) % 4096) >> 1) + (H89 > 255 ? 1 : 0)).ToString("X3");
-            // just a placeholder till I find out how Flipnote Studio does actually generate file names             
-            string _13str = $"80{H23}{H45}{H67}{H89.ToString("X2")}{HABC}";
+            var fnVM = ((byte)asm.Major).ToString("X2");
+            var fnVm = ((byte)asm.Minor).ToString("X2");
+            var fnYY = (byte)(dt.Year - 2009);
+            var fnMD = dt.Month * 32 + dt.Day;
+            var fnTi = (((dt.Hour * 3600 + dt.Minute * 60 + dt.Second) % 4096) >> 1) + (fnMD > 255 ? 1 : 0);
+            fnMD = (byte)fnMD;
+            var fnYMD = (fnYY << 9) + fnMD;
+            var H6_9 = fnYMD.ToString("X4");
+            var H89 = ((byte)fnMD).ToString("X2");
+            var HABC = fnTi.ToString("X3");
+
+            string _13str = $"80{fnVM}{fnVm}{H6_9}{HABC}";            
             string nEdited = 0.ToString().PadLeft(3, '0');
             var filename = $"{mac6}_{_13str}_{nEdited}.ppm";
-            f.Filename = filename;
+            f.Filename = FilenameChecksumDigit(filename) + filename.Remove(0, 1);
 
             var rawfn = new byte[18];
             for (int i = 0; i < 3; i++) 
@@ -362,14 +358,14 @@ namespace FlipnoteDesktop.Data
             uint animDataSize =(uint)(6 + 4 * frames.Count);
 
             f.AnimationHeader.FrameOffsetTableSize = (ushort)(4 * frames.Count);
-            f.AnimationHeader.Flags = 0x530000;
+            f.AnimationHeader.Flags = 0x420000;
             
-            f.Frames = new _FrameData[frames.Count];            
+            f.Frames = new _FrameData[frames.Count]; ;
 
             for (int i = 0; i < frames.Count; i++)
             {
                 f.Frames[i] = frames[i].ToFrameData();
-                animDataSize += (uint)f.Frames[i].ToByte().Length;
+                animDataSize += (uint)f.Frames[i].ToByteArray().Length;
             }
 
             f.AnimationDataSize = animDataSize;
@@ -405,23 +401,46 @@ namespace FlipnoteDesktop.Data
                 w.Write((ushort)0); // 0x06A2
                 w.Write(AnimationHeader.Flags);
 
+                // Calculate frame offsets & write frame data
                 List<byte[]> lst = new List<byte[]>();
-                for (int i = 0; i < Frames.Length; i++) 
-                {
-                    lst.Add(Frames[i].ToByte());
-                }
-
                 uint offset = 0;
                 for (int i = 0; i < Frames.Length; i++) 
                 {
+                    lst.Add(Frames[i].ToByteArray());
                     w.Write(offset);
                     offset += (uint)lst[i].Length;
-                }
+                }                
 
                 for (int i = 0; i < Frames.Length; i++)
                 {
                     w.Write(lst[i]);
-                }           
+                }
+
+                // Write sound data
+                for (int i = 0; i < Frames.Length; i++) 
+                    w.Write((byte)0);
+
+                // make the next offset dividable by 4
+                w.Write(new byte[(4 - w.BaseStream.Position % 4) % 4]);
+                w.Write((uint)0); // BGM
+                w.Write((uint)0); // SE1
+                w.Write((uint)0); // SE2
+                w.Write((uint)0); // SE3
+
+                w.Write(SoundHeader.CurrentFramespeed); // Frame speed
+                w.Write(1); //BGM speed
+                w.Write(new byte[14]);
+                
+                using (var ms = new MemoryStream()) 
+                {
+                    var p = w.BaseStream.Position;
+                    w.BaseStream.Seek(0, SeekOrigin.Begin);
+                    w.BaseStream.CopyTo(ms);
+                    File.WriteAllBytes("flipnote.dat", ms.ToArray());
+                    w.BaseStream.Seek(p, SeekOrigin.Begin);
+                    w.Write(ComputeSignature(ms.ToArray()));                    
+                }
+                w.Write(new byte[0x10]);
             }
         }
 
@@ -436,10 +455,102 @@ namespace FlipnoteDesktop.Data
                 sumc = (sumc + (int)filename[i]) % 256;
             }
             return checksumDict[sumc % 36];
+        }       
+
+        /// <summary>
+        /// Generates the RSA SHA-1 signature for the file data passed as parameter
+        /// </summary>
+        /// <remarks>
+        /// The private key is not contained in this package. Good luck in googling 
+        /// it by yourself. Once you have it, place it in a file named "private-key"
+        /// in PEM format.
+        /// </remarks>
+        /// <param name="data">The PPM binary data</param>      
+        /// <returns>a 144-sized byte array.</returns>
+        public static byte[] ComputeSignature(byte[] data)
+        {
+            var privkey = File.ReadAllText("private-key")
+                .Replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .Replace("-----END RSA PRIVATE KEY-----", "")
+                .Replace(System.Environment.NewLine, "");
+            var rsa = CreateRsaProviderFromPrivateKey(privkey);
+            var hash = new SHA1CryptoServiceProvider().ComputeHash(data);
+            return rsa.SignHash(hash, CryptoConfig.MapNameToOID("SHA1"));
         }
 
-        public class _Metadata
+        // https://stackoverflow.com/questions/14644926/use-pem-encoded-rsa-private-key-in-net                     
+        private static RSACryptoServiceProvider CreateRsaProviderFromPrivateKey(string privateKey)
         {
+            var privkeybytes = Convert.FromBase64String(privateKey);
+            var rsa = new RSACryptoServiceProvider();
+            var RSAparams = new RSAParameters();
+            using (BinaryReader r = new BinaryReader(new MemoryStream(privkeybytes)))
+            {
+                byte bt = 0;
+                ushort twobytes = 0;
+                twobytes = r.ReadUInt16();
+                if (twobytes == 0x8130)
+                    r.ReadByte();
+                else if (twobytes == 0x8230)
+                    r.ReadInt16();
+                else
+                    throw new Exception("Unexpected format");
+
+                twobytes = r.ReadUInt16();
+                if (twobytes != 0x0102)
+                    throw new Exception("Unexpected version");
+
+                bt = r.ReadByte();
+                if (bt != 0x00)
+                    throw new Exception("Unexpected format");
+
+                RSAparams.Modulus = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.Exponent = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.D = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.P = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.Q = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.DP = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.DQ = r.ReadBytes(GetIntegerSize(r));
+                RSAparams.InverseQ = r.ReadBytes(GetIntegerSize(r));
+            }
+
+            rsa.ImportParameters(RSAparams);
+            return rsa;
+        }
+
+        private static int GetIntegerSize(BinaryReader r)
+        {
+            byte bt = 0;
+            byte lowbyte = 0x00;
+            byte highbyte = 0x00;
+            int count = 0;
+            bt = r.ReadByte();
+            if (bt != 0x02)
+                return 0;
+            bt = r.ReadByte();
+            if (bt == 0x81)
+                count = r.ReadByte();
+            else
+                if (bt == 0x82)
+            {
+                highbyte = r.ReadByte();
+                lowbyte = r.ReadByte();
+                byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
+                count = BitConverter.ToInt32(modint, 0);
+            }
+            else            
+                count = bt;
+            while (r.ReadByte() == 0x00)
+                count--;            
+            r.BaseStream.Seek(-1, SeekOrigin.Current);
+            return count;
+        }
+
+        /// <summary>
+        /// Flipnote file metadata.
+        /// </summary>
+        public class _Metadata
+        {           
             public ushort Lock;
             public ushort ThumbnailFrameIndex;
             public string RootAuthorName;
@@ -450,15 +561,18 @@ namespace FlipnoteDesktop.Data
             public byte[] ParentFilename;
             public byte[] CurrentFilename;
             public byte[] RootAuthorId;
-            public byte[] RootFileFragment;
-            public uint Timestamp;
-            public ushort _0x9E; //unused                     
+            public byte[] RootFileFragment;           
+            public uint Timestamp; // aka # of seconds passed since 2020/01/01
+            public ushort _0x9E;   // unused                     
 
+            /// <summary>
+            /// Get the actual date from Timestamp.
+            /// </summary>
             public DateTime Date
             {
-                get => new DateTime(2000, 1, 1).AddSeconds(Timestamp);                
+                get => new DateTime(2000, 1, 1).AddSeconds(Timestamp);
             }
-        }        
+        }
 
         public class _AnimationHeader
         {
@@ -468,13 +582,18 @@ namespace FlipnoteDesktop.Data
             public uint[] Offsets;
         }
 
+        /// <summary>
+        /// Flipnote animation frame data. This is a low-level data linker
+        /// for filesystem read/write operations. At application level, 
+        /// DecodedFrame is used while editing the flipnotes.
+        /// </summary>        
         public class _FrameData
-        {
-            public long Position;            
+        {            
+            public long StreamPosition;            
             public long AnimationIndex;
             public byte FirstByteHeader;
-            public byte[] Layer1LineEncoding;
-            public byte[] Layer2LineEncoding;
+            public byte[] Layer1LineEncoding = new byte[48];
+            public byte[] Layer2LineEncoding = new byte[48];
 
             public bool[,] Layer1 = new bool[192, 256];
             public bool[,] Layer2 = new bool[192, 256];
@@ -527,12 +646,33 @@ namespace FlipnoteDesktop.Data
                 return (LineEncoding)((_byte >> pos) & 0x3);
             }
 
+            /// <summary>
+            /// Helper for editing the Layer`X`LineEncoding individual line compression data.
+            /// </summary>
+            /// <param name="target">Could be Layer1LineEncoding or Layer2LineEncoding</param>
+            /// <param name="index">Index of line whose compression to be set</param>
+            /// <param name="value">Compression type (could be 0, 1, 2 or 3)</param>
+            private void SetLineEncoding(byte[] target, int index, int value)
+            {
+                int o = index >> 2;
+                int pos = (index & 0x3) * 2;
+                var b = target[o];
+                b &= (byte)~(0x3 << pos);
+                b |= (byte)(value << pos);
+                target[o] = b;
+            }
+
+            /// <summary>
+            /// Builds the current frame by writing the current data over the previous frame data.           
+            /// </summary>
+            /// <remarks>Used if frame diffing is enabled.</remarks>
+            /// <param name="frame">The previous frame</param>
             public void Overwrite(_FrameData frame)
-            {                
+            {
                 if ((FirstByteHeader & 0b10000000) != 0)
-                {                    
+                {
                     return;
-                }                
+                }
                 for(int y=0;y<192;y++)
                 {
                     if (y - TranslateY < 0) continue;
@@ -547,37 +687,107 @@ namespace FlipnoteDesktop.Data
                 }
             }
 
-            /*public System.Drawing.Bitmap xFrame(int i)
-            {
-                var bmp = new System.Drawing.Bitmap(256, 192);
-                for (int x = 0; x < 256; x++)
-                    for (int y = 0; y < 192; y++)
-                        bmp.SetPixel(x, y, Layer1[y, x] ? System.Drawing.Color.Black : System.Drawing.Color.White);
-                return bmp;
-            } */        
-
-            public byte[] ToByte()
+            /// <summary>
+            /// Converts frame data to flipnote PPM-format binary
+            /// </summary>
+            /// <returns>
+            /// A byte array containing animation frame data as should
+            /// be existent in a PPM file
+            /// </returns>
+            public byte[] ToByteArray()
             {
                 var res = new List<byte>();                
                 res.Add(FirstByteHeader);
+
                 // pack all lines with type 3 compression
+                for (int i = 0; i < 48; i++)
+                    Layer1LineEncoding[i] = Layer2LineEncoding[i] = 0xFF;
+                for(int l=0;l<192;l++)
+                {
+                    var enc = L1ChooseLineEncoding(l);
+                    if (enc == 0) SetLineEncoding(Layer1LineEncoding, l, 0);
+                    enc = L2ChooseLineEncoding(l);
+                    if (enc == 0) SetLineEncoding(Layer2LineEncoding, l, 0);
+                }
+
                 res.AddRange(Layer1LineEncoding);
                 res.AddRange(Layer2LineEncoding);
                 for (int l = 0; l < 192; l++)
                 {
-                    for (int i = 0; i < 32; i++) 
-                    {
-                        byte chunk = 0;
-                        for (int j = 0; j < 8; j++) 
-                        {
-                            int c = 8 * i + j;
-                            if (Layer1[l, c])
-                                chunk |= (byte)(1 << j);
-                        }
-                        res.Add(chunk);
-                    }
+                    L1PutLine(res, l);                                        
                 }
                 for (int l = 0; l < 192; l++)
+                {
+                    L2PutLine(res, l);
+                }
+                return res.ToArray();
+            }
+
+            /// <summary>
+            /// Choose the encoding for a Layer 1 line
+            /// </summary>
+            /// <param name="l">Line number</param>
+            /// <returns></returns>
+            private int L1ChooseLineEncoding(int l)
+            {
+                // count the 0-filled & 1-filled 8-bit chuncks
+                int _0chks = 0, _1chks = 0;
+                for (int i = 0; i < 32; i++) 
+                {
+                    int c = 8 * i, n0 = 0, n1 = 0;
+                    for (int j = 0; j < 8; j++)
+                        if(Layer1[l,c+j])                        
+                            n1++;                        
+                        else                        
+                            n0++;
+                    _0chks += n0 == 8 ? 1 : 0;
+                    _1chks += n1 == 8 ? 1 : 0;
+                }
+                // no line data => compression type 0
+                if (_0chks == 32) 
+                    return 0;
+                // no chuncks of any type => compression type 3
+                if (_0chks == 0 && _1chks == 0)
+                    return 3;
+                // choose between compression types 1 and 2
+                return _0chks > _1chks ? 1 : 2;
+            }
+
+            /// <summary>
+            /// Choose the encoding for a Layer 2 line
+            /// </summary>
+            /// <param name="l">Line number</param>
+            /// <returns></returns>
+            private int L2ChooseLineEncoding(int l)
+            {
+                // count the 0-filled & 1-filled 8-bit chuncks
+                int _0chks = 0, _1chks = 0;
+                for (int i = 0; i < 32; i++)
+                {
+                    int c = 8 * i, n0 = 0, n1 = 0;
+                    for (int j = 0; j < 8; j++)
+                        if (Layer2[l, c + j]) 
+                            n1++;
+                        else
+                            n0++;
+                    _0chks += n0 == 8 ? 1 : 0;
+                    _1chks += n1 == 8 ? 1 : 0;
+                }
+                // no line data => compression type 0
+                if (_0chks == 32)
+                    return 0;
+                // no chuncks of any type => compression type 3
+                if (_0chks == 0 && _1chks == 0)
+                    return 3;
+                // choose between compression types 1 and 2
+                return _0chks > _1chks ? 1 : 2;
+            }
+
+            private void L1PutLine(List<byte> lst, int ln)
+            {
+                int compr = (int)GetLineEncoding1(ln);
+                if (compr == 0) return;
+                if(compr==3)
                 {
                     for (int i = 0; i < 32; i++)
                     {
@@ -585,15 +795,34 @@ namespace FlipnoteDesktop.Data
                         for (int j = 0; j < 8; j++)
                         {
                             int c = 8 * i + j;
-                            if (Layer2[l, c]) 
+                            if (Layer1[ln, c]) 
                                 chunk |= (byte)(1 << j);
                         }
-                        res.Add(chunk);
+                        lst.Add(chunk);
                     }
                 }
-                return res.ToArray();
             }
-        }
+
+            private void L2PutLine(List<byte> lst, int ln)
+            {
+                int compr = (int)GetLineEncoding2(ln);
+                if (compr == 0) return;
+                if (compr == 3)
+                {
+                    for (int i = 0; i < 32; i++)
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++)
+                        {
+                            int c = 8 * i + j;
+                            if (Layer2[ln, c]) 
+                                chunk |= (byte)(1 << j);
+                        }
+                        lst.Add(chunk);
+                    }
+                }
+            }
+        } // _FrameData
 
         public class _SoundHeader
         {
@@ -623,10 +852,13 @@ namespace FlipnoteDesktop.Data
 
         public int FrameSpeed
         {
-            get => PlaybackSpeed[SoundHeader.CurrentFramespeed];
+            get => FrameSpeedToMs[SoundHeader.CurrentFramespeed];
         }
-
-        public static _PlaybackSpeed PlaybackSpeed = new _PlaybackSpeed();
+        
+        /// <summary>
+        /// Class helper to convert the 1-8 frame speed numbering system to milliseconds
+        /// </summary>
+        public static _PlaybackSpeed FrameSpeedToMs = new _PlaybackSpeed();
         public class _PlaybackSpeed
         {
             public int this[int i]

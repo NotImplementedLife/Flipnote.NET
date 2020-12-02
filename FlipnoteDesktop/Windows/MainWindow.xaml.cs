@@ -160,6 +160,12 @@ namespace FlipnoteDesktop.Windows
             if(Flipnote==null)
             {
                 Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);
+                //var fil
+                Flipnote.Save(Flipnote.Filename);
+            }
+            else
+            {
+                Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);
                 Flipnote.Save(Flipnote.Filename);
             }
         }

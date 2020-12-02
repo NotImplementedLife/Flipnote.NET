@@ -537,16 +537,7 @@ namespace FlipnoteDesktop.Data
             header |= (byte)((Layer2ColorInt) << 3);
             header |= (byte)((Layer1ColorInt) << 1);
             header |= (byte)(IsPaperWhite ? 1 : 0);
-            fd.FirstByteHeader = header;
-            fd.Layer1LineEncoding = new byte[48];
-            fd.Layer2LineEncoding = new byte[48];
-            // set all line encodings to Raw Line Data
-            // this will be changed in the future
-            for(int i=0;i<192;i++)
-            {
-                SetLineEncoding(fd.Layer1LineEncoding, i, 3);
-                SetLineEncoding(fd.Layer2LineEncoding, i, 3);
-            }
+            fd.FirstByteHeader = header;            
             for (int x = 0; x < 256; x++)
                 for (int y = 0; y < 192; y++) 
                 {
@@ -554,16 +545,6 @@ namespace FlipnoteDesktop.Data
                     fd.Layer2[y, x] = Layer2Data[x, y];
                 }
             return fd;
-        }
-
-        private void SetLineEncoding(byte[] arr,int index,int value)
-        {
-            int o = index >> 2;
-            int pos = (index & 0x3) * 2;
-            var b = arr[o];
-            b &= (byte)~(0x3 << pos);
-            b |= (byte)(value << pos);
-            arr[o] = b;
-        }
+        }               
     }
 }
