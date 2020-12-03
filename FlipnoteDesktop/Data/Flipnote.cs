@@ -355,21 +355,24 @@ namespace FlipnoteDesktop.Data
             // write the animation data
             // THIS PART MUST BE CHANGED
 
-            uint animDataSize =(uint)(6 + 4 * frames.Count);
+            uint animDataSize = (uint)(8 + 4 * frames.Count);
 
             f.AnimationHeader.FrameOffsetTableSize = (ushort)(4 * frames.Count);
             f.AnimationHeader.Flags = 0x420000;
             
-            f.Frames = new _FrameData[frames.Count]; ;
+            f.Frames = new _FrameData[frames.Count];
 
+            int x = 0;
             for (int i = 0; i < frames.Count; i++)
             {
                 f.Frames[i] = frames[i].ToFrameData();
-                animDataSize += (uint)f.Frames[i].ToByteArray().Length;
+                animDataSize += (uint)f.Frames[i].ToByteArray().Length;                
             }
-
+            while ((animDataSize & 0x3) != 0) animDataSize++;            
             f.AnimationDataSize = animDataSize;
 
+            f.SoundHeader.CurrentFramespeed = 3;
+            f.SoundHeader.RecordedBGMFramespeed = 1;
             return f;
         }
 
@@ -416,6 +419,8 @@ namespace FlipnoteDesktop.Data
                     w.Write(lst[i]);
                 }
 
+                w.Write(new byte[(4 - w.BaseStream.Position % 4) % 4]);
+
                 // Write sound data
                 for (int i = 0; i < Frames.Length; i++) 
                     w.Write((byte)0);
@@ -428,15 +433,14 @@ namespace FlipnoteDesktop.Data
                 w.Write((uint)0); // SE3
 
                 w.Write(SoundHeader.CurrentFramespeed); // Frame speed
-                w.Write(1); //BGM speed
+                w.Write(SoundHeader.RecordedBGMFramespeed); //BGM speed
                 w.Write(new byte[14]);
                 
                 using (var ms = new MemoryStream()) 
                 {
                     var p = w.BaseStream.Position;
                     w.BaseStream.Seek(0, SeekOrigin.Begin);
-                    w.BaseStream.CopyTo(ms);
-                    File.WriteAllBytes("flipnote.dat", ms.ToArray());
+                    w.BaseStream.CopyTo(ms);                    
                     w.BaseStream.Seek(p, SeekOrigin.Begin);
                     w.Write(ComputeSignature(ms.ToArray()));                    
                 }
@@ -697,29 +701,16 @@ namespace FlipnoteDesktop.Data
             public byte[] ToByteArray()
             {
                 var res = new List<byte>();                
-                res.Add(FirstByteHeader);
-
-                // pack all lines with type 3 compression
-                for (int i = 0; i < 48; i++)
-                    Layer1LineEncoding[i] = Layer2LineEncoding[i] = 0xFF;
+                res.Add(FirstByteHeader);                
                 for(int l=0;l<192;l++)
                 {
-                    var enc = L1ChooseLineEncoding(l);
-                    if (enc == 0) SetLineEncoding(Layer1LineEncoding, l, 0);
-                    enc = L2ChooseLineEncoding(l);
-                    if (enc == 0) SetLineEncoding(Layer2LineEncoding, l, 0);
+                    SetLineEncoding(Layer1LineEncoding, l, L1ChooseLineEncoding(l));
+                    SetLineEncoding(Layer2LineEncoding, l, L2ChooseLineEncoding(l));                    
                 }
-
                 res.AddRange(Layer1LineEncoding);
                 res.AddRange(Layer2LineEncoding);
-                for (int l = 0; l < 192; l++)
-                {
-                    L1PutLine(res, l);                                        
-                }
-                for (int l = 0; l < 192; l++)
-                {
-                    L2PutLine(res, l);
-                }
+                for (int l = 0; l < 192; L1PutLine(res, l++)) ;
+                for (int l = 0; l < 192; L2PutLine(res, l++)) ;                
                 return res.ToArray();
             }
 
@@ -787,19 +778,65 @@ namespace FlipnoteDesktop.Data
             {
                 int compr = (int)GetLineEncoding1(ln);
                 if (compr == 0) return;
-                if(compr==3)
+                if(compr==1)
+                {
+                    var chks = new List<byte>();
+                    uint flag = 0;
+                    for (int i = 0; i < 32; i++) 
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++)
+                            if (Layer1[ln, 8 * i + j]) 
+                                chunk |= (byte)(1 << j);
+                        if (chunk != 0x00) 
+                        {
+                            flag |= (1u << (31 - i));
+                            chks.Add(chunk);
+                        }
+                    }
+                    lst.Add((byte)((flag & 0xFF000000u) >> 24));
+                    lst.Add((byte)((flag & 0x00FF0000u) >> 16));
+                    lst.Add((byte)((flag & 0x0000FF00u) >> 8));
+                    lst.Add((byte)(flag & 0x000000FFu));
+                    lst.AddRange(chks);
+                    return;
+                }
+                if (compr == 2) 
+                {
+                    var chks = new List<byte>();
+                    uint flag = 0;
+                    for (int i = 0; i < 32; i++)
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++) 
+                            if (Layer1[ln, 8 * i + j])
+                                chunk |= (byte)(1 << j);
+                        if (chunk != 0xFF) 
+                        {
+                            flag |= (1u << (31 - i));
+                            chks.Add(chunk);
+                        }
+                    }
+                    lst.Add((byte)((flag & 0xFF000000u) >> 24));
+                    lst.Add((byte)((flag & 0x00FF0000u) >> 16));
+                    lst.Add((byte)((flag & 0x0000FF00u) >> 8));
+                    lst.Add((byte)(flag & 0x000000FFu));
+                    lst.AddRange(chks);
+                    return;
+                }
+                if (compr==3)
                 {
                     for (int i = 0; i < 32; i++)
                     {
                         byte chunk = 0;
                         for (int j = 0; j < 8; j++)
-                        {
-                            int c = 8 * i + j;
-                            if (Layer1[ln, c]) 
+                        {                           
+                            if (Layer1[ln, 8 * i + j]) 
                                 chunk |= (byte)(1 << j);
                         }
                         lst.Add(chunk);
                     }
+                    return;
                 }
             }
 
@@ -807,6 +844,52 @@ namespace FlipnoteDesktop.Data
             {
                 int compr = (int)GetLineEncoding2(ln);
                 if (compr == 0) return;
+                if (compr == 1)
+                {
+                    var chks = new List<byte>();
+                    uint flag = 0;
+                    for (int i = 0; i < 32; i++)
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++)
+                            if (Layer2[ln, 8 * i + j]) 
+                                chunk |= (byte)(1 << j);
+                        if (chunk != 0x00)
+                        {
+                            flag |= (1u << (31 - i));
+                            chks.Add(chunk);
+                        }
+                    }                    
+                    lst.Add((byte)((flag & 0xFF000000u) >> 24));
+                    lst.Add((byte)((flag & 0x00FF0000u) >> 16));
+                    lst.Add((byte)((flag & 0x0000FF00u) >> 8));
+                    lst.Add((byte)(flag & 0x000000FFu));                    
+                    lst.AddRange(chks);                    
+                    return;
+                }
+                if (compr == 2)
+                {
+                    var chks = new List<byte>();
+                    uint flag = 0;
+                    for (int i = 0; i < 32; i++)
+                    {
+                        byte chunk = 0;
+                        for (int j = 0; j < 8; j++)
+                            if (Layer2[ln, 8 * i + j])
+                                chunk |= (byte)(1 << j);
+                        if (chunk != 0xFF)
+                        {
+                            flag |= (1u << (31 - i));
+                            chks.Add(chunk);
+                        }
+                    }
+                    lst.Add((byte)((flag & 0xFF000000u) >> 24));
+                    lst.Add((byte)((flag & 0x00FF0000u) >> 16));
+                    lst.Add((byte)((flag & 0x0000FF00u) >> 8));
+                    lst.Add((byte)(flag & 0x000000FFu));
+                    lst.AddRange(chks);
+                    return;
+                }
                 if (compr == 3)
                 {
                     for (int i = 0; i < 32; i++)
@@ -814,12 +897,12 @@ namespace FlipnoteDesktop.Data
                         byte chunk = 0;
                         for (int j = 0; j < 8; j++)
                         {
-                            int c = 8 * i + j;
-                            if (Layer2[ln, c]) 
+                            if (Layer2[ln, 8 * i + j]) 
                                 chunk |= (byte)(1 << j);
                         }
                         lst.Add(chunk);
                     }
+                    return;
                 }
             }
         } // _FrameData

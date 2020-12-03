@@ -534,8 +534,8 @@ namespace FlipnoteDesktop.Data
             var fd = new Flipnote._FrameData();
             byte header = 0;
             header |= 1 << 7; // no frame diffing
-            header |= (byte)((Layer2ColorInt) << 3);
-            header |= (byte)((Layer1ColorInt) << 1);
+            header |= (byte)(((int)Layer2Color+1) << 3);
+            header |= (byte)(((int)Layer1Color+1) << 1);           
             header |= (byte)(IsPaperWhite ? 1 : 0);
             fd.FirstByteHeader = header;            
             for (int x = 0; x < 256; x++)

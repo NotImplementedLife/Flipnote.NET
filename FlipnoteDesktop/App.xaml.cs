@@ -54,7 +54,7 @@ namespace FlipnoteDesktop
                 {
                     Title = "Flipnote Player",
                     Width = 512,
-                    Height = 384 + TitleBarHeight - 2
+                    Height = 384 + TitleBarHeight - 4
                 };
                 SimpleFlipnotePlayer player = new SimpleFlipnotePlayer();
                 player.Source = flipnote;
