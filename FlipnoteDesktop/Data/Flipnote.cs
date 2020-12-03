@@ -358,7 +358,7 @@ namespace FlipnoteDesktop.Data
             uint animDataSize = (uint)(8 + 4 * frames.Count);
 
             f.AnimationHeader.FrameOffsetTableSize = (ushort)(4 * frames.Count);
-            f.AnimationHeader.Flags = 0x420000;
+            f.AnimationHeader.Flags = 0x430000;
             
             f.Frames = new _FrameData[frames.Count];
 

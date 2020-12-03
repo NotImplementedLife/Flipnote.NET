@@ -12,7 +12,13 @@ namespace FlipnoteDesktop.Data
 {
     public class DecodedFrame
     {
+        /// <summary>
+        /// Layer 1 pixels as double array. Usage: Layer1Data[x,y]= ~true|false~;
+        /// </summary>
         public bool[,] Layer1Data = new bool[256, 192];
+        /// <summary>
+        /// Layer 2 pixels as double array. Usage: Layer2Data[x,y]= ~true|false~;
+        /// </summary>
         public bool[,] Layer2Data = new bool[256, 192];
 
         public DecodedFrame()

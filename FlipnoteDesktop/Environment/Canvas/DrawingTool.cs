@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace FlipnoteDesktop.Environment.Canvas
 {
-    public class DrawingTool
+    public abstract class DrawingTool
     {
         public FrameCanvasEditor Target { get; private set; } = null;
 

@@ -1,4 +1,5 @@
 ﻿using FlipnoteDesktop.Data;
+using FlipnoteDesktop.Environment.Canvas.Generators;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -136,6 +137,9 @@ namespace FlipnoteDesktop.Windows
             if(ofd.ShowDialog()==true)
             {
                 Flipnote = new Flipnote(ofd.FileName);
+                // This stores the flipnote frames
+                // Ok, ok, it's not the best practice, but at least it works.
+                // Maybe I'll change this in the future.
                 FramesList.List.ItemsSource = Flipnote.GetDecodedFrameList();                
                 FramesList.List.Items.Refresh();
                 FramesList.List.SelectedIndex = 0;
@@ -159,8 +163,7 @@ namespace FlipnoteDesktop.Windows
         {
             if(Flipnote==null)
             {
-                Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);
-                //var fil
+                Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);                
                 Flipnote.Save(Flipnote.Filename);
             }
             else
@@ -168,6 +171,14 @@ namespace FlipnoteDesktop.Windows
                 Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);
                 Flipnote.Save(Flipnote.Filename);
             }
+        }
+
+        private void ExampleGeneratorMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var g = new ExampleGenerator();
+            g.Execute(FramesList.List.ItemsSource as List<DecodedFrame>);
+            FramesList.List.Items.Refresh();
+            FramesList.List.SelectedIndex = 0;
         }
     }
 

@@ -153,6 +153,8 @@
     <Compile Include="Environment\Canvas\DrawingTool.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\LineTool.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\EraserTool.cs" />
+    <Compile Include="Environment\Canvas\Generator.cs" />
+    <Compile Include="Environment\Canvas\Generators\ExampleGenerator.cs" />
     <Compile Include="Environment\Canvas\Pattern.cs" />
     <Compile Include="Environment\Canvas\BrushPatterns.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\BrushTool.cs" />
@@ -401,6 +403,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
 </Project>

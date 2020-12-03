@@ -50,6 +50,12 @@
                     <MenuItem Name="ShowGridMenuItem"
                         Header="_Show Grid" Command="local:MainWindowCommands.ToggleGridVisibility" InputGestureText="Ctrl+G" IsCheckable="True"/>
                 </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem Name="GeneratorsMenuItem" Header="Generators...">
+                        <MenuItem Name="ExampleGeneratorMenuItem" Header="Example Generator" Click="ExampleGeneratorMenuItem_Click"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Name="ManagePluginsMenuItem" Header="Manage Plugins..."/>
+                </MenuItem>
                 <MenuItem Header="_Options">
                     <MenuItem Name="FlipnoteUserMenuItem" 
                               Header="Flipnote User" InputGestureText="(none)"
