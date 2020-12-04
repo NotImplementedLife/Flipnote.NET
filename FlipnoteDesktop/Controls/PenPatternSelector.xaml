@@ -115,7 +115,7 @@
                                 BorderBrush="Transparent"
                                 BorderThickness="2"
                                 Width="24" Height="24">
-                            <drawable:PatternSample PatternName="{TemplateBinding Content}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                            <drawable:PenPatternSample PatternName="{TemplateBinding Content}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                         </Border>
 
                         <ControlTemplate.Triggers>

@@ -23,5 +23,12 @@ namespace FlipnoteDesktop.Environment.Canvas
         {
             return Pixels[y % Rows, x % Cols];
         }
+
+        /// <summary>
+        /// This option adds extra pixels to drawn shapes (lines) to make it a continuous drawing.
+        /// </summary>
+        /// <remarks>
+        /// Only used by PenPatterns</remarks>
+        public bool ContinuousDraw = false;
     }
 }

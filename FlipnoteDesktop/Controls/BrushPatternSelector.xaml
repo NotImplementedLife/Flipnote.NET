@@ -59,8 +59,7 @@
                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                             Margin="3,3,13,3" VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch" />
-                            <TextBox x:Name="PART_EditableTextBox"
-                            Style="{x:Null}" 
+                            <TextBox x:Name="PART_EditableTextBox" Style="{x:Null}" 
                             Template="{StaticResource ComboBoxTextBox}" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center" 
@@ -115,7 +114,8 @@
                                 BorderBrush="Transparent"
                                 BorderThickness="2"
                                 Width="24" Height="24">
-                            <drawable:PatternSample PatternName="{TemplateBinding Content}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                            <drawable:BrushPatternSample PatternName="{TemplateBinding Content}" 
+                                                    RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                         </Border>
 
                         <ControlTemplate.Triggers>

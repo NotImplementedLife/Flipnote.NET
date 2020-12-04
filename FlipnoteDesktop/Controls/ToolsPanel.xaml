@@ -24,7 +24,10 @@
                                         MouseUp="DragArea_MouseUp"/>
             </StackPanel>
             <UniformGrid Columns="2" Grid.Row="1" VerticalAlignment="Top">
-                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0">
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="PenTool"
+                        ToolTip="Pen"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
                     <Button.Content>
                         <drawable:PenIcon/>
                     </Button.Content>

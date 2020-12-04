@@ -25,11 +25,11 @@ namespace FlipnoteDesktop.Controls
         public PenPatternSelector()
         {
             InitializeComponent();
-            ComboBox.ItemsSource = PenPatterns.NamesList();
+            ComboBox.ItemsSource = PenPatterns.NamesList();            
         }
 
         public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(PenPatternSelector),
-          new FrameworkPropertyMetadata(BrushPatterns.Mono, new PropertyChangedCallback(ValuePropertyChanged)));
+          new FrameworkPropertyMetadata(PenPatterns.Mono, new PropertyChangedCallback(ValuePropertyChanged)));
 
         private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -50,13 +50,13 @@ namespace FlipnoteDesktop.Controls
         public event OnValueChanged ValueChanged;
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DataContext = new PatternSample
-            {
-                PatternName = (string)ComboBox.SelectedItem,
+        {            
+            DataContext = new PenPatternSample
+            {                
+                PatternName = (string)ComboBox.SelectedItem,                
                 Padding = new Thickness(3)
             };
-            Value = (DataContext as PatternSample).Pattern;
+            Value = (DataContext as PenPatternSample).Pattern;
         }
     }
 }

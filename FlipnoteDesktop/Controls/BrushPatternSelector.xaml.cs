@@ -51,12 +51,12 @@ namespace FlipnoteDesktop.Controls
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataContext = new PatternSample
-            {
+            DataContext = new BrushPatternSample
+            {                
                 PatternName = (string)ComboBox.SelectedItem,
                 Padding = new Thickness(3)                
             };
-            Value = (DataContext as PatternSample).Pattern;
+            Value = (DataContext as BrushPatternSample).Pattern;
         }
     }
 }

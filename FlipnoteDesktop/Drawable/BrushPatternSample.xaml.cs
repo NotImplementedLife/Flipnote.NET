@@ -1,7 +1,6 @@
 ﻿using FlipnoteDesktop.Environment.Canvas;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,20 +17,20 @@ using System.Windows.Shapes;
 namespace FlipnoteDesktop.Drawable
 {
     /// <summary>
-    /// Interaction logic for PatternSample.xaml
+    /// Interaction logic for BrushPatternSample.xaml
     /// </summary>
-    public partial class PatternSample : UserControl
+    public partial class BrushPatternSample : UserControl
     {
-        public PatternSample()
+        public BrushPatternSample()
         {
-            InitializeComponent();            
+            InitializeComponent();
             Image.Source = new WriteableBitmap(12, 12, 96, 96, PixelFormats.Indexed2,
-                new BitmapPalette(new List<Color> { Colors.White, Colors.Black }));           
+                new BitmapPalette(new List<Color> { Colors.White, Colors.Black }));
         }
 
         public bool IsPen;
 
-        public static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(PatternSample),
+        public static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(BrushPatternSample),
             new PropertyMetadata("Default", new PropertyChangedCallback(PatternNamePropertyChanged)));
 
         public string PatternName
@@ -47,13 +46,13 @@ namespace FlipnoteDesktop.Drawable
 
         private static void PatternNamePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var o = d as PatternSample;
+            var o = d as BrushPatternSample;
             Pattern p = BrushPatterns.Mono;
             try
             {
                 if (e.NewValue is string)
                 {
-                    p = typeof(BrushPatterns).GetField((string)e.NewValue).GetValue(null) as Pattern;                    
+                    p = typeof(BrushPatterns).GetField((string)e.NewValue).GetValue(null) as Pattern;
                 }
             }
             finally
@@ -61,7 +60,7 @@ namespace FlipnoteDesktop.Drawable
                 for (int x = 0; x < 12; x++)
                     for (int y = 0; y < 12; y++)
                         if (p.GetPixelAt(x, y))
-                        {                            
+                        {
                             o.SetImagePixel(x, y, 1);
                         }
             }

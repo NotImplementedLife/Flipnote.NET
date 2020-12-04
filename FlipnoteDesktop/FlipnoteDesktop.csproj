@@ -105,6 +105,9 @@
     <Compile Include="Drawable\BrushIcon.xaml.cs">
       <DependentUpon>BrushIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Drawable\BrushPatternSample.xaml.cs">
+      <DependentUpon>BrushPatternSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Drawable\CopyFrameIcon.xaml.cs">
       <DependentUpon>CopyFrameIcon.xaml</DependentUpon>
     </Compile>
@@ -141,11 +144,11 @@
     <Compile Include="Drawable\PaperIcon.xaml.cs">
       <DependentUpon>PaperIcon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Drawable\PatternSample.xaml.cs">
-      <DependentUpon>PatternSample.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Drawable\PenIcon.xaml.cs">
       <DependentUpon>PenIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\PenPatternSample.xaml.cs">
+      <DependentUpon>PenPatternSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\UpPointingTriangle.xaml.cs">
       <DependentUpon>UpPointingTriangle.xaml</DependentUpon>
@@ -153,6 +156,7 @@
     <Compile Include="Environment\Canvas\DrawingTool.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\LineTool.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\EraserTool.cs" />
+    <Compile Include="Environment\Canvas\DrawingTools\PenTool.cs" />
     <Compile Include="Environment\Canvas\Generator.cs" />
     <Compile Include="Environment\Canvas\Generators\ExampleGenerator.cs" />
     <Compile Include="Environment\Canvas\Pattern.cs" />
@@ -232,6 +236,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Drawable\BrushPatternSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\CopyFrameIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -280,11 +288,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Drawable\PatternSample.xaml">
+    <Page Include="Drawable\PenIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Drawable\PenIcon.xaml">
+    <Page Include="Drawable\PenPatternSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
