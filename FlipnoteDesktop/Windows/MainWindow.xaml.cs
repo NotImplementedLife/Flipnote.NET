@@ -1,5 +1,7 @@
 ﻿using FlipnoteDesktop.Data;
+using FlipnoteDesktop.Environment.Canvas;
 using FlipnoteDesktop.Environment.Canvas.Generators;
+using FlipnoteDesktop.External.Plugins;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -27,7 +29,7 @@ namespace FlipnoteDesktop.Windows
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();            
             // create a single blank frame
             FramesList.List.ItemsSource = new List<DecodedFrame>
             {
@@ -39,6 +41,8 @@ namespace FlipnoteDesktop.Windows
             {
                 FlipnoteUserMenuItem.InputGestureText = App.AuthorName;
             }
+
+            ExampleGeneratorMenuItem.Tag = typeof(ExampleGenerator);
         }
 
         private void App_AuthorNameChanged()
@@ -56,8 +60,7 @@ namespace FlipnoteDesktop.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
-            _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;
-            App.ImportPlugin(@"Plugins\G_TypeConsole.dll");
+            _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;            
         }              
 
         #region RightTabControl
@@ -163,15 +166,12 @@ namespace FlipnoteDesktop.Windows
             FrameCanvasEditor.LayerBox1.Value = FrameCanvasEditor.LayerBox2.Value;
             FrameCanvasEditor.LayerBox2.Value = tmp;
         }
-        #endregion
-
-        Flipnote Flipnote = null;
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if(Flipnote==null)
+            if (Flipnote == null)
             {
-                Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);                
+                Flipnote = Flipnote.New(App.AuthorName, App.AuthorId, FramesList.List.ItemsSource as List<DecodedFrame>);
                 Flipnote.Save(Flipnote.Filename);
             }
             else
@@ -181,25 +181,20 @@ namespace FlipnoteDesktop.Windows
             }
         }
 
-        private void ExampleGeneratorMenuItem_Click(object sender, RoutedEventArgs e)
+        private void OpenPluginManager_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var g = new ExampleGenerator();
-            g.Execute(FramesList.List.ItemsSource as List<DecodedFrame>);
+            new PluginManagerWindow().ShowDialog();
+        }
+        #endregion
+
+        Flipnote Flipnote = null;       
+        
+        public void GeneratorMenuItem_Click(object sender,RoutedEventArgs e)
+        {
+            (Activator.CreateInstance((sender as MenuItem).Tag as Type) as Generator)
+                .Execute(FramesList.List.ItemsSource as List<DecodedFrame>);
             FramesList.List.Items.Refresh();
             FramesList.List.SelectedIndex = 0;
         }
-    }
-
-    /// <summary>
-    /// Defines the routed commands used in the MainWindow
-    /// </summary>
-    static class MainWindowCommands
-    {        
-        public static RoutedCommand ToggleGridVisibility = new RoutedCommand();
-        public static RoutedCommand SwitchActiveLayer = new RoutedCommand();
-        public static RoutedCommand ZoomInCanvas = new RoutedCommand();
-        public static RoutedCommand ZoomOutCanvas = new RoutedCommand();
-        public static RoutedCommand GetFlipnoteUserId = new RoutedCommand();
-        public static RoutedCommand InvertLayerColors = new RoutedCommand();
-    }
+    }   
 }

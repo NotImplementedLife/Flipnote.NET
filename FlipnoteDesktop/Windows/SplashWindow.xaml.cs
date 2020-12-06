@@ -1,4 +1,5 @@
 ﻿using FlipnoteDesktop.Extensions;
+using FlipnoteDesktop.External.Plugins;
 using FlipnoteDesktop.Windows;
 using System;
 using System.Collections.Generic;
@@ -35,35 +36,56 @@ namespace FlipnoteDesktop.Windows
         /// Show logo for 3 seconds, then launch the MainWindow
         /// </summary>      
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
-        {           
+        {
             Task.Run(() =>
             {
-                // check for .fsuserdata
-                if (File.Exists(".fsuserdata")) 
+                
+                Log("Checking for user data...");
+                if (File.Exists(".fsuserdata"))
                 {
                     try
-                    {                               
+                    {
                         using (BinaryReader r = new BinaryReader(File.Open(".fsuserdata", FileMode.Open)))
                         {
 
-                            Dispatcher.Invoke(() => App.AuthorName = r.ReadWChars(11).Trim('\0'));                            
+                            Dispatcher.Invoke(() => App.AuthorName = r.ReadWChars(11).Trim('\0'));
                             Dispatcher.Invoke(() => App.AuthorId = r.ReadBytes(8));
-                            
-                        }                        
+
+                        }
                     }
                     catch (Exception)
                     {
-                        Dispatcher.Invoke(()=>MessageBox.Show("Could not load user data."));
+                        Dispatcher.Invoke(() => MessageBox.Show("Could not load user data."));
                     }
                 }
+                Thread.Sleep(1000);
+
+                Log("Loading plugins...");
+                Directory.GetFiles("Plugins", "*.dll", SearchOption.TopDirectoryOnly).AsParallel().ForAll((fn) =>
+                {
+                    Log($"Loading plugins... ({System.IO.Path.GetFileName(fn)})");
+                    Thread.Sleep(500);
+                    PluginManager.ImportPlugins(fn);
+                });
                 
                 Thread.Sleep(3000);
+                Log("Ready");
                 Dispatcher.Invoke(() =>
-                {                    
-                    new MainWindow().Show();
+                {
+                    var wnd = new MainWindow();
+                    PluginManager.Populate(wnd);
+                    wnd.Show();
                     Close();                    
                 });
             });
         }       
+        
+        /// <summary>
+        /// Message to display loading progress
+        /// </summary>
+        private void Log(string msg)
+        {
+            Dispatcher.Invoke(() => { LogMsg.Text = msg; });
+        }
     }
 }

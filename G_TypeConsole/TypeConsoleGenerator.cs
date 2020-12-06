@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace G_TypeConsole
 {
     public class TypeConsoleGenerator : Generator
-    {        
+    {
         public override List<DecodedFrame> GenerateFrames()
         {
             var res = new List<DecodedFrame>();
@@ -31,6 +31,8 @@ namespace G_TypeConsole
             }
             return res;
         }
+
+        public override string Name { get => "Type Console"; }
 
         public void PlaceSquare(DecodedFrame frame, int layer, int px, int py)
         {

@@ -74,14 +74,6 @@ namespace FlipnoteDesktop
             {
 
             }
-        }      
-        
-        public static void ImportPlugin(string dllpath)
-        {
-            Assembly myassembly = Assembly.LoadFrom(dllpath);
-            Type type = myassembly.GetType("FDHeader.Metadata");
-            string plugin_name = type.GetField("PluginName").GetValue(null) as string;
-            ///
-        }
+        }                     
     }
 }

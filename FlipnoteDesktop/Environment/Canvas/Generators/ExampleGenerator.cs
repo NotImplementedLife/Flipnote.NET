@@ -11,6 +11,8 @@ namespace FlipnoteDesktop.Environment.Canvas.Generators
     {
         public ExampleGenerator() { }
 
+        public override string Name { get => "Example"; }
+
         public override List<DecodedFrame> GenerateFrames()
         {
             var res = new List<DecodedFrame>();

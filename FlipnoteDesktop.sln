@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{668E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G_TypeConsole", "G_TypeConsole\G_TypeConsole.csproj", "{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{B8F65948-DD38-4559-BAC1-BFC68FE86D64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8F65948-DD38-4559-BAC1-BFC68FE86D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8F65948-DD38-4559-BAC1-BFC68FE86D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8F65948-DD38-4559-BAC1-BFC68FE86D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8F65948-DD38-4559-BAC1-BFC68FE86D64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF} = {668EC33D-F7E1-4F5C-8614-EFB8FE82553F}
+		{B8F65948-DD38-4559-BAC1-BFC68FE86D64} = {668EC33D-F7E1-4F5C-8614-EFB8FE82553F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D063199-4222-4D97-9059-BCE39666CE39}

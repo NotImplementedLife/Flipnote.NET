@@ -22,7 +22,7 @@
                                 <DoubleAnimation
                                     Storyboard.TargetName="Overlay" 
                                     Storyboard.TargetProperty="Height"
-                                    From="0" To="300" Duration="0:0:3" 
+                                    From="0" To="300" Duration="0:0:10" 
                                     AutoReverse="True" />      
                             </Storyboard>
                         </BeginStoryboard>
@@ -38,7 +38,9 @@
                     </VisualBrush>
                 </Canvas.Background>
             </Canvas>
-            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="LightGreen" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+            <TextBlock FontFamily="Consolas" FontSize="14" Foreground="DarkBlue" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                       Name="LogMsg" Margin="4"/>
+            <TextBlock FontFamily="Consolas" FontSize="14" Foreground="DarkBlue" VerticalAlignment="Bottom" HorizontalAlignment="Right"
                        Name="BuildVersion"
                        Margin="4">1.2.3</TextBlock>
         </Grid>

@@ -17,6 +17,7 @@ namespace FlipnoteDesktop.Environment.Canvas
             UsesBothLayers = usesBothLayers;
         }
 
+        public abstract string Name { get; }
         public bool UsesBothLayers { get; }
 
         /// <summary>

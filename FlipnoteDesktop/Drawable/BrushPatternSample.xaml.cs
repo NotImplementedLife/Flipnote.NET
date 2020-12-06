@@ -26,9 +26,7 @@ namespace FlipnoteDesktop.Drawable
             InitializeComponent();
             Image.Source = new WriteableBitmap(12, 12, 96, 96, PixelFormats.Indexed2,
                 new BitmapPalette(new List<Color> { Colors.White, Colors.Black }));
-        }
-
-        public bool IsPen;
+        }        
 
         internal static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(BrushPatternSample),
             new PropertyMetadata("Default", new PropertyChangedCallback(PatternNamePropertyChanged)));

@@ -28,9 +28,7 @@ namespace FlipnoteDesktop.Drawable
             InitializeComponent();
             Image.Source = new WriteableBitmap(32, 32, 96, 96, PixelFormats.Indexed2,
                 new BitmapPalette(new List<Color> { Colors.White, Colors.Black }));
-        }
-
-        public bool IsPen;
+        }        
 
         public static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(PenPatternSample),
             new PropertyMetadata("Default", new PropertyChangedCallback(PatternNamePropertyChanged)));
@@ -63,7 +61,7 @@ namespace FlipnoteDesktop.Drawable
                 for (int t = 3; t < 29; t++)
                 {
                     double a = (t * 0.0625 - 1);
-                    int y = (int)(25 * a * a * a - a) + 16;
+                    int y = (int)(25 * a * a * a + a) + 16;
                     var pts = LineTool.GetLinePixels(x0, y0, t, y);
                     if (o.Pattern.ContinuousDraw)
                     {

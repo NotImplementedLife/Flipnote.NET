@@ -22,6 +22,7 @@
         <CommandBinding Command="local:MainWindowCommands.ZoomOutCanvas" Executed="ZoomOutCanvas_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.GetFlipnoteUserId" Executed="GetFlipnoteUserId_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.InvertLayerColors" Executed="InvertLayerColors_Executed"/>
+        <CommandBinding Command="local:MainWindowCommands.OpenPluginManager" Executed="OpenPluginManager_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
@@ -32,6 +33,7 @@
         <KeyBinding Key="Subtract" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomOutCanvas"/>
         <KeyBinding Key="U" Modifiers="Ctrl" Command="local:MainWindowCommands.GetFlipnoteUserId"/>
         <KeyBinding Key="I" Modifiers="Ctrl" Command="local:MainWindowCommands.InvertLayerColors"/>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="local:MainWindowCommands.OpenPluginManager"/>
     </Window.InputBindings>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
@@ -56,9 +58,10 @@
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Name="GeneratorsMenuItem" Header="Generators...">
-                        <MenuItem Name="ExampleGeneratorMenuItem" Header="Example Generator" Click="ExampleGeneratorMenuItem_Click"></MenuItem>
+                        <MenuItem Name="ExampleGeneratorMenuItem" Header="Example Generator" Click="GeneratorMenuItem_Click"></MenuItem>
                     </MenuItem>
-                    <MenuItem Name="ManagePluginsMenuItem" Header="Manage Plugins..."/>
+                    <MenuItem Header="Manage Plugins..." Command="local:MainWindowCommands.OpenPluginManager"
+                              InputGestureText="Ctrl+P"/>
                 </MenuItem>
                 <MenuItem Header="_Options">
                     <MenuItem Name="FlipnoteUserMenuItem" 
