@@ -20,7 +20,7 @@ namespace FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages
     /// <summary>
     /// Interaction logic for ExtractFromFlipnotePage.xaml
     /// </summary>
-    public partial class ExtractFromFlipnotePage : Page
+    internal partial class ExtractFromFlipnotePage : Page
     {
         public ExtractFromFlipnotePage()
         {

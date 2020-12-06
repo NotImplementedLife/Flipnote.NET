@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:FlipnoteDesktop.Windows"
         mc:Ignorable="d"
         Title="Flipnote User Id" Height="400" Width="300"
+        x:ClassModifier="internal"
         ResizeMode="NoResize">
     <Grid>
         <Frame Name="Frame" NavigationUIVisibility="Hidden" Navigated="Frame_Navigated"/>

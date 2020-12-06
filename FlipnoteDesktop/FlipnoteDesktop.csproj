@@ -150,6 +150,9 @@
     <Compile Include="Drawable\PenPatternSample.xaml.cs">
       <DependentUpon>PenPatternSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Drawable\RightPointingTriangle.xaml.cs">
+      <DependentUpon>RightPointingTriangle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Drawable\UpPointingTriangle.xaml.cs">
       <DependentUpon>UpPointingTriangle.xaml</DependentUpon>
     </Compile>
@@ -296,6 +299,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Drawable\RightPointingTriangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\UpPointingTriangle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -411,7 +418,9 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="External\Plugins\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
 </Project>

@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 
 namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
 {
-    public class EraserTool : DrawingTool
+    internal class EraserTool : DrawingTool
     {
         public EraserTool()
         {

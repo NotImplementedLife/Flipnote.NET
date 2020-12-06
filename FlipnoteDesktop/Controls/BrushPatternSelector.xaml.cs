@@ -20,7 +20,7 @@ namespace FlipnoteDesktop.Controls
     /// <summary>
     /// Interaction logic for BrushPatternSelector.xaml
     /// </summary>
-    public partial class BrushPatternSelector : UserControl
+    internal partial class BrushPatternSelector : UserControl
     {        
         public BrushPatternSelector()
         {
@@ -28,7 +28,7 @@ namespace FlipnoteDesktop.Controls
             ComboBox.ItemsSource = BrushPatterns.NamesList();            
         }
 
-        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(BrushPatternSelector),
+        internal static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(BrushPatternSelector),
           new FrameworkPropertyMetadata(BrushPatterns.Mono, new PropertyChangedCallback(ValuePropertyChanged)));
 
         private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -37,7 +37,7 @@ namespace FlipnoteDesktop.Controls
             o.ValueChanged?.Invoke(o);
         }
 
-        public Pattern Value
+        internal Pattern Value
         {
             get => GetValue(ValueProperty) as Pattern;
             set

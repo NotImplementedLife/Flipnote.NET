@@ -23,7 +23,7 @@ namespace FlipnoteDesktop.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    internal partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -56,7 +56,8 @@ namespace FlipnoteDesktop.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ShowGridMenuItem.IsChecked = FrameCanvasEditor.Grid.Visibility == Visibility.Visible;
-            _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;                        
+            _ToggleBtnRef = RightTabControl.Template.FindName("TabControlToggle", RightTabControl) as ToggleButton;
+            App.ImportPlugin(@"Plugins\G_TypeConsole.dll");
         }              
 
         #region RightTabControl
@@ -155,6 +156,13 @@ namespace FlipnoteDesktop.Windows
         {
             new FlipnoteUserIdGetterWindow().ShowDialog();            
         }
+
+        private void InvertLayerColors_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var tmp = FrameCanvasEditor.LayerBox1.Value;
+            FrameCanvasEditor.LayerBox1.Value = FrameCanvasEditor.LayerBox2.Value;
+            FrameCanvasEditor.LayerBox2.Value = tmp;
+        }
         #endregion
 
         Flipnote Flipnote = null;
@@ -192,5 +200,6 @@ namespace FlipnoteDesktop.Windows
         public static RoutedCommand ZoomInCanvas = new RoutedCommand();
         public static RoutedCommand ZoomOutCanvas = new RoutedCommand();
         public static RoutedCommand GetFlipnoteUserId = new RoutedCommand();
+        public static RoutedCommand InvertLayerColors = new RoutedCommand();
     }
 }

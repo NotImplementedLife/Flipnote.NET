@@ -9,6 +9,7 @@
         Title="SplashWindow" Height="300" Width="500"
         AllowsTransparency="True"
         WindowStyle="None"
+        x:ClassModifier="internal"
         WindowStartupLocation="CenterScreen">
     <Border Background="#F97300" SnapsToDevicePixels="True">
         <Grid>

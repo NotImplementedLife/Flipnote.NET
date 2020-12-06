@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlipnoteDesktop.Environment.Canvas
 {
-    public static class BrushPatterns
+    internal static class BrushPatterns
     {
         public static readonly Pattern Mono = new Pattern(new bool[1, 1] { { true } });
         public static readonly Pattern Dots = new Pattern(new bool[2, 2] { { true, false }, { false, false } });

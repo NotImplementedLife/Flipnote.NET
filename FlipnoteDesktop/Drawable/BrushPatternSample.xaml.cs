@@ -19,7 +19,7 @@ namespace FlipnoteDesktop.Drawable
     /// <summary>
     /// Interaction logic for BrushPatternSample.xaml
     /// </summary>
-    public partial class BrushPatternSample : UserControl
+    internal partial class BrushPatternSample : UserControl
     {
         public BrushPatternSample()
         {
@@ -30,7 +30,7 @@ namespace FlipnoteDesktop.Drawable
 
         public bool IsPen;
 
-        public static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(BrushPatternSample),
+        internal static DependencyProperty PatternNameProperty = DependencyProperty.Register("PatternName", typeof(string), typeof(BrushPatternSample),
             new PropertyMetadata("Default", new PropertyChangedCallback(PatternNamePropertyChanged)));
 
         public string PatternName
@@ -39,7 +39,7 @@ namespace FlipnoteDesktop.Drawable
             set => SetValue(PatternNameProperty, value);
         }
 
-        public Pattern Pattern
+        internal Pattern Pattern
         {
             get => typeof(BrushPatterns).GetField(PatternName).GetValue(null) as Pattern;
         }

@@ -21,12 +21,12 @@ namespace FlipnoteDesktop.Drawable
     /// <summary>
     /// Interaction logic for PenPatternSample.xaml
     /// </summary>
-    public partial class PenPatternSample : UserControl
+    internal partial class PenPatternSample : UserControl
     {
         public PenPatternSample()
         {
             InitializeComponent();
-            Image.Source = new WriteableBitmap(12, 12, 96, 96, PixelFormats.Indexed2,
+            Image.Source = new WriteableBitmap(32, 32, 96, 96, PixelFormats.Indexed2,
                 new BitmapPalette(new List<Color> { Colors.White, Colors.Black }));
         }
 
@@ -41,7 +41,7 @@ namespace FlipnoteDesktop.Drawable
             set => SetValue(PatternNameProperty, value);
         }
 
-        public Pattern Pattern
+        internal Pattern Pattern
         {
             get => typeof(PenPatterns).GetField(PatternName).GetValue(null) as Pattern;
         }
@@ -59,11 +59,11 @@ namespace FlipnoteDesktop.Drawable
             }
             finally
             {
-                int x0 = 2, y0 = 0;
-                for (int t = 3; t < 10; t++)
+                int x0 = 3, y0 = 7;
+                for (int t = 3; t < 29; t++)
                 {
-                    double a = (t * 0.25 - 1.3);
-                    int y = (int)(11 * a * a * a) + 6;
+                    double a = (t * 0.0625 - 1);
+                    int y = (int)(25 * a * a * a - a) + 16;
                     var pts = LineTool.GetLinePixels(x0, y0, t, y);
                     if (o.Pattern.ContinuousDraw)
                     {
@@ -94,7 +94,7 @@ namespace FlipnoteDesktop.Drawable
                     y0 = y;
                 }
             }
-            (o.Image.Source as WriteableBitmap).WritePixels(new Int32Rect(0, 0, 12, 12), o.pixels, 3, 0);
+            (o.Image.Source as WriteableBitmap).WritePixels(new Int32Rect(0, 0, 32, 32), o.pixels, 8, 0);
         }
 
         void PutPoint(int x, int y)
@@ -111,11 +111,11 @@ namespace FlipnoteDesktop.Drawable
                 }            
         }
 
-        byte[] pixels = new byte[12 * 3];
+        byte[] pixels = new byte[32 * 8];
         private void SetImagePixel(int x, int y, int val)
         {
-            if (x < 0 || x > 11 || y < 0 || y > 11) return;
-            int b = 12 * y + x;
+            if (x < 0 || x > 31 || y < 0 || y > 31) return;
+            int b = 32 * y + x;
             int p = 3 - b % 4;
             b /= 4;
             pixels[b] &= (byte)(~(0b11 << (2 * p)));

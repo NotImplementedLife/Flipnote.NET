@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:FlipnoteDesktop.Controls"
              xmlns:drawable="clr-namespace:FlipnoteDesktop.Drawable"
              mc:Ignorable="d" 
+             x:ClassModifier="internal"
              d:DesignHeight="30" d:DesignWidth="50">
     <UserControl.Resources>
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
@@ -114,8 +115,8 @@
                         <Border Name="Border" CornerRadius="2" SnapsToDevicePixels="true" Margin="3" Background="{TemplateBinding Background}" 
                                 BorderBrush="Transparent"
                                 BorderThickness="2"
-                                Width="24" Height="24">
-                            <drawable:PenPatternSample PatternName="{TemplateBinding Content}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                Width="32" Height="32">
+                            <drawable:PenPatternSample PatternName="{TemplateBinding Content}" RenderOptions.BitmapScalingMode="Linear"/>
                         </Border>
 
                         <ControlTemplate.Triggers>

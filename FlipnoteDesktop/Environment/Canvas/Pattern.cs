@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlipnoteDesktop.Environment.Canvas
 {
-    public class Pattern
+    internal class Pattern
     {
         public Pattern(bool[,] pixels)
         {

@@ -7,6 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="300"
       Title="MainPage"         
+      x:ClassModifier="internal"
       Background="White">
     <Page.Resources>
         <Style TargetType="Hyperlink">

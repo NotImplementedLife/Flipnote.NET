@@ -20,7 +20,7 @@ namespace FlipnoteDesktop.Controls
     /// <summary>
     /// Interaction logic for PenPatternSelector.xaml
     /// </summary>
-    public partial class PenPatternSelector : UserControl
+    internal partial class PenPatternSelector : UserControl
     {
         public PenPatternSelector()
         {
@@ -28,7 +28,7 @@ namespace FlipnoteDesktop.Controls
             ComboBox.ItemsSource = PenPatterns.NamesList();            
         }
 
-        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(PenPatternSelector),
+          internal static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(Pattern), typeof(PenPatternSelector),
           new FrameworkPropertyMetadata(PenPatterns.Mono, new PropertyChangedCallback(ValuePropertyChanged)));
 
         private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -37,7 +37,7 @@ namespace FlipnoteDesktop.Controls
             o.ValueChanged?.Invoke(o);
         }
 
-        public Pattern Value
+        internal Pattern Value
         {
             get => GetValue(ValueProperty) as Pattern;
             set
@@ -54,8 +54,9 @@ namespace FlipnoteDesktop.Controls
             DataContext = new PenPatternSample
             {                
                 PatternName = (string)ComboBox.SelectedItem,                
-                Padding = new Thickness(3)
+                Padding = new Thickness(1),                
             };
+            RenderOptions.SetBitmapScalingMode((DataContext as PenPatternSample), BitmapScalingMode.Linear);
             Value = (DataContext as PenPatternSample).Pattern;
         }
     }

@@ -18,7 +18,7 @@ namespace FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages
     /// <summary>
     /// Interaction logic for CheckIdentityPage.xaml
     /// </summary>
-    public partial class CheckIdentityPage : Page
+    internal partial class CheckIdentityPage : Page
     {
         public CheckIdentityPage()
         {

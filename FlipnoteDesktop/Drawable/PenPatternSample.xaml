@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlipnoteDesktop.Drawable"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             x:ClassModifier="internal"
+             d:DesignHeight="450" d:DesignWidth="450">
     <Viewbox Stretch="Uniform">
-        <Canvas Width="12" Height="12" Background="White">
-            <Image Name="Image" Width="12" Height="12" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        <Canvas Width="32" Height="32" Background="White">
+            <Image Name="Image" Width="32" Height="32" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
         </Canvas>
     </Viewbox>
 </UserControl>

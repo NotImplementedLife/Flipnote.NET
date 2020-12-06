@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FlipnoteDesktop.Extensions
 {
-    public static class BinaryReaderExtensions
+    internal static class BinaryReaderExtensions
     {
         public static string ReadWChars(this BinaryReader r, int count)
         {

@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FlipnoteDesktop.Controls"             
+             xmlns:local="clr-namespace:FlipnoteDesktop.Controls"
+             xmlns:drawable="clr-namespace:FlipnoteDesktop.Drawable"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="Gray"             
              PreviewMouseWheel="UserControl_PreviewMouseWheel"
@@ -26,7 +27,16 @@
             <CheckBox Name="PaperColorSelector" Height="30" Style="{DynamicResource PaperColorSelector}" Margin="3 2 3 2"
                       Checked="PaperColorSelector_Checked" Unchecked="PaperColorSelector_Unchecked"
                       ToolTip="Paper background"/>
-            <StackPanel Margin="3 2 3 2" Name="ToolOptions" Orientation="Horizontal" Height="30"/>
+            <StackPanel Margin="3 2 0 2" Name="ToolOptions" Orientation="Horizontal" Height="30"/>
+            <!--Separator line:-->
+            <StackPanel Width="1" Height="30" Background="#F97300" Margin="7 0"/>
+            <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="18" Height="18" BorderThickness="0"
+                    Name="PlayFlipnoteButton"
+                    ToolTip="Compile and Play flipnote">
+                <Button.Content>
+                    <drawable:RightPointingTriangle/>
+                </Button.Content>
+            </Button>
         </WrapPanel>
         <ScrollViewer Name="ScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}"
                       PreviewMouseMove="ScrollViewer_PreviewMouseMove">
@@ -66,7 +76,8 @@
         <Canvas Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ClipToBounds="True">
             <local:ToolsPanel x:Name="ToolBox" Canvas.Top="30" Canvas.Left="10" Width="50" Height="170"/>
         </Canvas>
-        <StackPanel Grid.Row="1" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel Grid.Row="1" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Visibility="Collapsed">
             <TextBlock>Mouse position = <Run Name="DbgCanvasPos">(X,Y)</Run></TextBlock>
         </StackPanel>
     </Grid>

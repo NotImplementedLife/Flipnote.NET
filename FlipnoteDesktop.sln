@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.1169
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlipnoteDesktop", "FlipnoteDesktop\FlipnoteDesktop.csproj", "{9E15DC82-CCDE-447D-91F9-988E917147EA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{668EC33D-F7E1-4F5C-8614-EFB8FE82553F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G_TypeConsole", "G_TypeConsole\G_TypeConsole.csproj", "{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{9E15DC82-CCDE-447D-91F9-988E917147EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E15DC82-CCDE-447D-91F9-988E917147EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E15DC82-CCDE-447D-91F9-988E917147EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6C6B6EBE-0CE4-4EBE-9FF6-12631A5BC0BF} = {668EC33D-F7E1-4F5C-8614-EFB8FE82553F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D063199-4222-4D97-9059-BCE39666CE39}

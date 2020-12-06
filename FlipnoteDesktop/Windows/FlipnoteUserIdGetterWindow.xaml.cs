@@ -18,7 +18,7 @@ namespace FlipnoteDesktop.Windows
     /// <summary>
     /// Interaction logic for FlipnoteUserIdGetterWindow.xaml
     /// </summary>
-    public partial class FlipnoteUserIdGetterWindow : Window
+    internal partial class FlipnoteUserIdGetterWindow : Window
     {
         public FlipnoteUserIdGetterWindow()
         {

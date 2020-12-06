@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:FlipnoteDesktop.Controls"
              xmlns:drawable="clr-namespace:FlipnoteDesktop.Drawable"
              mc:Ignorable="d" 
+             x:ClassModifier="internal"
              d:DesignHeight="30" d:DesignWidth="50">
     <UserControl.Resources>
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">

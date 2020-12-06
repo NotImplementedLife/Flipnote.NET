@@ -11,16 +11,16 @@ using System.Windows.Shapes;
 
 namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
 {
-    class PenTool : DrawingTool
+    internal class PenTool : DrawingTool
     {
         public PenTool()
         {
             Attached += PenTool_Attached;
             Detached += PenTool_Detached;
-        }        
+            BuildPreviewShape();
+        }
 
-        Rectangle PreviewRect = new Rectangle() { IsHitTestVisible = false };
-        
+        Viewbox PreviewShape = new Viewbox() { IsHitTestVisible = false };        
         PenPatternSelector PatternInput;
 
         public void PenTool_Attached(object o)
@@ -40,13 +40,14 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
                 Margin = new System.Windows.Thickness(3, 0, 3, 0)
             });
             Target.ToolOptions.Children.Add(PatternInput);
-            Target.ExtensionPanel.Children.Add(PreviewRect);
+            Target.ExtensionPanel.Children.Add(PreviewShape);
             Target.ExtensionPanel.ClipToBounds = true;
         }
 
         private void PatternInput_ValueChanged(object o)
         {
             Pattern = PatternInput.Value;
+            BuildPreviewShape();
         }        
 
         public void PenTool_Detached(object o)
@@ -145,11 +146,10 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
         }
         protected override void OnMouseMove(object sender, MouseEventArgs e)
         {
-            System.Windows.Controls.Canvas.SetLeft(PreviewRect, Target.Zoom * (Target.canvasX - Pattern.Cols / 2));
-            System.Windows.Controls.Canvas.SetTop(PreviewRect, Target.Zoom * (Target.canvasY - Pattern.Rows / 2));
-            PreviewRect.Width = Pattern.Cols * Target.Zoom;
-            PreviewRect.Height = Pattern.Rows * Target.Zoom;
-            PreviewRect.Fill = Brushes.Green;
+            System.Windows.Controls.Canvas.SetLeft(PreviewShape, Target.Zoom * (Target.canvasX - Pattern.Cols / 2));
+            System.Windows.Controls.Canvas.SetTop(PreviewShape, Target.Zoom * (Target.canvasY - Pattern.Rows / 2));
+            PreviewShape.Width = Pattern.Cols * Target.Zoom;
+            PreviewShape.Height = Pattern.Rows * Target.Zoom;            
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
                 if (lastX >= 0)
@@ -172,8 +172,34 @@ namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
 
         protected override void OnMouseLeave(object sender, MouseEventArgs e)
         {
-            PreviewRect.Width = PreviewRect.Height = 0;
+            PreviewShape.Width = PreviewShape.Height = 0;
             lastX = -1;
+        }
+
+        private void BuildPreviewShape()
+        {            
+            var canvas= new System.Windows.Controls.Canvas()
+            {
+                Width = 5 * Pattern.Cols,
+                Height = 5 * Pattern.Rows
+            };           
+            for (int x = 0; x < Pattern.Cols; x++)
+                for (int y = 0; y < Pattern.Rows; y++)
+                    if (Pattern.GetPixelAt(x, y))
+                    {
+                        var sq = new Rectangle()
+                        {
+                            Width=5,
+                            Height=5,
+                            Fill=Brushes.Green
+                        };
+                        System.Windows.Controls.Canvas.SetLeft(sq, 5 * x);
+                        System.Windows.Controls.Canvas.SetTop(sq, 5 * y);
+                        canvas.Children.Add(sq);
+                    }
+            PreviewShape.Child = canvas;            
+            System.Windows.Controls.Canvas.SetLeft(PreviewShape, 200 * (-Pattern.Cols));
+            System.Windows.Controls.Canvas.SetTop(PreviewShape, 200 * (-Pattern.Rows));            
         }
     }
 }

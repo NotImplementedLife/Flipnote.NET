@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlipnoteDesktop.Environment.Canvas
 {
-    public static class PenPatterns
+    internal static class PenPatterns
     {
         public static readonly Pattern Mono = new Pattern(new bool[1, 1] { { true } });
         public static readonly Pattern CaligraphyLeft = new Pattern(new bool[3, 3]
@@ -21,7 +21,7 @@ namespace FlipnoteDesktop.Environment.Canvas
                 { false, false,  true },
                 { false,  true, false },
                 {  true, false, false }
-            }) { ContinuousDraw = true };
+            }) { ContinuousDraw = true };       
 
         public static List<string> NamesList()
         {

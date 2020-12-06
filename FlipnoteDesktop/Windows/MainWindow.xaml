@@ -11,6 +11,7 @@
         Title="Flipnote Desktop" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
+        x:ClassModifier="internal"
         Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="Open_Executed"/>
@@ -20,6 +21,7 @@
         <CommandBinding Command="local:MainWindowCommands.ZoomInCanvas" Executed="ZoomInCanvas_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.ZoomOutCanvas" Executed="ZoomOutCanvas_Executed"/>
         <CommandBinding Command="local:MainWindowCommands.GetFlipnoteUserId" Executed="GetFlipnoteUserId_Executed"/>
+        <CommandBinding Command="local:MainWindowCommands.InvertLayerColors" Executed="InvertLayerColors_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
@@ -29,6 +31,7 @@
         <KeyBinding Key="Add" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomInCanvas"/>
         <KeyBinding Key="Subtract" Modifiers="Ctrl" Command="local:MainWindowCommands.ZoomOutCanvas"/>
         <KeyBinding Key="U" Modifiers="Ctrl" Command="local:MainWindowCommands.GetFlipnoteUserId"/>
+        <KeyBinding Key="I" Modifiers="Ctrl" Command="local:MainWindowCommands.InvertLayerColors"/>
     </Window.InputBindings>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
@@ -45,6 +48,7 @@
                 </MenuItem>
                 <MenuItem Header="Edit">
                     <MenuItem Header="_Switch Active Layer" Command="local:MainWindowCommands.SwitchActiveLayer" InputGestureText="Ctrl+L"/>
+                    <MenuItem Header="Invert Layer Colors" Command="local:MainWindowCommands.InvertLayerColors" InputGestureText="Ctrl+I" />
                 </MenuItem>
                 <MenuItem Header="_View">
                     <MenuItem Name="ShowGridMenuItem"
@@ -172,15 +176,63 @@
                         </controls:FramesList>
                     </TabItem>
                     <TabItem Header="Properties" PreviewMouseDown="TabItem_MouseDown">
-                        <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Playback speed:" VerticalAlignment="Center"/>
-                                <controls:SpeedSelector Grid.Column="1" x:Name="PlayBackSpeed"/>
-                            </Grid>
+                        <StackPanel Margin="5 2">
+                            <StackPanel.Resources>
+                                <Style TargetType="{x:Type Expander}">
+                                    <Setter Property="HeaderTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <Border BorderBrush="#F97300" BorderThickness="0 0 0 1" Margin="-11 2 0 0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="   "/>
+                                                        <TextBlock Text="{TemplateBinding Content}"/>
+                                                        <TextBlock Text=" "/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </StackPanel.Resources>
+                            <Expander Header="Animation Options" IsExpanded="True">
+                                <StackPanel Margin="5 0 0 0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Hide Layer 1:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
+                                                  Name="HideLayer1ChkBox"/>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Hide Layer 2:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
+                                                  Name="HideLayer2ChkBox"/>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Loop:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
+                                                  Name="LoopChkBox"/>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Playback speed:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <controls:SpeedSelector Grid.Column="1" x:Name="PlayBackSpeed"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
                         </StackPanel>
                     </TabItem>
                 </TabControl>

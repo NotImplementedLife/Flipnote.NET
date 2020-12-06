@@ -11,6 +11,7 @@ using FlipnoteDesktop.Data;
 using System.IO;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Reflection;
 
 namespace FlipnoteDesktop
 {
@@ -73,7 +74,14 @@ namespace FlipnoteDesktop
             {
 
             }
-
-        }        
+        }      
+        
+        public static void ImportPlugin(string dllpath)
+        {
+            Assembly myassembly = Assembly.LoadFrom(dllpath);
+            Type type = myassembly.GetType("FDHeader.Metadata");
+            string plugin_name = type.GetField("PluginName").GetValue(null) as string;
+            ///
+        }
     }
 }

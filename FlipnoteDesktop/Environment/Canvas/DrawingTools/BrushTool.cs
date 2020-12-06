@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 
 namespace FlipnoteDesktop.Environment.Canvas.DrawingTools
 {
-    public class BrushTool : DrawingTool
+    internal class BrushTool : DrawingTool
     {
         public BrushTool()
         {

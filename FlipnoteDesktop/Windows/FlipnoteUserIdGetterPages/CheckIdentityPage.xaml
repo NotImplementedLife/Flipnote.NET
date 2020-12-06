@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages"
       mc:Ignorable="d"       
       d:DesignHeight="400" d:DesignWidth="300"      
+      x:ClassModifier="internal"
       Background="White">
     <StackPanel VerticalAlignment="Center">
         <TextBlock FontSize="18" TextAlignment="Center">Are you <Run Name="Username" Foreground="#F97300" Text="username here"/> ?</TextBlock>
