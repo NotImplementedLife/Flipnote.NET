@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,12 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FDHeader.Metadata.cs" />
     <Compile Include="GenSettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GenSettingsWindow.Designer.cs">
       <DependentUpon>GenSettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="TypeConsoleGenerator.cs" />
     <Compile Include="UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>
