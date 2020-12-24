@@ -5,5 +5,5 @@
 <#+
 	static DateTime now=DateTime.UtcNow;
     int BuildNumber = (int)(now - new DateTime(2020,11,14)).TotalDays;
-    int Revision = (int)((int)now.Hour*3600+now.Minute*60+now.Second);
+    int Revision = (int)((long)((long)now.Hour*3600+now.Minute*60+now.Second)*65534/86400);
 #>

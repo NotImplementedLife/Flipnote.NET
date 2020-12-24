@@ -43,6 +43,8 @@ namespace FlipnoteDesktop.Controls
             var o = d as SpeedSelector;
             o.ValueDisplay.Width = o.Value * 10;
             o.ValueText.Text = o.Value.ToString();
+            if (e.OldValue != e.NewValue)
+                o.ValueChanged?.Invoke(o);
         }
 
         int msOverValue = 1;
@@ -63,5 +65,8 @@ namespace FlipnoteDesktop.Controls
         {
             Value = msOverValue;
         }
+
+        public delegate void OnValueChanged(object sender);
+        public event OnValueChanged ValueChanged;
     }
 }

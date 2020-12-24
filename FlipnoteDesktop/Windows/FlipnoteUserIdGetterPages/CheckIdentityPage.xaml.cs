@@ -52,7 +52,8 @@ namespace FlipnoteDesktop.Windows.FlipnoteUserIdGetterPages
                 Dispatcher.Invoke(() =>
                 {
                     App.AuthorId = AuthorId;
-                    App.AuthorName = AuthorName.Trim('\0');                    
+                    App.AuthorName = AuthorName.Trim('\0');
+                    Window.DialogResult = true;
                     Window.Close();
                 });
             });

@@ -13,6 +13,6 @@ namespace FlipnoteDesktop.Windows
         public static RoutedCommand ZoomOutCanvas = new RoutedCommand();
         public static RoutedCommand GetFlipnoteUserId = new RoutedCommand();
         public static RoutedCommand InvertLayerColors = new RoutedCommand();
-        public static RoutedCommand OpenPluginManager = new RoutedCommand();
+        public static RoutedCommand OpenPluginManager = new RoutedCommand();        
     }
 }

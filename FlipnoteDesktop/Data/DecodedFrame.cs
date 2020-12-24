@@ -19,7 +19,7 @@ namespace FlipnoteDesktop.Data
         /// <summary>
         /// Layer 2 pixels as double array. Usage: Layer2Data[x,y]= ~true|false~;
         /// </summary>
-        public bool[,] Layer2Data = new bool[256, 192];
+        public bool[,] Layer2Data = new bool[256, 192];        
 
         public DecodedFrame()
         {

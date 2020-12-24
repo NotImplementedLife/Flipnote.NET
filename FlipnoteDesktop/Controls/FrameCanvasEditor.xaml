@@ -32,7 +32,8 @@
             <StackPanel Width="1" Height="30" Background="#F97300" Margin="7 0"/>
             <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="18" Height="18" BorderThickness="0"
                     Name="PlayFlipnoteButton"
-                    ToolTip="Compile and Play flipnote">
+                    ToolTip="Compile and Play flipnote"
+                    Click="PlayFlipnoteButton_Click">
                 <Button.Content>
                     <drawable:RightPointingTriangle/>
                 </Button.Content>

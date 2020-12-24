@@ -68,6 +68,11 @@
                               Header="Flipnote User" InputGestureText="(none)"
                               Command="local:MainWindowCommands.GetFlipnoteUserId"/>
                 </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Name="AboutMenuItem"
+                              Header="About"
+                              Click="AboutMenuItem_Click"></MenuItem>
+                </MenuItem>
             </Menu>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -197,45 +202,48 @@
                                     </Setter>
                                 </Style>
                             </StackPanel.Resources>
-                            <Expander Header="Animation Options" IsExpanded="True">
-                                <StackPanel Margin="5 0 0 0">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Hide Layer 1:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                        <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
-                                                  Name="HideLayer1ChkBox"/>
-                                    </Grid>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Hide Layer 2:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                        <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
-                                                  Name="HideLayer2ChkBox"/>
-                                    </Grid>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Loop:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                        <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
-                                                  Name="LoopChkBox"/>
-                                    </Grid>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Playback speed:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                        <controls:SpeedSelector Grid.Column="1" x:Name="PlayBackSpeed"/>
-                                    </Grid>
-                                </StackPanel>
-                            </Expander>
+                            <TextBlock Foreground="#F97300" Margin="10,0,0,0">Animation Properties</TextBlock>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Playback speed:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <controls:SpeedSelector Grid.Column="1" x:Name="PlayBackSpeed"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Loop:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
+                                          Name="LoopChkBox"
+                                          Checked="LoopChkBox_Checked"
+                                          Unchecked="LoopChkBox_Unchecked"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Hide Layer 1:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
+                                          Name="HideLayer1ChkBox"
+                                          Checked="HideLayer1ChkBox_Checked"
+                                          Unchecked="HideLayer1ChkBox_Unchecked"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Hide Layer 2:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <CheckBox Grid.Column="1" BorderBrush="#F97300" HorizontalAlignment="Left" Margin="7 0 0 0"
+                                          Name="HideLayer2ChkBox"
+                                          Checked="HideLayer2ChkBox_Checked"
+                                          Unchecked="HideLayer2ChkBox_Unchecked"/>
+                            </Grid>
                         </StackPanel>
                     </TabItem>
                 </TabControl>

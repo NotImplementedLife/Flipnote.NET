@@ -1,6 +1,8 @@
 ﻿using FlipnoteDesktop.Data;
 using FlipnoteDesktop.Environment.Canvas;
 using FlipnoteDesktop.Environment.Canvas.DrawingTools;
+using FlipnoteDesktop.Windows;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -223,6 +225,13 @@ namespace FlipnoteDesktop.Controls
 
         public delegate void OnSelectedLayerChanged(object o);
         public event OnSelectedLayerChanged SelectedLayerChanged;
+
+        private void PlayFlipnoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var wnd = Window.GetWindow(this) as MainWindow;
+            var flipnote = Flipnote.New(null, null, wnd.FramesList.List.ItemsSource as List<DecodedFrame>, true);
+            App.CreateFlipnotePlayerWindow(flipnote).ShowDialog();
+        }
 
         public void ForceToolBoxDrag(Point pt)
         {            

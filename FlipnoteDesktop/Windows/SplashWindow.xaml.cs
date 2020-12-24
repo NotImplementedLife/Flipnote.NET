@@ -38,8 +38,7 @@ namespace FlipnoteDesktop.Windows
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Task.Run(() =>
-            {
-                
+            {                
                 Log("Checking for user data...");
                 if (File.Exists(".fsuserdata"))
                 {
@@ -55,12 +54,16 @@ namespace FlipnoteDesktop.Windows
                     }
                     catch (Exception)
                     {
-                        Dispatcher.Invoke(() => MessageBox.Show("Could not load user data."));
+                        Dispatcher.Invoke(() => MessageBox.Show("The file \".fsuserdata\" exists but seems to be corrupted. You nees to reload your Flipnote user data", "Could not load user data."));
                     }
                 }
                 Thread.Sleep(1000);
 
                 Log("Loading plugins...");
+                if (!Directory.Exists("Plugins")) 
+                {
+                    Directory.CreateDirectory("Plugins");
+                }
                 Directory.GetFiles("Plugins", "*.dll", SearchOption.TopDirectoryOnly).AsParallel().ForAll((fn) =>
                 {
                     Log($"Loading plugins... ({System.IO.Path.GetFileName(fn)})");

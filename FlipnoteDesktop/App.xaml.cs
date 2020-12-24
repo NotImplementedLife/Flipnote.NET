@@ -43,28 +43,17 @@ namespace FlipnoteDesktop
         public delegate void OnAuthorNameChanged();
         public static event OnAuthorNameChanged AuthorNameChanged;
 
+        static double BorderWidth = (SystemParameters.MaximizedPrimaryScreenWidth - SystemParameters.FullPrimaryScreenWidth) / 2.0;
+        static double TitleBarHeight = BorderWidth + SystemParameters.WindowCaptionHeight;
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {                            
             if (e.Args.Length == 1)
             {
                 var filename = e.Args[0];
                 var flipnote = new Flipnote(filename);
-                double BorderWidth = (SystemParameters.MaximizedPrimaryScreenWidth - SystemParameters.FullPrimaryScreenWidth) / 2.0;
-                double TitleBarHeight = BorderWidth + SystemParameters.WindowCaptionHeight;
-                Window wnd = new Window
-                {
-                    Title = "Flipnote Player",
-                    Width = 512,
-                    Height = 384 + TitleBarHeight - 4
-                };
-                SimpleFlipnotePlayer player = new SimpleFlipnotePlayer();
-                player.Source = flipnote;
-                wnd.Content = player;
-                wnd.Loaded += delegate (object o, RoutedEventArgs ev)
-                {
-                    player.Start();
-                };
-                wnd.Show();
+
+                CreateFlipnotePlayerWindow(flipnote).Show();
             }
             else if (e.Args.Length == 0)
             {
@@ -74,6 +63,24 @@ namespace FlipnoteDesktop
             {
 
             }
-        }                     
+        }
+
+        public static Window CreateFlipnotePlayerWindow(Flipnote src)
+        {
+            Window wnd = new Window
+            {
+                Title = "Flipnote Player",
+                Width = 512,
+                Height = 384 + TitleBarHeight - 4
+            };
+            SimpleFlipnotePlayer player = new SimpleFlipnotePlayer();
+            player.Source = src;
+            wnd.Content = player;
+            wnd.Loaded += delegate (object o, RoutedEventArgs ev)
+            {
+                player.Start();
+            };
+            return wnd;
+        }
     }
 }

@@ -36,18 +36,19 @@ namespace FlipnoteDesktop.Windows
         public CheckIdentityPage CheckIdentityPage;
 
         public void GoToHomePage()        
-            => Frame.Navigate(MainPage);                    
+            => Frame.Navigate(MainPage);
 
-        public void GoToExtractFromUserDataFilePage()      
+        public void GoToExtractFromUserDataFilePage()
             => Frame.Navigate(ExtractFromUserDataFilePage);       
 
         public void GoToExtractFromPPMPage()        
             => Frame.Navigate(ExtractFromFlipnotePage);       
 
         public void GoToCheckIdentityPage()        
-            => Frame.Navigate(CheckIdentityPage);        
+            => Frame.Navigate(CheckIdentityPage);
 
-        private void Frame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)        
-            => Frame.NavigationService.RemoveBackEntry();       
+        private void Frame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+            => Frame.NavigationService.RemoveBackEntry();
+        
     }
 }

@@ -36,7 +36,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -98,7 +99,6 @@
     </Compile>
     <Compile Include="Data\DecodedFrame.cs" />
     <Compile Include="Data\LayerColor.cs" />
-    <Compile Include="Data\FlipnoteProperties.cs" />
     <Compile Include="Drawable\AddIcon.xaml.cs">
       <DependentUpon>AddIcon.xaml</DependentUpon>
     </Compile>
@@ -175,6 +175,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>VersionCounter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\FlipnoteUserIdGetterPages\CheckIdentityPage.xaml.cs">
       <DependentUpon>CheckIdentityPage.xaml</DependentUpon>
@@ -350,6 +353,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\FlipnoteUserIdGetterPages\CheckIdentityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -421,6 +428,8 @@
     <Resource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\GitHub-Mark-64px.png" />
+    <Resource Include="Images\nil-profile.png" />
     <Content Include="Properties\VersionCounter.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>VersionCounter.cs</LastGenOutput>

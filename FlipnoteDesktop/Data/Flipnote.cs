@@ -135,7 +135,7 @@ namespace FlipnoteDesktop.Data
                 SoundHeader.SE2TrackSize = r.ReadUInt32();
                 SoundHeader.SE3TrackSize = r.ReadUInt32();
                 SoundHeader.CurrentFramespeed = r.ReadByte();
-                SoundHeader.RecordedBGMFramespeed = r.ReadByte();
+                SoundHeader.RecordingBGMFramespeed = r.ReadByte();
                 r.ReadBytes(14);
 
                 SoundData.RawBGM = r.ReadBytes((int)SoundHeader.BGMTrackSize);
@@ -285,73 +285,75 @@ namespace FlipnoteDesktop.Data
 
         public string Filename;
 
-        public static Flipnote New(string authorName, byte[] authorId, List<DecodedFrame> frames)
+        public static Flipnote New(string authorName, byte[] authorId, List<DecodedFrame> frames, bool ignoreMetadata = false)
         {            
             var f = new Flipnote();
             f.FrameCount = (ushort)(frames.Count - 1);
             f.FormatVersion = 0x24;
 
-            f.Metadata.RootAuthorId = new byte[8];
-            f.Metadata.ParentAuthorId = new byte[8];
-            f.Metadata.CurrentAuthorId = new byte[8];
-            Array.Copy(authorId, f.Metadata.RootAuthorId, 8);
-            Array.Copy(authorId, f.Metadata.ParentAuthorId, 8);
-            Array.Copy(authorId, f.Metadata.CurrentAuthorId, 8);
-            f.Metadata.RootAuthorName = authorName;
-            f.Metadata.ParentAuthorName = authorName;
-            f.Metadata.CurrentAuthorName = authorName;
-
-            string mac6 = string.Join("", authorId.Take(3).Reverse().Select(t => t.ToString("X2")));
-            var asm = Assembly.GetEntryAssembly().GetName().Version;
-            var dt = DateTime.UtcNow;
-            var fnVM = ((byte)asm.Major).ToString("X2");
-            var fnVm = ((byte)asm.Minor).ToString("X2");
-            var fnYY = (byte)(dt.Year - 2009);
-            var fnMD = dt.Month * 32 + dt.Day;
-            var fnTi = (((dt.Hour * 3600 + dt.Minute * 60 + dt.Second) % 4096) >> 1) + (fnMD > 255 ? 1 : 0);
-            fnMD = (byte)fnMD;
-            var fnYMD = (fnYY << 9) + fnMD;
-            var H6_9 = fnYMD.ToString("X4");
-            var H89 = ((byte)fnMD).ToString("X2");
-            var HABC = fnTi.ToString("X3");
-
-            string _13str = $"80{fnVM}{fnVm}{H6_9}{HABC}";            
-            string nEdited = 0.ToString().PadLeft(3, '0');
-            var filename = $"{mac6}_{_13str}_{nEdited}.ppm";
-            f.Filename = FilenameChecksumDigit(filename) + filename.Remove(0, 1);
-
-            var rawfn = new byte[18];
-            for (int i = 0; i < 3; i++) 
+            if (!ignoreMetadata) 
             {
-                rawfn[i] = byte.Parse("" + mac6[2 * i] + mac6[2 * i + 1], System.Globalization.NumberStyles.HexNumber);
-            }
-            for (int i = 3; i < 16; i++)
-            {
-                rawfn[i] = (byte)_13str[i - 3];
-            }
-            rawfn[16] = rawfn[17] = 0;
+                f.Metadata.RootAuthorId = new byte[8];
+                f.Metadata.ParentAuthorId = new byte[8];
+                f.Metadata.CurrentAuthorId = new byte[8];
+                Array.Copy(authorId, f.Metadata.RootAuthorId, 8);
+                Array.Copy(authorId, f.Metadata.ParentAuthorId, 8);
+                Array.Copy(authorId, f.Metadata.CurrentAuthorId, 8);
+                f.Metadata.RootAuthorName = authorName;
+                f.Metadata.ParentAuthorName = authorName;
+                f.Metadata.CurrentAuthorName = authorName;
 
-            f.Metadata.ParentFilename = new byte[18];
-            f.Metadata.CurrentFilename = new byte[18];
+                string mac6 = string.Join("", authorId.Take(3).Reverse().Select(t => t.ToString("X2")));
+                var asm = Assembly.GetEntryAssembly().GetName().Version;
+                var dt = DateTime.UtcNow;
+                var fnVM = ((byte)asm.Major).ToString("X2");
+                var fnVm = ((byte)asm.Minor).ToString("X2");
+                var fnYY = (byte)(dt.Year - 2009);
+                var fnMD = dt.Month * 32 + dt.Day;
+                var fnTi = (((dt.Hour * 3600 + dt.Minute * 60 + dt.Second) % 4096) >> 1) + (fnMD > 255 ? 1 : 0);
+                fnMD = (byte)fnMD;
+                var fnYMD = (fnYY << 9) + fnMD;
+                var H6_9 = fnYMD.ToString("X4");
+                var H89 = ((byte)fnMD).ToString("X2");
+                var HABC = fnTi.ToString("X3");
 
-            Array.Copy(rawfn, f.Metadata.ParentFilename, 18);
-            Array.Copy(rawfn, f.Metadata.CurrentFilename, 18);
+                string _13str = $"80{fnVM}{fnVm}{H6_9}{HABC}";
+                string nEdited = 0.ToString().PadLeft(3, '0');
+                var filename = $"{mac6}_{_13str}_{nEdited}.ppm";
+                f.Filename = FilenameChecksumDigit(filename) + filename.Remove(0, 1);
 
-            f.Metadata.RootFileFragment = new byte[8];
-            for (int i = 0; i < 3; i++)
-            {
-                f.Metadata.RootFileFragment[i] = 
-                    byte.Parse("" + mac6[2 * i] + mac6[2 * i + 1], System.Globalization.NumberStyles.HexNumber);
+                var rawfn = new byte[18];
+                for (int i = 0; i < 3; i++)
+                {
+                    rawfn[i] = byte.Parse("" + mac6[2 * i] + mac6[2 * i + 1], System.Globalization.NumberStyles.HexNumber);
+                }
+                for (int i = 3; i < 16; i++)
+                {
+                    rawfn[i] = (byte)_13str[i - 3];
+                }
+                rawfn[16] = rawfn[17] = 0;
+
+                f.Metadata.ParentFilename = new byte[18];
+                f.Metadata.CurrentFilename = new byte[18];
+
+                Array.Copy(rawfn, f.Metadata.ParentFilename, 18);
+                Array.Copy(rawfn, f.Metadata.CurrentFilename, 18);
+
+                f.Metadata.RootFileFragment = new byte[8];
+                for (int i = 0; i < 3; i++)
+                {
+                    f.Metadata.RootFileFragment[i] =
+                        byte.Parse("" + mac6[2 * i] + mac6[2 * i + 1], System.Globalization.NumberStyles.HexNumber);
+                }
+                for (int i = 3; i < 8; i++)
+                {
+                    f.Metadata.RootFileFragment[i] =
+                        (byte)((byte.Parse("" + _13str[2 * (i - 3)], System.Globalization.NumberStyles.HexNumber) << 4)
+                              + byte.Parse("" + _13str[2 * (i - 3) + 1], System.Globalization.NumberStyles.HexNumber));
+                }
+                f.Metadata.Timestamp = (uint)((dt - new DateTime(2000, 1, 1, 0, 0, 0)).TotalSeconds);
+                f.RawThumbnail = new DecodedFrame().CreateThumbnailW64();
             }
-            for (int i = 3; i < 8; i++) 
-            {
-                f.Metadata.RootFileFragment[i] =
-                    (byte)((byte.Parse("" + _13str[2 * (i - 3)], System.Globalization.NumberStyles.HexNumber) << 4)
-                          + byte.Parse("" + _13str[2 * (i - 3) + 1], System.Globalization.NumberStyles.HexNumber));
-            }
-            f.Metadata.Timestamp = (uint)((dt - new DateTime(2000, 1, 1, 0, 0, 0)).TotalSeconds);
-            f.RawThumbnail = new DecodedFrame().CreateThumbnailW64();
-
             // write the animation data
             // THIS PART MUST BE CHANGED
 
@@ -371,7 +373,7 @@ namespace FlipnoteDesktop.Data
             f.AnimationDataSize = animDataSize;
 
             f.SoundHeader.CurrentFramespeed = 3;
-            f.SoundHeader.RecordedBGMFramespeed = 1;
+            f.SoundHeader.RecordingBGMFramespeed = 1;
             return f;
         }
 
@@ -432,7 +434,7 @@ namespace FlipnoteDesktop.Data
                 w.Write((uint)0); // SE3
 
                 w.Write(SoundHeader.CurrentFramespeed); // Frame speed
-                w.Write(SoundHeader.RecordedBGMFramespeed); //BGM speed
+                w.Write(SoundHeader.RecordingBGMFramespeed); //BGM speed
                 w.Write(new byte[14]);
                 
                 using (var ms = new MemoryStream()) 
@@ -441,7 +443,14 @@ namespace FlipnoteDesktop.Data
                     w.BaseStream.Seek(0, SeekOrigin.Begin);
                     w.BaseStream.CopyTo(ms);                    
                     w.BaseStream.Seek(p, SeekOrigin.Begin);
-                    w.Write(ComputeSignature(ms.ToArray()));                    
+                    if (File.Exists("private-key"))
+                    {
+                        w.Write(ComputeSignature(ms.ToArray()));
+                    }
+                    else
+                    {
+                        // maybe throw an error
+                    }
                 }
                 w.Write(new byte[0x10]);
             }
@@ -913,7 +922,7 @@ namespace FlipnoteDesktop.Data
             public uint SE2TrackSize;            
             public uint SE3TrackSize;           
             public byte CurrentFramespeed;
-            public byte RecordedBGMFramespeed;
+            public byte RecordingBGMFramespeed;
         }         
 
         public class _SoundData
@@ -961,6 +970,6 @@ namespace FlipnoteDesktop.Data
                     }
                 }
             }
-        }
+        }       
     }
 }

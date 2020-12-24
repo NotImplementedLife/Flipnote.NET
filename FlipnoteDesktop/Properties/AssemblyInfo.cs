@@ -3,10 +3,9 @@ using System.Runtime.InteropServices;
 using System.Windows;
 
 [assembly: AssemblyTitle("FlipnoteDesktop")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Flipnote Studio remake for Windows desktop brought to you by NotImpLife, 2020")]
 [assembly: AssemblyCompany("NotImplementedLab")]
 [assembly: AssemblyProduct("FlipnoteDesktop")]
-[assembly: AssemblyCopyright("Copyright © N.I.L  2020")]
 [assembly: ComVisible(false)]
 
 [assembly: ThemeInfo(
