@@ -36,7 +36,7 @@ Flipnote Desktop is a Windows app used to create and view Flipnotes. It packs th
 - add more tools
 - improve the preview window
 - update the plugin manager and create some plugins
-- add frame diffing and translation to the save options
+- add frame diffing and frame translation to the save options
 
 # Requirements
 
@@ -49,5 +49,5 @@ Flipnote Desktop is a Windows app used to create and view Flipnotes. It packs th
 
 # Notes
 
-Flipnote Studio is a trademark of Nintendo. This project is not link to them in any way. It has educational purposes and is meant 
+Flipnote Studio is a trademark of Nintendo. This project is not linked to them in any way. It has educational purposes and is meant 
 to be used as an example of various design and programming techniques.
