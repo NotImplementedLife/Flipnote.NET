@@ -44,6 +44,9 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FlipnoteDesktop.Environment.Startup</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -166,6 +169,9 @@
     <Compile Include="Environment\Canvas\BrushPatterns.cs" />
     <Compile Include="Environment\Canvas\DrawingTools\BrushTool.cs" />
     <Compile Include="Environment\Canvas\PenPatterns.cs" />
+    <Compile Include="Environment\CommandLine\CmdParser.cs" />
+    <Compile Include="Environment\CommandLine\CommandLineOption.cs" />
+    <Compile Include="Environment\Startup.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Data\Flipnote.cs" />
     <Compile Include="External\Plugins\PluginData.cs" />

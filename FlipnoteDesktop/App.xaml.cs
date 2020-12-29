@@ -12,6 +12,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Reflection;
+using FlipnoteDesktop.Environment.CommandLine;
 
 namespace FlipnoteDesktop
 {
@@ -46,23 +47,28 @@ namespace FlipnoteDesktop
         static double BorderWidth = (SystemParameters.MaximizedPrimaryScreenWidth - SystemParameters.FullPrimaryScreenWidth) / 2.0;
         static double TitleBarHeight = BorderWidth + SystemParameters.WindowCaptionHeight;
 
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {                            
-            if (e.Args.Length == 1)
-            {
-                var filename = e.Args[0];
-                var flipnote = new Flipnote(filename);
+        public static string Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
 
-                CreateFlipnotePlayerWindow(flipnote).Show();
-            }
-            else if (e.Args.Length == 0)
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {       
+            if(CmdParser.FileName==null)
             {
                 new SplashWindow().Show();
             }
-            else
+            if(CmdParser.FileName!=null)
             {
+                if(!CmdParser.OpenEdit)
+                {
+                    var filename = e.Args[0];
+                    var flipnote = new Flipnote(filename);
 
-            }
+                    CreateFlipnotePlayerWindow(flipnote).Show();
+                }
+                else
+                {
+                    new SplashWindow().Show();
+                }
+            }           
         }
 
         public static Window CreateFlipnotePlayerWindow(Flipnote src)
