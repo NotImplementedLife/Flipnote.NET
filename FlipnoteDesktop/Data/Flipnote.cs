@@ -360,16 +360,16 @@ namespace FlipnoteDesktop.Data
             uint animDataSize = (uint)(8 + 4 * frames.Count);
 
             f.AnimationHeader.FrameOffsetTableSize = (ushort)(4 * frames.Count);            
-            f.AnimationHeader.Flags = 0x430000; // ???
+            f.AnimationHeader.Flags = 0x00430000; // ???
 
             f.Frames = new _FrameData[frames.Count];
-            
+
             for (int i = 0; i < frames.Count; i++)
             {
                 f.Frames[i] = frames[i].ToFrameData();
-                animDataSize += (uint)f.Frames[i].ToByteArray().Length;                
-            }
-            while ((animDataSize & 0x3) != 0) animDataSize++;            
+                animDataSize += (uint)f.Frames[i].ToByteArray().Length;
+            }            
+            while ((animDataSize & 0x3) != 0) animDataSize++;          
             f.AnimationDataSize = animDataSize;
 
             f.SoundHeader.CurrentFramespeed = 3;

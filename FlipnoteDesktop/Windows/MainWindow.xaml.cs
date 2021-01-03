@@ -211,44 +211,44 @@ namespace FlipnoteDesktop.Windows
         private void HideLayer1ChkBox_Checked(object sender, RoutedEventArgs e)
         {
             if (CodeChanges) return;
-            AHFlags |= 0x0010;
+            AHFlags |= 0x00100000;
         }
 
         private void HideLayer1ChkBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (CodeChanges) return;
-            AHFlags &= 0xFFEF;
+            AHFlags &= 0xFFEFFFFF;
         }
 
         private void HideLayer2ChkBox_Checked(object sender, RoutedEventArgs e)
         {
             if (CodeChanges) return;
-            AHFlags |= 0x0020;
+            AHFlags |= 0x00200000;
         }
 
         private void HideLayer2ChkBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (CodeChanges) return;
-            AHFlags &= 0xFFDF;
+            AHFlags &= 0xFFDFFFFF;
         }
 
         private void LoopChkBox_Checked(object sender, RoutedEventArgs e)
         {
             if (CodeChanges) return;
-            AHFlags |= 0x0001;
+            AHFlags |= 0x00020000;
         }
 
         private void LoopChkBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (CodeChanges) return;
-            AHFlags &= 0xFFFE;
+            AHFlags &= 0xFFFDFFFF;
         }
 
         private void UpdateProperties()
         {
-            LoopChkBox.IsChecked = (AHFlags & 0x0001) > 0;
-            HideLayer1ChkBox.IsChecked = (AHFlags & 0x0010) > 0;
-            HideLayer1ChkBox.IsChecked = (AHFlags & 0x0020) > 0;
+            LoopChkBox.IsChecked = (AHFlags & 0x00020000) > 0;
+            HideLayer1ChkBox.IsChecked = (AHFlags & 0x00100000) > 0;
+            HideLayer1ChkBox.IsChecked = (AHFlags & 0x00200000) > 0;
         }        
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
@@ -261,6 +261,9 @@ namespace FlipnoteDesktop.Windows
         Flipnote Flipnote = null;
 
         // a copy of Animation Header Flags
-        uint AHFlags = 0x40;                   
+        // IMPORTANT NOTE:
+        // Changing the position of the animation flag makes the last
+        // frame appear to be corrupted, idk why
+        uint AHFlags = 0x00400000;                  
     }   
 }

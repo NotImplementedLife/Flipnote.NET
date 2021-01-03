@@ -28,7 +28,7 @@ namespace FlipnoteDesktop.Windows
         public SplashWindow()
         {
             InitializeComponent();
-            BuildVersion.Text = App.Version;
+            BuildVersion.Text = App.Version.ToString();
             Loaded += SplashWindow_Loaded;
         }
 

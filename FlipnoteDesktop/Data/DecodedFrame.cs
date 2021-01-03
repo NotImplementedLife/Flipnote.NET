@@ -521,9 +521,23 @@ namespace FlipnoteDesktop.Data
         {
             var res = new byte[1536];
             /// TO DO : change with the actual frame thumbnail
+            
+
+            // This writes text to the thumbnail (for debug purposes)
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(64, 48);
+            var g = System.Drawing.Graphics.FromImage(bmp);
+            var font = new System.Drawing.Font("Consolas", 8);                       
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+            g.DrawString(
+                $"FD {App.Version.Major}.{App.Version.Minor}\n" +
+                $"{App.Version.Build}.{App.Version.Revision}\n" +
+                DateTime.Now.ToString("yyyy-MM-dd\nHH:mm:ss"), font, System.Drawing.Brushes.Black, new System.Drawing.Point(0, -1));
             for (int x = 0; x < 64; x++)
                 for (int y = 0; y < 48; y++)
-                    w64SetPixel(res, x, y, (8 * (y / 8) + x / 8) % 16);
+                {
+                    w64SetPixel(res, x, y, bmp.GetPixel(x, y).A == 255 ? 7 : 0);                    
+                }                               
             return res;
         }
 

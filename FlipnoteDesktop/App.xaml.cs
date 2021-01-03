@@ -47,7 +47,7 @@ namespace FlipnoteDesktop
         static double BorderWidth = (SystemParameters.MaximizedPrimaryScreenWidth - SystemParameters.FullPrimaryScreenWidth) / 2.0;
         static double TitleBarHeight = BorderWidth + SystemParameters.WindowCaptionHeight;
 
-        public static string Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+        public static Version Version = Assembly.GetEntryAssembly().GetName().Version;      
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {       
