@@ -28,6 +28,7 @@
             </Button>
         </Grid>
         <TextBox x:Name="Input" Background="White" BorderBrush="#F97300" BorderThickness="0"
-                 VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="13"/>
+                 VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontSize="13"                 
+                 TextChanged="Input_TextChanged"/>
     </DockPanel>
 </UserControl>

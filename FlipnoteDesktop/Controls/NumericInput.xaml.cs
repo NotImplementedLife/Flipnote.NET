@@ -45,6 +45,7 @@ namespace FlipnoteDesktop.Controls
                 ni.Input.Text = ((int)e.NewValue).ToString();
             }            
             ni.ValueChanged?.Invoke(ni);
+            //MessageBox.Show("Here2");
         }
 
         public int Value
@@ -105,6 +106,27 @@ namespace FlipnoteDesktop.Controls
             {
                 SetValue(MinValueProperty, value);
             }
+        }       
+
+        private void UpdateValue()
+        {
+            if (int.TryParse(Input.Text, out int val))
+            {
+                if (val < MinValue) val = MinValue;
+                else if (val > MaxValue) val = MaxValue;
+                Value = val;
+            }
+            else if (Input.Text != "")
+            {
+                int i = Input.CaretIndex;
+                Input.Text = Value.ToString();
+                Input.CaretIndex = Math.Min(i - 1, Input.Text.Length);
+            }
+        }
+
+        private void Input_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateValue();            
         }
     }
 }
