@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="FlipnoteDotNet.Drawable.PenPatternSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDotNet.Drawable"
+             mc:Ignorable="d" 
+             x:ClassModifier="internal"
+             d:DesignHeight="450" d:DesignWidth="450">
+    <Viewbox Stretch="Uniform">
+        <Canvas Width="32" Height="32" Background="White">
+            <Image Name="Image" Width="32" Height="32" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        </Canvas>
+    </Viewbox>
+</UserControl>

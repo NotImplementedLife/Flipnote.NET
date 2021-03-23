@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="FlipnoteDotNet.Drawable.PenIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDotNet.Drawable"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="50" Name="Control">
+    <Viewbox Stretch="Uniform">
+        <Canvas Width="5120" Height="5120">
+            <Path Fill="{Binding ElementName=Control, Path=Foreground, Mode=TwoWay}">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry Figures="M4030 1095 l-675 -676 155 -152 c171 -168 235 -210 375 -243 102 -24 267 -15 357 18 133 50 170 80 468 378 298 298 328 335 378 468 37 99 42 259 13 367 -39 140 -80 204 -240 368 -79 81 -146 147 -150 147 -3 0 -310 -304 -681 -675z"/>
+                        <PathGeometry Figures="M666 3382 c-36 -25 -63 -66 -71 -108 -15 -83 -73 -21 1275 -1369 l1260 -1260 112 113 113 112 -240 238 c-132 131 -702 699 -1268 1262 l-1027 1024 -63 4 c-49 2 -68 -1 -91 -16z"/>
+                        <PathGeometry Figures="M1230 4121 c-86 -28 -159 -90 -201 -171 -34 -65 -34 -203 0 -275 19 -40 267 -294 1287 -1315 l1264 -1265 225 225 225 225 -1262 1263 c-1042 1041 -1272 1267 -1316 1289 -57 28 -173 41 -222 24z"/>
+                        <PathGeometry Figures="M1838 4531 c-37 -12 -68 -35 -89 -68 -23 -34 -25 -122 -5 -161 8 -15 577 -589 1265 -1277 l1251 -1250 112 113 113 112 -1245 1245 c-685 685 -1258 1254 -1275 1265 -37 23 -91 32 -127 21z"/>
+                        <PathGeometry Figures="M10 5116 c0 -13 381 -1531 386 -1535 2 -3 17 7 32 21 46 44 119 85 186 104 l63 18 1 95 c1 193 91 377 240 494 121 95 247 139 399 139 l101 0 6 41 c9 56 49 142 93 195 19 24 34 44 32 46 -2 2 -339 87 -749 189 -410 103 -755 190 -767 193 -13 3 -23 4 -23 0z"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Canvas>
+    </Viewbox>
+</UserControl>

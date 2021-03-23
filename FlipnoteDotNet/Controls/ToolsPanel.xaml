@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="FlipnoteDotNet.Controls.ToolsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDotNet.Controls"
+             xmlns:drawable="clr-namespace:FlipnoteDotNet.Drawable"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="70">
+    <UserControl.Effect>
+        <DropShadowEffect BlurRadius="1" ShadowDepth="2" Color="#888888"/>
+    </UserControl.Effect>
+    <Border CornerRadius="3" Background="White" BorderThickness="1" BorderBrush="#F97300">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                <drawable:DraggableIcon x:Name="DragArea" Width="10" Height="10" Foreground="#F97300"
+                                        Background="Transparent"     
+                                        MouseDown="DragArea_MouseDown"
+                                        MouseMove="DragArea_MouseMove"
+                                        MouseUp="DragArea_MouseUp"/>
+            </StackPanel>
+            <UniformGrid Columns="2" Grid.Row="1" VerticalAlignment="Top">
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="PenTool"
+                        ToolTip="Pen"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
+                    <Button.Content>
+                        <drawable:PenIcon/>
+                    </Button.Content>
+                </Button>
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="BrushTool"
+                        ToolTip="Brush"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
+                    <Button.Content>
+                        <drawable:BrushIcon/>
+                    </Button.Content>
+                </Button>
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="EraserTool"                        
+                        ToolTip="Eraser"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
+                    <Button.Content>
+                        <drawable:EraserIcon/>
+                    </Button.Content>
+                </Button>
+                <Button Style="{DynamicResource ResourceKey=SimpleButton}" Width="20" Height="20" BorderThickness="0"
+                        Tag="LineTool"          
+                        ToolTip="Line"
+                        Name="LineToolButton"
+                        PreviewMouseDown="ToolIcon_PreviewMouseDown">
+                    <Button.Content>
+                        <Path Stroke="{Binding ElementName=LineToolButton, Path=Foreground}" StrokeThickness="1" Data="M1 2L19 18"/>
+                    </Button.Content>
+                </Button>
+            </UniformGrid>
+        </Grid>
+    </Border>
+</UserControl>

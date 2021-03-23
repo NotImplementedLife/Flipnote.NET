@@ -1,9 +1,9 @@
 .git/
 .vs/
-FlipnoteDesktop/bin/
-FlipnoteDesktop/obj/
-FlipnoteDesktop/Properties/VersionCounter.cs
-FlipnoteDesktop/FlipnoteDesktop.csproj.user
+FlipnoteDotNet/bin/
+FlipnoteDotNet/obj/
+FlipnoteDotNet/Properties/VersionCounter.cs
+FlipnoteDotNet/FlipnoteDesktop.csproj.user
 G_TypeConsole/bin/
 G_TypeConsole/obj/
 Test/bin/

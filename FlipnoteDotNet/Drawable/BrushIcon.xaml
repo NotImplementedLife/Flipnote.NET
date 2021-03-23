@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="FlipnoteDotNet.Drawable.BrushIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlipnoteDotNet.Drawable"
+             mc:Ignorable="d" 
+              d:DesignHeight="50" d:DesignWidth="50" Name="Control">
+    <Viewbox Stretch="Uniform">
+        <Canvas Width="32" Height="32">
+            <Path Fill="{Binding ElementName=Control, Path=Foreground, Mode=TwoWay}">
+                <Path.Data>
+                    <GeometryGroup FillRule="Nonzero">
+                        <RectangleGeometry Rect="13,2,6,15" RadiusX="3" RadiusY="1"/>
+                        <RectangleGeometry Rect="6,14.5,20,2.7" RadiusX="1" RadiusY="1"/>
+                        <PathGeometry Figures="M8 18 L24 18 Q23 24 29 28L10 28Q7 24 8 18"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Canvas>
+    </Viewbox>
+</UserControl>
