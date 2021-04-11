@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlipnoteDotNet", "FlipnoteD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{668EC33D-F7E1-4F5C-8614-EFB8FE82553F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPMLib", "PPMLib\PPMLib\PPMLib.csproj", "{75E6691F-5EF0-4102-9FF0-199CA0D9F7E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{9E15DC82-CCDE-447D-91F9-988E917147EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E15DC82-CCDE-447D-91F9-988E917147EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E15DC82-CCDE-447D-91F9-988E917147EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75E6691F-5EF0-4102-9FF0-199CA0D9F7E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75E6691F-5EF0-4102-9FF0-199CA0D9F7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75E6691F-5EF0-4102-9FF0-199CA0D9F7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75E6691F-5EF0-4102-9FF0-199CA0D9F7E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
