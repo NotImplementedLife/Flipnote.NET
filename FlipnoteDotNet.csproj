@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,9 +51,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Brushes.cs" />
+    <Compile Include="Constants\Colors.cs" />
+    <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\IntException.cs" />
     <Compile Include="Extensions\QueueExtensions.cs" />
+    <Compile Include="GUI\Canvas\CanvasComponentsCollection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GUI\Canvas\CanvasSpaceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -63,8 +73,12 @@
     <Compile Include="GUI\Canvas\Drawing\CanvasGraphicsRenderer.cs" />
     <Compile Include="GUI\Canvas\Drawing\ICanvasGraphicsOperation.cs" />
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawLine.cs" />
+    <Compile Include="GUI\Canvas\Drawing\Operations\FillRectangle.cs" />
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawRectangle.cs" />
     <Compile Include="GUI\Canvas\ICanvasComponent.cs" />
+    <Compile Include="GUI\Controls\FSplitContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
     <Compile Include="MainForm.cs">
@@ -111,8 +125,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Constants\" />
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

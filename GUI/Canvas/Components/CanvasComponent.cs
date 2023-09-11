@@ -23,7 +23,11 @@ namespace FlipnoteDotNet.GUI.Canvas.Components
             get => _Bounds.Size;
             set => _Bounds.Size = value;
         }
+        public bool IsFixed { get; set; } = false;
 
-        public virtual void OnPaint(CanvasGraphics g) { }        
+        public virtual void OnPaint(CanvasGraphics g)
+        {
+            g.DrawRectangle(new Pen(Brushes.Gray, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash }, Bounds);
+        }
     }
 }

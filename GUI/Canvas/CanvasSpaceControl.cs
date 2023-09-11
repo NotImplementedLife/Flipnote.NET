@@ -1,17 +1,19 @@
-﻿using FlipnoteDotNet.Extensions;
+﻿using FlipnoteDotNet.Constants;
+using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
 using FlipnoteDotNet.GUI.MouseGestures;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Canvas
 {
     public partial class CanvasSpaceControl : UserControl
     {
-        public List<ICanvasComponent> CanvasComponents { get; } = new List<ICanvasComponent>();
+        public CanvasComponentsCollection CanvasComponents { get; } = new CanvasComponentsCollection();
 
         MouseGesturesHandler MouseGesturesHandler = new MouseGesturesHandler();
 
@@ -37,17 +39,7 @@ namespace FlipnoteDotNet.GUI.Canvas
             MouseGesturesHandler.AttachTarget(this);
 
             OldSize = Size;
-        }        
-
-        class CanvasDragMoveData
-        {
-            public Point CanvasViewLocation { get; }
-
-            public CanvasDragMoveData(Point canvasViewLocation)
-            {
-                CanvasViewLocation = canvasViewLocation;
-            }
-        }
+        }                
 
         private Point ScreenToCanvas(Point p)
         {
@@ -80,24 +72,57 @@ namespace FlipnoteDotNet.GUI.Canvas
         private void MouseGesturesHandler_Click(object sender, ClickGestureArgs e)
         {            
             Debug.WriteLine("Click");
+
+            var hitpoint = ScreenToCanvas(e.Location);
+            var components = CanvasComponents.Where(_ => !_.IsFixed && _.Bounds.Contains(hitpoint)).ToArray();
+
+            if (ModifierKeys == Keys.Control)
+            {
+                if (components.Length > 0)
+                    CanvasComponents.ToggleSelected(components[0]);
+            }
+            else
+            {                
+                CanvasComponents.SelectSingle(components.FirstOrDefault());
+            }                          
+            Invalidate();
         }
 
         private void MouseGesturesHandler_DragStart(object sender, DragGestureArgs e)
         {
             Debug.WriteLine($"Drag start {e.StartLocation}; {e.CurrentLocation}");
 
-            e.UserData = new CanvasDragMoveData(CanvasViewLocation);            
+            var hitpoint = ScreenToCanvas(e.CurrentLocation);
+            var components = CanvasComponents
+                .Where(_ => !_.IsFixed && _.Bounds.Contains(hitpoint))
+                .Where(CanvasComponents.IsSelected).ToArray();            
+
+            if (components.Length == 0) 
+                e.UserData = new CanvasDragMoveData(CanvasViewLocation);
+            else
+                e.UserData = new SelectionDragMoveData(CanvasComponents.SelectedComponents.Select(_ => (_, _.Location)).ToArray());
         }
 
         private void MouseGesturesHandler_Drag(object sender, DragGestureArgs e)
         {
             Debug.WriteLine($"Drag {e.StartLocation}; {e.CurrentLocation}");
 
-            var data = e.UserData as CanvasDragMoveData;
-
-            var location = data.CanvasViewLocation;
-            location.Offset(e.DeltaLocation);
-            CanvasViewLocation = location;
+            if (e.UserData is CanvasDragMoveData canvasData)
+            {                
+                var location = canvasData.CanvasViewLocation;
+                location.Offset(e.DeltaLocation);
+                CanvasViewLocation = location;
+            }
+            else if(e.UserData is SelectionDragMoveData selData)
+            {
+                Debug.WriteLine($"Selection");
+                selData.Items.ForEach(_ => 
+                {
+                    var l = _.OriginalLocation;
+                    l.Offset(e.DeltaLocation);
+                    _.Component.Location = l;
+                });                
+            }
 
             Invalidate();
         }
@@ -109,10 +134,26 @@ namespace FlipnoteDotNet.GUI.Canvas
 
         private void CanvasSpaceControl_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.White);
+            e.Graphics.FillRectangle(Constants.Brushes.TransparentBackgroundBrush, 0, 0, Width, Height);
+            //e.Graphics.Clear(Color.White);
             var canvasRenderer = new CanvasGraphicsRenderer(e.Graphics, CanvasViewScale, CanvasViewLocation);
             var canvasGraphics = new CanvasGraphics(canvasRenderer);
-            CanvasComponents.ForEach(_ => _.OnPaint(canvasGraphics));
+            CanvasComponents.ForEach(comp =>
+            {
+                comp.OnPaint(canvasGraphics);
+
+                if (comp.IsFixed)
+                    return;           
+
+                if (CanvasComponents.IsSelected(comp))
+                {
+                    canvasGraphics.DrawRectangle(Color.Blue.GetPen(2), comp.Bounds);
+                }
+                else
+                {
+                    canvasGraphics.DrawRectangle(Color.Gray.Alpha(64).GetPen(2), comp.Bounds);
+                }                                               
+            });
             canvasGraphics.Flush();
         }
 
@@ -134,6 +175,27 @@ namespace FlipnoteDotNet.GUI.Canvas
             OldSize = Size;
             CanvasViewLocation = new Point(x, y);
             Invalidate();
+        }
+
+
+        class CanvasDragMoveData
+        {
+            public Point CanvasViewLocation { get; }
+
+            public CanvasDragMoveData(Point canvasViewLocation)
+            {
+                CanvasViewLocation = canvasViewLocation;
+            }
+        }
+
+        class SelectionDragMoveData
+        {
+            public (ICanvasComponent Component, Point OriginalLocation)[] Items { get; }
+
+            public SelectionDragMoveData((ICanvasComponent Component, Point OriginalLocation)[] items)
+            {
+                Items = items;
+            }
         }
     }
 }

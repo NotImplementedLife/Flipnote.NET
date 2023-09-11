@@ -8,6 +8,7 @@ namespace FlipnoteDotNet.GUI.Canvas
         Rectangle Bounds { get; set; }
         Point Location { get; set; }
         Size Size { get; set; }
+        bool IsFixed { get; set; }
 
         void OnPaint(CanvasGraphics g);
 

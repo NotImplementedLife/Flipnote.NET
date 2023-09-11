@@ -22,8 +22,7 @@ namespace FlipnoteDotNet.GUI.Canvas.Drawing
             => Graphics.DrawLine(pen, TransformToGraphics(p1), TransformToGraphics(p2));
 
         public void DrawRectangle(Pen pen, Rectangle rectangle)
-        {
-            Debug.WriteLine($"Here? {rectangle}");
+        {            
             Graphics.DrawRectangle(pen, TransformToGraphics(rectangle));
         }
 

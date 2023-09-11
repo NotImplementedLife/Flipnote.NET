@@ -24,11 +24,7 @@ namespace FlipnoteDotNet.GUI.Canvas.Drawing
         public void Flush()
         {
 
-            PendingOperations.DequeueAll().ForEach(_ =>
-            {
-                Debug.WriteLine(_);
-                _.Execute(Renderer);
-            });
+            PendingOperations.DequeueAll().ForEach(_ => _.Execute(Renderer));            
         }
 
         public void DrawLine(Pen pen, Point p1, Point p2)
@@ -45,6 +41,15 @@ namespace FlipnoteDotNet.GUI.Canvas.Drawing
 
         public void DrawRectangle(Pen pen, int x, int y, int width, int height)
             => DrawRectangle(pen, new Rectangle(x, y, width, height));
+
+        public void FillRectangle(Brush brush, Rectangle rectangle)
+             => PendingOperations.Enqueue(new FillRectangle(brush, rectangle));
+
+        public void FillRectangle(Brush brush, Point point, Size size)
+            => FillRectangle(brush, new Rectangle(point, size));
+
+        public void FillRectangle(Brush brush, int x, int y, int width, int height)
+            => FillRectangle(brush, new Rectangle(x, y, width, height));
 
 
     }

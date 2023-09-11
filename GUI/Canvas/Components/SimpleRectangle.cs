@@ -6,7 +6,8 @@ namespace FlipnoteDotNet.GUI.Canvas.Components
 {
     public class SimpleRectangle : CanvasComponent
     {
-        public Pen Pen { get; set; } = Pens.Black;
+        public Pen Pen { get; set; } = Pens.Transparent;
+        public Brush Brush { get; set; } = Brushes.Transparent;
 
         public SimpleRectangle(Rectangle rectangle)
         {
@@ -22,6 +23,7 @@ namespace FlipnoteDotNet.GUI.Canvas.Components
 
         public override void OnPaint(CanvasGraphics g)
         {
+            g.FillRectangle(Brush, Bounds);
             g.DrawRectangle(Pen, Bounds);
         }
     }

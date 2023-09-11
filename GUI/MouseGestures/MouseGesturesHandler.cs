@@ -42,7 +42,9 @@ namespace FlipnoteDotNet.GUI.MouseGestures
 
 
         private void Target_MouseWheel(object sender, MouseEventArgs e)
-        {            
+        {
+            if (IsDragging)
+                return; // prevent zoom while drag & drop
             var factor = e.Delta / SystemInformation.MouseWheelScrollDelta;
             if (factor == 0) return;
             Zoom?.Invoke(Target, new ZoomGestureArgs(e.Location, factor));
