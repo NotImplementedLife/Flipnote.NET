@@ -3,11 +3,16 @@ using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.MouseGestures;
+using FlipnoteDotNet.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;
 
@@ -41,35 +46,268 @@ namespace FlipnoteDotNet.GUI.Tracks
             MouseGesturesHandler.Drag += MouseGesturesHandler_Drag;
             MouseGesturesHandler.Drop += MouseGesturesHandler_Drop;
             MouseGesturesHandler.Zoom += MouseGesturesHandler_Zoom;
+            MouseGesturesHandler.Click += MouseGesturesHandler_Click;
             MouseGesturesHandler.AttachTarget(this.ScrollContainer);
-        }        
 
-        private void MouseGesturesHandler_DragStart(object sender, DragGestureArgs e)
-        {            
-            if (TrackbarPanelBounds.Contains(e.StartLocation))
+            SequenceManager.ElementAdded += SequenceManager_ElementAdded;
+            SequenceManager.ElementRemoved += SequenceManager_ElementRemoved;
+
+            ScrollContainer.MouseMove += ScrollContainer_MouseMove;
+        }
+
+        private IEnumerable<(SequenceTrack.Element Element, Rectangle Bounds, int TrackId)> GetVisibleElements()
+        {
+            var rect = TracksPanelBounds;
+            int y = rect.Top - ScrollY;            
+            for (int i = 0; i < SequenceManager.TracksCount; i++, y += TrackHeight)
             {
-                int trackSignX = TrackSignScreenX;
-                int r = TrackbarPanelBounds.Height / 4;
-                e.UserData = new TrackSignMoveDragData(trackSignX);
-
-                /*if (e.StartLocation.X.IsInRange(trackSignX-r, trackSignX+r))
+                if (y < rect.Top - TrackHeight) 
+                    continue;
+                var track = SequenceManager.GetTrack(i);
+                foreach (var elem in track.GetElements())
                 {
-                    
-                }*/
+                    var x1 = TrackToScreen(elem.TimestampStart);
+                    var x2 = TrackToScreen(elem.TimestampEnd);
+                    if (x2 < rect.Left || x1 >= rect.Right) continue;
+                    var r = new Rectangle(x1, y + TrackPadding, x2 - x1, TrackHeight - 2 * TrackPadding);
+                    yield return (elem, r, i);
+                }
             }
         }
 
-        private void MouseGesturesHandler_Drag(object sender, DragGestureArgs e)
+        private void ScrollContainer_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.UserData is TrackSignMoveDragData trackData) 
+            if(IsSequenceCreateMode)
+            {
+                using (var ms = new MemoryStream(Resources.cur_cross))                
+                    Cursor = new Cursor(ms);
+                return;
+            }            
+
+            var x1 = e.Location.X - 3;
+            var x2 = e.Location.X + 3;
+            var y = e.Location.Y;
+            Cursor = Cursors.Default;
+            foreach (var (_, bounds, _) in GetVisibleElements()) 
+                if (y.IsInRange(bounds.Top, bounds.Bottom) && (bounds.Right.IsInRange(x1, x2) || bounds.Left.IsInRange(x1, x2))) 
+                {
+                    Cursor = Cursors.SizeWE;
+                    break;
+                }            
+        }
+
+        private bool ElementRemovedEventActive = true;
+
+        private void SequenceManager_ElementRemoved(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e)
+        {
+            if (!ElementRemovedEventActive) return;
+            if(e==SelectedElement)
+            {
+                _SelectedElement = null;
+                SelectedElementChanged?.Invoke(this, new EventArgs());
+            }
+
+            InvalidateSurface();
+        }
+
+        private void SequenceManager_ElementAdded(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e)
+        {
+            InvalidateSurface();
+        }
+
+        private void MouseGesturesHandler_Click(object sender, ClickGestureArgs e)
+        {
+            var oldSelection = _SelectedElement;
+            _SelectedElement = null;
+            foreach (var (elem, bounds, _) in GetVisibleElements()) 
+            {
+                if (bounds.Contains(e.Location))
+                {
+                    _SelectedElement = elem;
+                    break;
+                }
+            }             
+            InvalidateSurface();
+
+            if (oldSelection != _SelectedElement) 
+            {
+                SelectedElementChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        private bool IsSequenceCreateMode = false;
+        private Rectangle SequenceCreatePreviewBounds = new Rectangle();
+
+        public void StartSequenceCreateMode()
+        {
+            IsSequenceCreateMode = true;
+        }
+
+        public void EndSequenceCreateMode()
+        {
+            IsSequenceCreateMode = false;
+            SequenceCreateModeEnded?.Invoke(this, new EventArgs());
+        }
+
+        public event EventHandler SequenceCreateModeEnded;
+
+        private void MouseGesturesHandler_DragStart(object sender, DragGestureArgs e)
+        {            
+            if(IsSequenceCreateMode)
+            {
+                var trackLine = ScreenToTrackLineId(e.StartLocation.Y);
+                if (!trackLine.IsInRange(0, SequenceManager.TracksCount)) 
+                {
+                    EndSequenceCreateMode();
+                    e.Cancel();
+                    return;
+                }
+
+                e.UserData = new SequenceCreateDragData(ScreenToTrack(e.StartLocation.X), trackLine);
+                return;
+            }
+
+            if (TrackbarPanelBounds.Contains(e.StartLocation))
+            {
+                e.UserData = new TrackSignMoveDragData();
+                return;
+            }
+            var x1 = e.StartLocation.X - 3;
+            var x2 = e.StartLocation.X + 3;
+            var y = e.StartLocation.Y;
+            Cursor = Cursors.Default;
+            foreach (var (elem, bounds, _) in GetVisibleElements()) 
+            {
+                if (y.IsInRange(bounds.Top, bounds.Bottom))
+                {
+                    if(bounds.Left.IsInRange(x1, x2))
+                    {
+                        e.UserData = new SequenceResizeDragData(elem, SequenceResizeDragData._Direction.Left);
+                        return;
+
+                    }
+                    if (bounds.Right.IsInRange(x1, x2)) 
+                    {
+                        e.UserData = new SequenceResizeDragData(elem, SequenceResizeDragData._Direction.Right);                        
+                        return;
+                    }                                      
+                    if(bounds.Contains(e.StartLocation))
+                    {
+                        e.UserData = new SequenceMoveDragData(elem);
+                        SelectElement(elem);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void SelectElement(SequenceTrack.Element e)
+        {
+            if (SelectedElement == e) return;
+            _SelectedElement = e;
+            SelectedElementChanged?.Invoke(this, new EventArgs());
+        }        
+
+        private void MouseGesturesHandler_Drag(object sender, DragGestureArgs e)
+        {            
+            if (e.UserData is TrackSignMoveDragData) 
             {
                 TrackSignPosition = ScreenToTrackSignPosition(e.CurrentLocation.X);
+                return;
+            }
+            if(e.UserData is SequenceResizeDragData resizeData)
+            {                
+                resizeData.Resize(e.DeltaLocation.X * 100 / Zoom);
+                InvalidateSurface();
+                return;
+            }
+            if(e.UserData is SequenceMoveDragData moveData)
+            {
+                var elem = moveData.Element;
+                int oldS = elem.TimestampStart;
+                int oldE = elem.TimestampEnd;
+                moveData.Move(e.DeltaLocation.X * 100 / Zoom);                
+                
+                int trackId = ScreenToTrackLineId(e.CurrentLocation.Y).Clamp(0, SequenceManager.TracksCount - 1);                
+
+                bool trackChanged = SequenceManager.GetTrack(trackId) != elem.Track;
+                                
+                var newR = GetScreenRectangleOnTrack(trackId, elem.TimestampStart, elem.TimestampEnd);
+
+                var crsOverlappedElem = GetVisibleElements()
+                    .Where(_ => _.Element != elem && (_.TrackId == trackId || SequenceManager.GetTrack(_.TrackId) == elem.Track) && _.Bounds.IntersectsWith(newR))
+                    .FirstOrDefault();
+                bool crsOverlapsElems = crsOverlappedElem.Element != null;
+
+                if (!crsOverlapsElems)
+                {
+                    ElementRemovedEventActive = false;
+                    elem.Track.RemoveSequence(elem.Sequence);
+                    SequenceManager.GetTrack(trackId).AddElement(elem);
+                    ElementRemovedEventActive = true;
+                }
+                else if (!trackChanged)
+                {                
+                    elem.TimestampStart = oldS;
+                    elem.TimestampEnd = oldE;
+                }                
+                else
+                {
+                    var q = GetVisibleElements()
+                        .Where(_ => _.Element != elem && SequenceManager.GetTrack(_.TrackId) == elem.Track)
+                        .FirstOrDefault();
+                    if(q.Element!=null)
+                    {
+                        newR = GetScreenRectangleOnTrack(q.TrackId, elem.TimestampStart, elem.TimestampEnd);
+                        if(q.Bounds.IntersectsWith(newR))
+                        {
+                            elem.TimestampStart = oldS;
+                            elem.TimestampEnd = oldE;
+                        }
+                    }                
+                }
+                InvalidateSurface();
+                return;
+            }
+
+            if (e.UserData is SequenceCreateDragData createData)
+            {
+                var x1 = createData.StartX;
+                var t = createData.TrackId;
+                var x2 = createData.EndX = ScreenToTrack(e.CurrentLocation.X);
+                var tb = TrackToScreenLimits(t);
+                SequenceCreatePreviewBounds = new Rectangle(x1, tb.Top, x2 - x1, tb.Bottom - tb.Top);
+                InvalidateSurface();
+                return;
             }
 
         }
         private void MouseGesturesHandler_Drop(object sender, DropGestureArgs e)
         {
+            if(e.UserData is TrackSignMoveDragData)
+            {
+                CurrentFrameChanged?.Invoke(this, new EventArgs());
+                return;
+            }
+            if(e.UserData is SequenceCreateDragData createData)
+            {
+                var startX = createData.StartX;
+                var endX = createData.EndX;
+                var trackId = createData.TrackId;
+                var newR = GetScreenRectangleOnTrack(trackId, startX, endX);
+                bool overlapsElems = GetVisibleElements().Where(_ => _.TrackId == trackId && _.Bounds.IntersectsWith(newR)).Any();
+                if(!overlapsElems)
+                {
+                    SequenceManager.GetTrack(trackId).AddSequence(new Sequence(), startX, endX);
+                }
+
+                EndSequenceCreateMode();
+                InvalidateSurface();
+                return;
+            }
         }
+
+        public event EventHandler CurrentFrameChanged;
 
         private void MouseGesturesHandler_Zoom(object sender, ZoomGestureArgs e)
         {
@@ -129,41 +367,72 @@ namespace FlipnoteDotNet.GUI.Tracks
         private int TrackPadding = 3;
 
         Rectangle TrackbarPanelBounds => new Rectangle(0, 0, ContainerSize.Width, TrackBarPanelHeight);
+        Rectangle TracksPanelBounds => new Rectangle(LeftPanelWidth, TrackBarPanelHeight, ContainerSize.Width - LeftPanelWidth, ContainerSize.Height - BottomBarHeight - TrackBarPanelHeight);
 
-        private void SequenceTracksViewer_SurfacePaint(object sender, System.Windows.Forms.PaintEventArgs e)
+        private void SequenceTracksViewer_SurfacePaint(object sender, PaintEventArgs e)
         {
             var gw = ContainerSize.Width;// (int)e.Graphics.ClipBounds.Width;
             var gh = ContainerSize.Height;// (int)e.Graphics.ClipBounds.Height;
             var bottomBarY = gh - BottomBarHeight;
 
-            ClipDraw(DrawTracksPanel, e.Graphics, new Rectangle(LeftPanelWidth, TrackBarPanelHeight, gw - LeftPanelWidth, bottomBarY - TrackBarPanelHeight));
+            ClipDraw(DrawTracksPanel, e.Graphics, TracksPanelBounds);
             ClipDraw(DrawLeftPanel, e.Graphics, new Rectangle(0, TrackBarPanelHeight, LeftPanelWidth, gh));
             ClipDraw(DrawBottomBar, e.Graphics, new Rectangle(LeftPanelWidth, bottomBarY, gw - LeftPanelWidth, BottomBarHeight));
             ClipDraw(DrawTrackbarPanel, e.Graphics, TrackbarPanelBounds);
             ClipDraw(DrawTrackLabels, e.Graphics, new Rectangle(0, TrackBarPanelHeight, LeftPanelWidth, bottomBarY - TrackBarPanelHeight));
-        }        
+        }
+
+        private SequenceTrack.Element _SelectedElement = null;
+        public SequenceTrack.Element SelectedElement => _SelectedElement;
+
+        public event EventHandler SelectedElementChanged;
 
         private void DrawTracksPanel(Graphics g, Rectangle rect)
         {
             g.FillRectangle(Brushes.White, rect);
 
-            int y = rect.Top - ScrollY;
+            int y = rect.Top - ScrollY;            
 
-            for (int i = 0; i < SequenceManager.Tracks.Count; i++, y += TrackHeight) 
+            for (int i = 0; i < SequenceManager.TracksCount; i++, y += TrackHeight)
             {
                 if (y < rect.Top - TrackHeight)
                     continue;
                 g.FillRectangle(Colors.FlipnoteThemeSecondaryColor.GetBrush(), rect.Left, y + TrackPadding, rect.Right, TrackHeight - 2 * TrackPadding);
-                //g.DrawString($"{i}", Font, Brushes.Black, rect.Left, y + TrackPadding);
                 g.DrawLine(Colors.FlipnoteThemeAccentColor.GetPen(2), rect.Left, y + TrackPadding, rect.Right, y + TrackPadding);
                 g.DrawLine(Colors.FlipnoteThemeAccentColor.GetPen(2), rect.Left, y + TrackPadding + TrackHeight - 2 * TrackPadding, rect.Right, y + TrackPadding + TrackHeight - 2 * TrackPadding);
-                
             }
-            g.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(2), rect.Left, rect.Bottom, rect.Right, rect.Bottom);
-
 
             int trackSignX = TrackSignScreenX;
+            g.FillRectangle(Colors.FlipnoteThemeAccentColor.Alpha(64).GetBrush(), trackSignX, rect.Top, Zoom / 100, rect.Width);
+
+            foreach (var (elem, r, _) in GetVisibleElements()) 
+            {                
+                var color2 = elem == _SelectedElement ? Color.Yellow : Color.White;
+
+                var brush = new LinearGradientBrush(r, elem.Sequence.Color, color2, 90f);
+                var blend = new Blend();
+                blend.Positions = new float[] { 0.0f, 0.8f, 1.0f };
+                blend.Factors = new float[] { 0.0f, 0.2f, 1.0f };
+                brush.Blend = blend;
+                g.FillRoundedRectangle(brush, r, 5);
+                g.DrawRoundedRectangle(elem.Sequence.Color.GetPen(1), r, 5);
+
+                var textR = new Rectangle(r.X + 5, r.Y + 5, r.Width - 10, r.Height - 10);
+                var format = new StringFormat(StringFormatFlags.NoWrap);
+                g.DrawString(elem.Sequence.Name, Font, color2.GetBrush(), textR, format);
+            }            
+            g.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(2), rect.Left, rect.Bottom, rect.Right, rect.Bottom);            
             g.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(3), trackSignX, rect.Top, trackSignX, rect.Bottom);
+
+
+            if(IsSequenceCreateMode)
+            {
+                var sx1 = TrackToScreen(SequenceCreatePreviewBounds.Left);
+                var sx2 = TrackToScreen(SequenceCreatePreviewBounds.Right);
+                var sy = SequenceCreatePreviewBounds.Top;
+                var sh = SequenceCreatePreviewBounds.Height;
+                g.DrawRectangle(Pens.Black, sx1, sy, sx2 - sx1, sh);
+            }            
         }
 
         private void DrawTrackLabels(Graphics g, Rectangle rect)
@@ -173,7 +442,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             int w = rect.Width - 2 * TrackPadding;
             int h = TrackHeight - 2 * TrackPadding;
 
-            for (int i=0;i<SequenceManager.Tracks.Count;i++)
+            for (int i=0;i<SequenceManager.TracksCount;i++)
             {
                 g.DrawRectangle(Colors.FlipnoteThemeAccentColor.GetPen(2), x, y + TrackPadding, w + TrackPadding, h);
 
@@ -223,8 +492,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             {
                 var thumbnailRect = new Rectangle(tx + ThumbnailMargin, rect.Top + BottomBarPadding, ThumbnailSize.Width, ThumbnailSize.Height);
                 g.DrawRectangle(Colors.FlipnoteThemeMainColor.GetPen(), thumbnailRect);
-
-                //var text = $"{i * 1000 / thumbnailsCount + 1}";
+                
                 var text = $"{ScreenToTrackSignPosition(tx + ThumbnailSize.Width) + 1}";
                 var textSize = g.MeasureString(text, BottomBarFont);
 
@@ -241,7 +509,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             for (int i = 0; i < 2; i++)
                 SurfaceSize = new Size(
                     LeftPanelWidth + 1000 * Zoom / 100,
-                    TrackHeight * SequenceManager.Tracks.Count + TrackBarPanelHeight + BottomBarHeight);
+                    TrackHeight * SequenceManager.TracksCount + TrackBarPanelHeight + BottomBarHeight);
         }
 
         private void ClipDraw(Action<Graphics, Rectangle> action, Graphics g, Rectangle rect)
@@ -250,6 +518,37 @@ namespace FlipnoteDotNet.GUI.Tracks
             g.Clip = new Region(rect);
             action(g, rect);
             g.Clip = new Region(bounds);
+        }
+
+        private int ScreenToTrack(int x)
+        {
+            return (x - LeftPanelWidth + ScrollX) * 100 / Zoom;
+        }
+
+        private int TrackToScreen(int x)
+        {
+            return LeftPanelWidth - ScrollX + x * Zoom / 100;
+        }
+
+        private int ScreenToTrackLineId(int y)
+        {
+            int l = (y - TracksPanelBounds.Top + ScrollY);
+            return l < 0 ? -1 : l / TrackHeight;
+        }
+
+        private (int Top, int Bottom) TrackToScreenLimits(int index)
+        {
+            var t = index * TrackHeight - ScrollY + TracksPanelBounds.Top;
+            var b = t + TrackHeight;
+            return (t, b);
+        }
+
+        private Rectangle GetScreenRectangleOnTrack(int trackId, int startTX, int endTX)
+        {
+            var tb = TrackToScreenLimits(trackId);
+            var x1 = TrackToScreen(startTX);
+            var x2 = TrackToScreen(endTX);
+            return new Rectangle(x1, tb.Top, x2 - x1, tb.Bottom - tb.Top);
         }
     }
 }

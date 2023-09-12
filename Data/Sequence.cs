@@ -1,5 +1,8 @@
-﻿using FlipnoteDotNet.Data.StateChangeGenerators;
+﻿using FlipnoteDotNet.Attributes;
+using FlipnoteDotNet.Constants;
+using FlipnoteDotNet.Data.StateChangeGenerators;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace FlipnoteDotNet.Data
 {
@@ -13,5 +16,10 @@ namespace FlipnoteDotNet.Data
         }
         public List<Element> Elements { get; } = new List<Element>();
 
+        [Editable]
+        public string Name { get; set; } = "";
+
+        [Editable]
+        public Color Color { get; set; } = Color.DodgerBlue;
     }
 }

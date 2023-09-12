@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlipnoteDotNet.Data
 {
@@ -10,19 +8,48 @@ namespace FlipnoteDotNet.Data
     {
         public class Element
         {
-            public int Timestamp { get; set; }
             public Sequence Sequence { get; }
+            public int TimestampStart { get; set; }
+            public int TimestampEnd { get; set; }
+            public SequenceTrack Track { get; internal set; }
 
-            public Element(int timestamp, Sequence sequence)
+            public Element(Sequence sequence, int timestampStart, int timestampEnd)
             {
-                Timestamp = timestamp;
                 Sequence = sequence;
+                TimestampStart = timestampStart;
+                TimestampEnd = timestampEnd;
             }
         }
-        private List<Element> Elements { get; } = new List<Element>();
 
+        private Dictionary<Sequence, Element> Elements { get; } = new Dictionary<Sequence, Element>();
+        public IEnumerable<Element> GetElements() => Elements.Values.AsEnumerable();
 
+        public void AddElement(Element elem)
+        {
+            Elements.Add(elem.Sequence, elem);
+            elem.Track = this;
+            ElementAdded?.Invoke(this, elem);
+        }
 
+        public void AddSequence(Sequence sequence, int timestampStart, int timestampEnd)
+        {
+            var elem = new Element(sequence, timestampStart, timestampEnd);
+            Elements.Add(sequence, elem);
+            elem.Track = this;
+            ElementAdded?.Invoke(this, elem);
+        }
 
+        public void RemoveSequence(Sequence sequence)
+        {
+            if (!Elements.ContainsKey(sequence))
+                return;
+            var elem = Elements[sequence];
+            elem.Track = null;
+            Elements.Remove(sequence);
+            ElementRemoved?.Invoke(this, elem);
+        }
+
+        public event EventHandler<Element> ElementAdded;
+        public event EventHandler<Element> ElementRemoved;
     }
 }

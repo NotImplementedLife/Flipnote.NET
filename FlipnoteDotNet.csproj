@@ -78,6 +78,7 @@
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="Extensions\IntException.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\QueueExtensions.cs" />
@@ -102,17 +103,24 @@
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawRectangle.cs" />
     <Compile Include="GUI\Canvas\ICanvasComponent.cs" />
     <Compile Include="GUI\Canvas\Misc\ResizePoint.cs" />
-    <Compile Include="GUI\Controls\FSplitContainer.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GUI\Controls\ScrollView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI\Controls\ScrollView.Designer.cs">
       <DependentUpon>ScrollView.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\SequenceTracksEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\SequenceTracksEditor.Designer.cs">
+      <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
+    <Compile Include="GUI\ToolStripEmptyRenderer.cs" />
+    <Compile Include="GUI\Tracks\SequenceCreateDragData.cs" />
+    <Compile Include="GUI\Tracks\SequenceMoveDragData.cs" />
+    <Compile Include="GUI\Tracks\SequenceResizeDragData.cs" />
     <Compile Include="GUI\Tracks\SequenceTracksViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,6 +140,9 @@
     <EmbeddedResource Include="GUI\Controls\ScrollView.resx">
       <DependentUpon>ScrollView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\SequenceTracksEditor.resx">
+      <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +154,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -166,6 +178,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\ic_seq_add.png" />
+    <None Include="Resources\cur_cross.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

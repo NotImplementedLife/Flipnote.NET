@@ -1,19 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace FlipnoteDotNet.Data
 {
     internal class SequenceManager
     {
-        public List<SequenceTrack> Tracks { get; } = new List<SequenceTrack>();
+        private List<SequenceTrack> Tracks { get; } = new List<SequenceTrack>();
 
-        public SequenceManager()
+        public SequenceManager(int tracksCount=0)
         {
-            Tracks.Add(new SequenceTrack());
+            for (int i = 0; i < tracksCount; i++)
+                AddNewTrack();
         }
+
+        public void AddNewTrack()
+        {
+            var track=new SequenceTrack();
+            track.ElementAdded += Track_ElementAdded;
+            track.ElementRemoved += Track_ElementRemoved;
+            Tracks.Add(track);
+        }
+
+        public SequenceTrack GetTrack(int index) => Tracks[index];
+        public int TracksCount => Tracks.Count;
+
+        private void Track_ElementRemoved(object sender, SequenceTrack.Element e)
+        {
+            ElementRemoved?.Invoke(this, sender as SequenceTrack, e);
+        }
+
+        private void Track_ElementAdded(object sender, SequenceTrack.Element e)
+        {
+            ElementAdded?.Invoke(this, sender as SequenceTrack, e);
+        }
+
+        public delegate void OnElementAdded(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e);
+        public delegate void OnElementRemoved(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e);
+
+        public event OnElementAdded ElementAdded;
+        public event OnElementRemoved ElementRemoved;
 
     }
 }

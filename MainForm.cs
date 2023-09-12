@@ -1,6 +1,8 @@
 ﻿using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.GUI;
 using FlipnoteDotNet.GUI.Canvas.Components;
+using FlipnoteDotNet.GUI.Tracks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,7 +31,14 @@ namespace FlipnoteDotNet
             RightContainer.Panel2.Paint += TopLine_Paint;
 
             RightContainer.DisableSelectable();
+
+            ToolStrip.Renderer = new ToolStripEmptyRenderer();
+
+            SequenceTracksEditor.ToolStrip.Paint += BackgroundControlPaint;
         }
+
+
+        SequenceTracksViewer SequenceTrackViewer => SequenceTracksEditor.Viewer;
 
         private void BottomLine_Paint(object sender, PaintEventArgs e)
         {
@@ -58,11 +67,12 @@ namespace FlipnoteDotNet
             Canvas.CanvasComponents.Add(frame);
             Canvas.CanvasViewLocation = Point.Empty;
 
-            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
-            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
-            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
-            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
-            
+            SequenceTrackViewer.SequenceManager = new Data.SequenceManager(5);            
+
+            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Data.Sequence() { Name = "Tralalaala" }, 10, 25);
+            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Data.Sequence() { Name = "This Sequence", Color = Color.DarkBlue }, 16, 30);
+
+
             SequenceTrackViewer.AdjustSurfaceSize();
             SequenceTrackViewer.Invalidate();
         }
