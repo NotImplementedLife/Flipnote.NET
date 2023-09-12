@@ -7,23 +7,24 @@ namespace FlipnoteDotNet.GUI.Canvas.Components
     {
         private Rectangle _Bounds;
 
-        public Rectangle Bounds
+        public virtual Rectangle Bounds
         {
             get => _Bounds;
             set => _Bounds = value;
         }
 
-        public Point Location
+        public virtual Point Location
         {
             get => _Bounds.Location;
             set => _Bounds.Location = value;
         }
-        public Size Size
+        public virtual Size Size
         {
             get => _Bounds.Size;
             set => _Bounds.Size = value;
         }
         public bool IsFixed { get; set; } = false;
+        public virtual bool IsResizeable { get; set; } = false;
 
         public virtual void OnPaint(CanvasGraphics g)
         {

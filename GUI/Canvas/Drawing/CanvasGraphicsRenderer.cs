@@ -29,7 +29,11 @@ namespace FlipnoteDotNet.GUI.Canvas.Drawing
         public void FillRectangle(Brush brush, Rectangle rectangle)
             => Graphics.FillRectangle(brush, TransformToGraphics(rectangle));
 
+        public void DrawImage(Bitmap bitmap, Point p)
+            => Graphics.DrawImage(bitmap, TransformToGraphics(new Rectangle(p, bitmap.Size)));
 
+        public void DrawImage(Bitmap bitmap, Point p, Size newSize)
+            => Graphics.DrawImage(bitmap, TransformToGraphics(new Rectangle(p, newSize)));
 
         private Point TransformToGraphics(Point p)
         {
@@ -44,8 +48,6 @@ namespace FlipnoteDotNet.GUI.Canvas.Drawing
             var bottomRight = TransformToGraphics(new Point(rectangle.Right, rectangle.Bottom));
             var size = new Size(bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
             return new Rectangle(topLeft, size);
-        }
-
-
+        }        
     }
 }

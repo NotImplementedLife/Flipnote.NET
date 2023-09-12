@@ -1,7 +1,9 @@
 ﻿using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
+using FlipnoteDotNet.GUI.Canvas.Misc;
 using FlipnoteDotNet.GUI.MouseGestures;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -69,6 +71,8 @@ namespace FlipnoteDotNet.GUI.Canvas
             Invalidate();
         }
 
+        private List<ResizePoint> ResizePoints = new List<ResizePoint>();
+
         private void MouseGesturesHandler_Click(object sender, ClickGestureArgs e)
         {            
             Debug.WriteLine("Click");
@@ -79,12 +83,25 @@ namespace FlipnoteDotNet.GUI.Canvas
             if (ModifierKeys == Keys.Control)
             {
                 if (components.Length > 0)
-                    CanvasComponents.ToggleSelected(components[0]);
+                    CanvasComponents.ToggleSelected(components.Last());
             }
             else
             {                
-                CanvasComponents.SelectSingle(components.FirstOrDefault());
-            }                          
+                CanvasComponents.SelectSingle(components.LastOrDefault());
+            }
+
+            ResizePoints.Clear();
+            if (CanvasComponents.SelectedComponents.Count() == 1) 
+            {
+                var comp = CanvasComponents.SelectedComponents.First();
+                if (comp.IsResizeable)
+                {
+                    foreach (ResizeDirection direction in Enum.GetValues(typeof(ResizeDirection)))
+                    {
+                        ResizePoints.Add(new ResizePoint(comp, direction));
+                    }
+                }
+            }
             Invalidate();
         }
 
@@ -92,7 +109,17 @@ namespace FlipnoteDotNet.GUI.Canvas
         {
             Debug.WriteLine($"Drag start {e.StartLocation}; {e.CurrentLocation}");
 
-            var hitpoint = ScreenToCanvas(e.CurrentLocation);
+            var resizePoint = ResizePoints.Where(_ => CanvasToScreen(_.CanvasLocation).IsInRange(e.CurrentLocation, 5)).FirstOrDefault();
+            if(resizePoint!=null)
+            {
+                Debug.WriteLine("RESIZEPOINT");
+                resizePoint.SnapBounds();
+                e.UserData = new ResizePointDragData(resizePoint);
+                return;
+            }
+
+            var hitpoint = ScreenToCanvas(e.CurrentLocation);                       
+
             var components = CanvasComponents
                 .Where(_ => !_.IsFixed && _.Bounds.Contains(hitpoint))
                 .Where(CanvasComponents.IsSelected).ToArray();            
@@ -119,9 +146,15 @@ namespace FlipnoteDotNet.GUI.Canvas
                 selData.Items.ForEach(_ => 
                 {
                     var l = _.OriginalLocation;
-                    l.Offset(e.DeltaLocation);
+                    l.Offset(e.DeltaLocation.X * 100 / CanvasViewScaleFactor, e.DeltaLocation.Y * 100 / CanvasViewScaleFactor);
                     _.Component.Location = l;
                 });                
+            }
+            else if(e.UserData is ResizePointDragData resizePointDragData)
+            {
+                var resizePoint = resizePointDragData.ResizePoint;
+
+                resizePoint.DoResize(e.DeltaLocation.X * 100 / CanvasViewScaleFactor, e.DeltaLocation.Y * 100 / CanvasViewScaleFactor);
             }
 
             Invalidate();
@@ -138,6 +171,9 @@ namespace FlipnoteDotNet.GUI.Canvas
             //e.Graphics.Clear(Color.White);
             var canvasRenderer = new CanvasGraphicsRenderer(e.Graphics, CanvasViewScale, CanvasViewLocation);
             var canvasGraphics = new CanvasGraphics(canvasRenderer);
+
+            var resizePointsLocations = new List<Point>();
+
             CanvasComponents.ForEach(comp =>
             {
                 comp.OnPaint(canvasGraphics);
@@ -148,13 +184,25 @@ namespace FlipnoteDotNet.GUI.Canvas
                 if (CanvasComponents.IsSelected(comp))
                 {
                     canvasGraphics.DrawRectangle(Color.Blue.GetPen(2), comp.Bounds);
+
+                    foreach (var resizePoint in ResizePoints.Where(_ => _.Target == comp)) 
+                    {
+                        resizePointsLocations.Add(CanvasToScreen(resizePoint.CanvasLocation));
+                    }
+
                 }
                 else
                 {
                     canvasGraphics.DrawRectangle(Color.Gray.Alpha(64).GetPen(2), comp.Bounds);
-                }                                               
+                }                           
             });
             canvasGraphics.Flush();
+
+            foreach (var l in resizePointsLocations)
+            {
+                e.Graphics.FillRectangle(System.Drawing.Brushes.White, l.X - 3, l.Y - 3, 6, 6);
+                e.Graphics.DrawRectangle(Color.Blue.GetPen(2), l.X - 3, l.Y - 3, 6, 6);
+            }
         }
 
         protected override CreateParams CreateParams
@@ -196,6 +244,25 @@ namespace FlipnoteDotNet.GUI.Canvas
             {
                 Items = items;
             }
+        }
+
+        class ResizePointDragData
+        {            
+            public ResizePoint ResizePoint { get; }
+
+            public ResizePointDragData(ResizePoint resizePoint)
+            {
+                ResizePoint = resizePoint;
+            }
+        }
+
+        private void CanvasSpaceControl_MouseMove(object sender, MouseEventArgs e)
+        {            
+            var cursor = PointToClient(Cursor.Position);
+
+            var hoveredResizePoint = ResizePoints.Where(_ => CanvasToScreen(_.CanvasLocation).IsInRange(cursor, 4)).FirstOrDefault();
+
+            Cursor = hoveredResizePoint?.Cursor ?? Cursors.Default;
         }
     }
 }

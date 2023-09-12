@@ -37,6 +37,7 @@
             this.Name = "CanvasSpaceControl";
             this.Size = new System.Drawing.Size(446, 274);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.CanvasSpaceControl_Paint);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CanvasSpaceControl_MouseMove);
             this.Resize += new System.EventHandler(this.CanvasSpaceControl_Resize);
             this.ResumeLayout(false);
 

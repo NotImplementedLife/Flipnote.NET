@@ -51,6 +51,9 @@ namespace FlipnoteDotNet.GUI.Canvas.Drawing
         public void FillRectangle(Brush brush, int x, int y, int width, int height)
             => FillRectangle(brush, new Rectangle(x, y, width, height));
 
+        public void DrawImage(Bitmap image, Point point) => PendingOperations.Enqueue(new DrawImage(image, point));
+
+        public void DrawImage(Bitmap image, Point point, Size newSize) => PendingOperations.Enqueue(new DrawImage(image, point, newSize));
 
     }
 }

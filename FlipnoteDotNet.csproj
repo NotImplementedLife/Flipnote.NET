@@ -51,12 +51,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DescriptionAttribute.cs" />
+    <Compile Include="Attributes\EditableAttribute.cs" />
+    <Compile Include="Attributes\DisplayNameAttribute.cs" />
     <Compile Include="Constants\Brushes.cs" />
     <Compile Include="Constants\Colors.cs" />
+    <Compile Include="Data\ICloneable.cs" />
+    <Compile Include="Data\ILayer.cs" />
+    <Compile Include="Data\ILayerStateChanger.cs" />
+    <Compile Include="Data\IStateChangeGenerator.cs" />
+    <Compile Include="Data\IStateChanger.cs" />
+    <Compile Include="Data\Layers\AbstractLayer.cs" />
+    <Compile Include="Data\Layers\LocalizableLayer.cs" />
+    <Compile Include="Data\Sequence.cs" />
+    <Compile Include="Data\StateChangeGenerators\GradualStateChangeGenerator.cs" />
+    <Compile Include="Data\StateChangeGenerators\MultipleStateChangeGenerator.cs" />
+    <Compile Include="Data\StateChangeGenerators\SingularStateChangeGenerator.cs" />
+    <Compile Include="Data\StateChangers\PropertyStateChanger.cs" />
+    <Compile Include="Data\StateChangers\PropertyStateConstantChanger.cs" />
+    <Compile Include="Data\TemporalStateChanger.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\IntException.cs" />
+    <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\QueueExtensions.cs" />
     <Compile Include="GUI\Canvas\CanvasComponentsCollection.cs">
       <SubType>UserControl</SubType>
@@ -67,15 +85,18 @@
     <Compile Include="GUI\Canvas\CanvasSpaceControl.Designer.cs">
       <DependentUpon>CanvasSpaceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Canvas\Components\BitmapComponent.cs" />
     <Compile Include="GUI\Canvas\Components\CanvasComponent.cs" />
     <Compile Include="GUI\Canvas\Components\SimpleRectangle.cs" />
     <Compile Include="GUI\Canvas\Drawing\CanvasGraphics.cs" />
     <Compile Include="GUI\Canvas\Drawing\CanvasGraphicsRenderer.cs" />
     <Compile Include="GUI\Canvas\Drawing\ICanvasGraphicsOperation.cs" />
+    <Compile Include="GUI\Canvas\Drawing\Operations\DrawImage.cs" />
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawLine.cs" />
     <Compile Include="GUI\Canvas\Drawing\Operations\FillRectangle.cs" />
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawRectangle.cs" />
     <Compile Include="GUI\Canvas\ICanvasComponent.cs" />
+    <Compile Include="GUI\Canvas\Misc\ResizePoint.cs" />
     <Compile Include="GUI\Controls\FSplitContainer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -124,9 +145,7 @@
       <Name>PPMLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
   </ItemGroup>
