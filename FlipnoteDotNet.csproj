@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AtemporalAttribute.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Attributes\EditableAttribute.cs" />
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
@@ -103,6 +105,12 @@
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawRectangle.cs" />
     <Compile Include="GUI\Canvas\ICanvasComponent.cs" />
     <Compile Include="GUI\Canvas\Misc\ResizePoint.cs" />
+    <Compile Include="GUI\Controls\Expander.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\Expander.Designer.cs">
+      <DependentUpon>Expander.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Controls\ScrollView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,8 +123,15 @@
     <Compile Include="GUI\Controls\SequenceTracksEditor.Designer.cs">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
+    <Compile Include="GUI\Properties\PropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\PropertyEditor.Designer.cs">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ToolStripEmptyRenderer.cs" />
     <Compile Include="GUI\Tracks\SequenceCreateDragData.cs" />
     <Compile Include="GUI\Tracks\SequenceMoveDragData.cs" />
@@ -137,11 +152,17 @@
     <EmbeddedResource Include="GUI\Canvas\CanvasSpaceControl.resx">
       <DependentUpon>CanvasSpaceControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\Expander.resx">
+      <DependentUpon>Expander.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\ScrollView.resx">
       <DependentUpon>ScrollView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\SequenceTracksEditor.resx">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Properties\PropertyEditor.resx">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
