@@ -34,19 +34,19 @@ namespace FlipnoteDotNet
         private void BottomLine_Paint(object sender, PaintEventArgs e)
         {
             var control = sender as Control;
-            e.Graphics.DrawLine(Colors.FlipnoteThemeColor.GetPen(), 0, control.Height - 2, control.Width, control.Height - 2);
+            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, control.Height - 2, control.Width, control.Height - 2);
         }
 
         private void TopLine_Paint(object sender, PaintEventArgs e)
         {
             var control = sender as Control;
-            e.Graphics.DrawLine(Colors.FlipnoteThemeColor.GetPen(), 0, 2, control.Width, 2);
+            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, 2, control.Width, 2);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             var frame = new SimpleRectangle(new Rectangle(0, 0, 256, 192));
-            frame.Pen = Colors.FlipnoteThemeColor.GetPen(2, System.Drawing.Drawing2D.DashStyle.Dash);
+            frame.Pen = Colors.FlipnoteThemeMainColor.GetPen(2, System.Drawing.Drawing2D.DashStyle.Dash);
             frame.IsFixed = true;
 
             Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(0, 0, 256, 192)) { Brush = Brushes.White, IsFixed = true });
@@ -57,6 +57,14 @@ namespace FlipnoteDotNet
             Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(100, 26, 64, 32)));
             Canvas.CanvasComponents.Add(frame);
             Canvas.CanvasViewLocation = Point.Empty;
+
+            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
+            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
+            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
+            SequenceTrackViewer.SequenceManager.Tracks.Add(new Data.SequenceTrack());
+            
+            SequenceTrackViewer.AdjustSurfaceSize();
+            SequenceTrackViewer.Invalidate();
         }
 
         private void BackgroundControlPaint(object sender, PaintEventArgs e)

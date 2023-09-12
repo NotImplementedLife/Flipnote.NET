@@ -111,8 +111,7 @@ namespace FlipnoteDotNet.GUI.Canvas
 
             var resizePoint = ResizePoints.Where(_ => CanvasToScreen(_.CanvasLocation).IsInRange(e.CurrentLocation, 5)).FirstOrDefault();
             if(resizePoint!=null)
-            {
-                Debug.WriteLine("RESIZEPOINT");
+            {                
                 resizePoint.SnapBounds();
                 e.UserData = new ResizePointDragData(resizePoint);
                 return;
