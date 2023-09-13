@@ -8,14 +8,8 @@ using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.Properties;
 using FlipnoteDotNet.GUI.Tracks;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;
 
@@ -40,6 +34,8 @@ namespace FlipnoteDotNet
             ToolStrip.Renderer = new ToolStripEmptyRenderer();
 
             SequenceTracksEditor.ToolStrip.Paint += BackgroundControlPaint;
+
+            PropertyEditor.KeyFramesPanel = KeyframesExpander.ContentsPanel;
         }
 
 
@@ -72,12 +68,10 @@ namespace FlipnoteDotNet
             Canvas.CanvasComponents.Add(frame);
             Canvas.CanvasViewLocation = Point.Empty;
 
-            SequenceTrackViewer.SequenceManager = new Data.SequenceManager(5);            
+            SequenceTrackViewer.SequenceManager = new Data.SequenceManager(5);
 
-
-
-            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Data.Sequence() { Name = "Tralalaala" }, 10, 25);
-            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Data.Sequence() { Name = "This Sequence", Color = Color.DarkBlue }, 16, 30);            
+            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Sequence() { Name = "Tralalaala" }, 10, 25);
+            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Sequence() { Name = "This Sequence", Color = Color.DarkBlue }, 16, 30);            
 
 
             var s = new Sequence();

@@ -11,6 +11,7 @@ namespace FlipnoteDotNet.Utils.Temporal
         void AddValueChanger(int timestamp, IValueChanger valueChanger);
         void ClearValueChangers();
 
+        object CurrentValue { get; set; }
         IEnumerable<(IValueTransformer Transformer, int Timestamp)> GetTransformers();
     }
 
@@ -108,7 +109,8 @@ namespace FlipnoteDotNet.Utils.Temporal
         {
             get => GetCurrentValue();
             set => SetCurrentValue(value);
-        }        
+        }
+        object ITimeDependentValue.CurrentValue { get => CurrentValue; set => CurrentValue = (T)value; }
 
         public void PutTransformer(IValueTransformer transformer, int timestamp)
         {

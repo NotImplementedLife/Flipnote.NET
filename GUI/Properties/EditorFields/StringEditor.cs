@@ -24,5 +24,7 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         }
 
         public event EventHandler ObjectPropertyValueChanged;
+
+        public Panel KeyframesPanel { get; set; }
     }
 }

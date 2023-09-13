@@ -142,6 +142,12 @@
     <Compile Include="GUI\Properties\PropertyEditor.Designer.cs">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Properties\PropertyRow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\PropertyRow.Designer.cs">
+      <DependentUpon>PropertyRow.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ToolStripEmptyRenderer.cs" />
     <Compile Include="GUI\Tracks\SequenceCreateDragData.cs" />
     <Compile Include="GUI\Tracks\SequenceMoveDragData.cs" />
@@ -187,6 +193,9 @@
     <EmbeddedResource Include="GUI\Properties\PropertyEditor.resx">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Properties\PropertyRow.resx">
+      <DependentUpon>PropertyRow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -222,6 +231,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\ic_effects.png" />
+    <None Include="Resources\ic_keyframes.png" />
     <None Include="Resources\ic_layer_remove.png" />
     <None Include="Resources\ic_layer_add.png" />
     <None Include="Resources\ic_seq_add.png" />

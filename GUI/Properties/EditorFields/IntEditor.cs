@@ -11,9 +11,6 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
     [PropertyEditorControl(typeof(int))]
     internal class IntEditor : NumericUpDown, IPropertyEditorControl
     {
-        public object ObjectPropertyValue { get => (int)Value; set => Value = (int)value; }
-
-        public event EventHandler ObjectPropertyValueChanged;
 
         public IntEditor()
         {
@@ -27,5 +24,10 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         {
             ObjectPropertyValueChanged?.Invoke(this, new EventArgs());
         }
+
+        public object ObjectPropertyValue { get => (int)Value; set => Value = (int)value; }
+
+        public event EventHandler ObjectPropertyValueChanged;
+        public Panel KeyframesPanel { get; set; }
     }
 }

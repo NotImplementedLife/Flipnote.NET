@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Label = System.Windows.Forms.Label;
 
 namespace FlipnoteDotNet.GUI.Properties
 {
@@ -19,6 +21,9 @@ namespace FlipnoteDotNet.GUI.Properties
         {
             InitializeComponent();
         }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Panel KeyFramesPanel { get; set; }
 
         private object _Target = null;
         [Browsable(false)]
@@ -49,87 +54,68 @@ namespace FlipnoteDotNet.GUI.Properties
                 .Where(p => Attribute.IsDefined(p, typeof(EditableAttribute))).ToArray();
 
             properties.ForEach(_ => Debug.WriteLine(_));
-
-            int labelWidth = 75;
+          
             int h = 0;
             
             foreach(var prop in properties)
             {
-                var label = new Label
-                {
-                    Text = prop.Name,
-                    AutoSize = false,
-                    Width = labelWidth,
-                    Height = 25,
-                    AutoEllipsis = true,
-                    TextAlign = System.Drawing.ContentAlignment.MiddleRight
-                };
-
-                Control editor = null;
-                bool IsTimeDependent = false;
-
-                var targetType = prop.PropertyType;
-
-                if(prop.PropertyType.IsGenericConstruct(typeof(TimeDependentValue<>)))
-                {
-                    targetType = prop.PropertyType.GetGenericArguments()[0];                    
-                    IsTimeDependent = true;
-                }
-                if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType)) 
-                {
-                    editor = Activator.CreateInstance(editorType) as Control;
-                }
-
-                var row = new Panel();
-                row.Controls.Add(label);
-
-                row.Padding = new Padding(3);
-
-                if(editor!=null)
-                {                                        
-                    editor.Tag = prop;
-
-                    label.Top = (editor.Height - label.Height) / 2;
-
-                    row.Controls.Add(editor);
-
-                    editor.Anchor = AnchorStyles.Left | AnchorStyles.Top;
-                    editor.Left = labelWidth;
-                    editor.Top = 0;                    
-                    editor.Height = Math.Max(label.Height, editor.PreferredSize.Height);                    
-
-                    Debug.WriteLine($"E : {editor.Width}: {editor.Right} : {editor.Left}");
-
-                    if (editor is IPropertyEditorControl propEditorControl)
-                    {
-                        if (!IsTimeDependent)
-                        {
-                            propEditorControl.ObjectPropertyValue = prop.GetValue(Target);
-                            propEditorControl.ObjectPropertyValueChanged += PropEditorControl_ObjectPropertyValueChanged;
-                        }
-                        else
-                        {
-                            //...
-                        }
-                        Editors.Add(propEditorControl);
-                    }
-                }
-                row.AutoSize = true;
-                row.Dock = DockStyle.Top;
+                var row = new PropertyRow();
                 Controls.Add(row);
-                if (editor != null)
-                {
-                    editor.Width = row.Width - labelWidth - 3;
-                    editor.Anchor |= AnchorStyles.Right;
-                    editor.Top = (row.Height - editor.Height) / 2;
-                    label.Top = (row.Height - label.Height) / 2 - 2;
-
-                }
+                row.Dock = DockStyle.Top;
+                Control editor = CreateEditor(prop, out bool isTimeDependent);                         
+                row.SetEditor(prop.Name, editor, isTimeDependent);          
                 h += row.Height;
             }
 
-            Height = h;
-            //ResumeLayout(true);
+            Height = h;            
+        }
+
+        private Control CreateEditor(PropertyInfo prop, out bool isTimeDependent)
+        {
+            Control editor = null;
+            isTimeDependent = false;
+
+            var targetType = prop.PropertyType;
+
+            if (prop.PropertyType.IsGenericConstruct(typeof(TimeDependentValue<>)))
+            {
+                targetType = prop.PropertyType.GetGenericArguments()[0];
+                isTimeDependent = true;
+            }
+            if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
+            {
+                editor = Activator.CreateInstance(editorType) as Control;
+            }
+            if (editor == null) return null;
+
+            editor.Tag = prop;
+            if (editor is IPropertyEditorControl propEditorControl)
+            {
+                if (!isTimeDependent)
+                {
+                    propEditorControl.ObjectPropertyValue = prop.GetValue(Target);
+                    propEditorControl.ObjectPropertyValueChanged += PropEditorControl_ObjectPropertyValueChanged;
+                }
+                else
+                {
+                    propEditorControl.ObjectPropertyValue = (prop.GetValue(Target) as ITimeDependentValue).CurrentValue;
+                    propEditorControl.ObjectPropertyValueChanged += TimeDepPropEditorControl_ObjectPropertyValueChanged;
+                }
+                Editors.Add(propEditorControl);
+            }
+
+
+            return editor;
+        }
+
+        private void TimeDepPropEditorControl_ObjectPropertyValueChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void KeyframesViewLabel_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void PropEditorControl_ObjectPropertyValueChanged(object sender, EventArgs e)

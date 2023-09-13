@@ -40,7 +40,7 @@ namespace FlipnoteDotNet
             this.SequenceTracksEditor = new FlipnoteDotNet.GUI.Controls.SequenceTracksEditor();
             this.RightContainer = new System.Windows.Forms.SplitContainer();
             this.LayersEditor = new FlipnoteDotNet.GUI.Layers.LayersEditor();
-            this.expander2 = new FlipnoteDotNet.GUI.Controls.Expander();
+            this.KeyframesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
             this.SelectedElementLabel = new System.Windows.Forms.Label();
@@ -58,7 +58,7 @@ namespace FlipnoteDotNet
             this.RightContainer.Panel1.SuspendLayout();
             this.RightContainer.Panel2.SuspendLayout();
             this.RightContainer.SuspendLayout();
-            this.expander2.SuspendLayout();
+            this.KeyframesExpander.SuspendLayout();
             this.PropertiesExpander.ContentsPanel.SuspendLayout();
             this.PropertiesExpander.SuspendLayout();
             this.SuspendLayout();
@@ -139,7 +139,7 @@ namespace FlipnoteDotNet
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9782, -13050);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9802, -13085);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
@@ -170,7 +170,7 @@ namespace FlipnoteDotNet
             // RightContainer.Panel2
             // 
             this.RightContainer.Panel2.AutoScroll = true;
-            this.RightContainer.Panel2.Controls.Add(this.expander2);
+            this.RightContainer.Panel2.Controls.Add(this.KeyframesExpander);
             this.RightContainer.Panel2.Controls.Add(this.PropertiesExpander);
             this.RightContainer.Panel2.Controls.Add(this.SelectedElementLabel);
             this.RightContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
@@ -190,23 +190,23 @@ namespace FlipnoteDotNet
             this.LayersEditor.TabIndex = 0;
             this.LayersEditor.SelectionChanged += new System.EventHandler<FlipnoteDotNet.GUI.Layers.LayersEditor.SelectionChangedEventArgs>(this.LayersEditor_SelectionChanged);
             // 
-            // expander2
+            // KeyframesExpander
             // 
             // 
-            // expander2.ContentsPanel
+            // KeyframesExpander.ContentsPanel
             // 
-            this.expander2.ContentsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expander2.ContentsPanel.Location = new System.Drawing.Point(0, 40);
-            this.expander2.ContentsPanel.Name = "ContentsPanel";
-            this.expander2.ContentsPanel.Size = new System.Drawing.Size(189, 0);
-            this.expander2.ContentsPanel.TabIndex = 1;
-            this.expander2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.expander2.IsExpanded = false;
-            this.expander2.Location = new System.Drawing.Point(0, 60);
-            this.expander2.Name = "expander2";
-            this.expander2.Size = new System.Drawing.Size(189, 40);
-            this.expander2.TabIndex = 1;
-            this.expander2.Title = "Keyframes";
+            this.KeyframesExpander.ContentsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.KeyframesExpander.ContentsPanel.Location = new System.Drawing.Point(0, 40);
+            this.KeyframesExpander.ContentsPanel.Name = "ContentsPanel";
+            this.KeyframesExpander.ContentsPanel.Size = new System.Drawing.Size(189, 0);
+            this.KeyframesExpander.ContentsPanel.TabIndex = 1;
+            this.KeyframesExpander.Dock = System.Windows.Forms.DockStyle.Top;
+            this.KeyframesExpander.IsExpanded = false;
+            this.KeyframesExpander.Location = new System.Drawing.Point(0, 60);
+            this.KeyframesExpander.Name = "KeyframesExpander";
+            this.KeyframesExpander.Size = new System.Drawing.Size(189, 40);
+            this.KeyframesExpander.TabIndex = 1;
+            this.KeyframesExpander.Title = "Keyframes";
             // 
             // PropertiesExpander
             // 
@@ -294,7 +294,7 @@ namespace FlipnoteDotNet
             this.RightContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RightContainer)).EndInit();
             this.RightContainer.ResumeLayout(false);
-            this.expander2.ResumeLayout(false);
+            this.KeyframesExpander.ResumeLayout(false);
             this.PropertiesExpander.ContentsPanel.ResumeLayout(false);
             this.PropertiesExpander.ContentsPanel.PerformLayout();
             this.PropertiesExpander.ResumeLayout(false);
@@ -315,7 +315,7 @@ namespace FlipnoteDotNet
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private GUI.Controls.SequenceTracksEditor SequenceTracksEditor;        
         private System.Windows.Forms.Panel ContentPanel;
-        private GUI.Controls.Expander expander2;
+        private GUI.Controls.Expander KeyframesExpander;
         private GUI.Controls.Expander PropertiesExpander;
         private GUI.Properties.PropertyEditor PropertyEditor;
         private GUI.Layers.LayersEditor LayersEditor;
