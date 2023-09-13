@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace FlipnoteDotNet.Data
 {
-    internal class Sequence : ICloneable
+    public class Sequence : ICloneable
     {
         public class Element
         {

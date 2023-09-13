@@ -14,6 +14,8 @@ namespace FlipnoteDotNet
         [STAThread]
         static void Main()
         {
+            Constants.Reflection.Init();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

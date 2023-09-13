@@ -53,11 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AtemporalAttribute.cs" />
+    <Compile Include="Attributes\AttributeManager.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Attributes\EditableAttribute.cs" />
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
+    <Compile Include="Attributes\PropertyEditorControlAttribute.cs" />
     <Compile Include="Constants\Brushes.cs" />
     <Compile Include="Constants\Colors.cs" />
+    <Compile Include="Constants\Reflection.cs" />
     <Compile Include="Data\Drawing\FlipnoteVisualSource.cs" />
     <Compile Include="Data\ICloneable.cs" />
     <Compile Include="Data\ILayer.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="Extensions\IntException.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\QueueExtensions.cs" />
+    <Compile Include="Extensions\ReflectExtensions.cs" />
     <Compile Include="GUI\Canvas\CanvasComponentsCollection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -126,6 +130,10 @@
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
+    <Compile Include="GUI\Properties\EditorFields\StringEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\IPropertyEditorControl.cs" />
     <Compile Include="GUI\Properties\PropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -43,7 +43,6 @@ namespace FlipnoteDotNet
             this.expander2 = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
-            this.sequenceTracksViewer1 = new FlipnoteDotNet.GUI.Tracks.SequenceTracksViewer();
             this.FormMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
@@ -169,7 +168,7 @@ namespace FlipnoteDotNet
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9342, -12280);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9482, -12525);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
@@ -183,6 +182,7 @@ namespace FlipnoteDotNet
             this.SequenceTracksEditor.Name = "SequenceTracksEditor";
             this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
             this.SequenceTracksEditor.TabIndex = 0;
+            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.SequenceTrack.Element>(this.SequenceTracksEditor_SelectedElementChanged);
             // 
             // expander2
             // 
@@ -196,7 +196,7 @@ namespace FlipnoteDotNet
             this.expander2.ContentsPanel.TabIndex = 1;
             this.expander2.Dock = System.Windows.Forms.DockStyle.Top;
             this.expander2.IsExpanded = false;
-            this.expander2.Location = new System.Drawing.Point(0, 140);
+            this.expander2.Location = new System.Drawing.Point(0, 40);
             this.expander2.Name = "expander2";
             this.expander2.Size = new System.Drawing.Size(189, 40);
             this.expander2.TabIndex = 1;
@@ -204,42 +204,38 @@ namespace FlipnoteDotNet
             // 
             // PropertiesExpander
             // 
+            this.PropertiesExpander.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             // 
             // PropertiesExpander.ContentsPanel
             // 
-            this.PropertiesExpander.ContentsPanel.Controls.Add(this.sequenceTracksViewer1);
-            this.PropertiesExpander.ContentsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PropertiesExpander.ContentsPanel.AutoSize = true;
+            this.PropertiesExpander.ContentsPanel.Controls.Add(this.PropertyEditor);
             this.PropertiesExpander.ContentsPanel.Location = new System.Drawing.Point(0, 40);
-            this.PropertiesExpander.ContentsPanel.MinimumSize = new System.Drawing.Size(0, 100);
+            this.PropertiesExpander.ContentsPanel.MinimumSize = new System.Drawing.Size(0, 25);
             this.PropertiesExpander.ContentsPanel.Name = "ContentsPanel";
-            this.PropertiesExpander.ContentsPanel.Size = new System.Drawing.Size(189, 100);
+            this.PropertiesExpander.ContentsPanel.Size = new System.Drawing.Size(190, 25);
             this.PropertiesExpander.ContentsPanel.TabIndex = 1;
             this.PropertiesExpander.Dock = System.Windows.Forms.DockStyle.Top;
+            this.PropertiesExpander.IsExpanded = false;
             this.PropertiesExpander.Location = new System.Drawing.Point(0, 0);
             this.PropertiesExpander.Name = "PropertiesExpander";
-            this.PropertiesExpander.Size = new System.Drawing.Size(189, 140);
+            this.PropertiesExpander.Size = new System.Drawing.Size(189, 40);
             this.PropertiesExpander.TabIndex = 2;
             this.PropertiesExpander.Title = "Properties";
+            this.PropertiesExpander.Resize += new System.EventHandler(this.PropertiesExpander_Resize);
             // 
             // PropertyEditor
             // 
-            this.PropertyEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PropertyEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PropertyEditor.Location = new System.Drawing.Point(0, 0);
+            this.PropertyEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropertyEditor.AutoSize = true;
+            this.PropertyEditor.BackColor = System.Drawing.Color.IndianRed;
+            this.PropertyEditor.Location = new System.Drawing.Point(0, -1);
             this.PropertyEditor.Name = "PropertyEditor";
-            this.PropertyEditor.Size = new System.Drawing.Size(189, 126);
+            this.PropertyEditor.Size = new System.Drawing.Size(189, 20);
             this.PropertyEditor.TabIndex = 0;
             this.PropertyEditor.Target = null;
-            // 
-            // sequenceTracksViewer1
-            // 
-            this.sequenceTracksViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sequenceTracksViewer1.Location = new System.Drawing.Point(0, 0);
-            this.sequenceTracksViewer1.Name = "sequenceTracksViewer1";
-            this.sequenceTracksViewer1.Size = new System.Drawing.Size(189, 100);
-            this.sequenceTracksViewer1.SurfaceSize = new System.Drawing.Size(1100, 90);
-            this.sequenceTracksViewer1.TabIndex = 0;
-            this.sequenceTracksViewer1.TrackSignPosition = 0;
+            this.PropertyEditor.ObjectPropertyChanged += new System.EventHandler<System.Reflection.PropertyInfo>(this.PropertyEditor_ObjectPropertyChanged);
             // 
             // MainForm
             // 
@@ -272,7 +268,9 @@ namespace FlipnoteDotNet
             this.RightContainer.ResumeLayout(false);
             this.expander2.ResumeLayout(false);
             this.PropertiesExpander.ContentsPanel.ResumeLayout(false);
+            this.PropertiesExpander.ContentsPanel.PerformLayout();
             this.PropertiesExpander.ResumeLayout(false);
+            this.PropertiesExpander.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -287,12 +285,11 @@ namespace FlipnoteDotNet
         private System.Windows.Forms.MenuStrip FormMenu;
         private System.Windows.Forms.ToolStrip ToolStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private GUI.Controls.SequenceTracksEditor SequenceTracksEditor;
-        private GUI.Properties.PropertyEditor PropertyEditor;        
+        private GUI.Controls.SequenceTracksEditor SequenceTracksEditor;        
         private System.Windows.Forms.Panel ContentPanel;
         private GUI.Controls.Expander expander2;
         private GUI.Controls.Expander PropertiesExpander;
-        private GUI.Tracks.SequenceTracksViewer sequenceTracksViewer1;
+        private GUI.Properties.PropertyEditor PropertyEditor;
     }
 }
 

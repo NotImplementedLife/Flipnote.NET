@@ -4,7 +4,9 @@ using FlipnoteDotNet.GUI.Designers;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
+using Brushes = System.Drawing.Brushes;
 
 namespace FlipnoteDotNet.GUI.Controls
 {
@@ -15,14 +17,28 @@ namespace FlipnoteDotNet.GUI.Controls
         {
             InitializeComponent();
             this.EnableDoubleBuffer();
-            Content.EnableDoubleBuffer();            
+            HeaderPanel.EnableDoubleBuffer();
+            Content.EnableDoubleBuffer();
+            HeaderPanel.Paint += Panel_Paint;
+            LocationChanged += Expander_LocationChanged;
         }
+
+        private void Expander_LocationChanged(object sender, EventArgs e)
+        {
+            Invalidate(true);
+        }
+
+        private string _Title = "Expander";
 
         [Browsable(true)]
         public string Title
         {
-            get => Header.Text;
-            set => Header.Text = value;
+            get => _Title;
+            set
+            {
+                _Title = value;
+                HeaderPanel.Invalidate();
+            }
         }              
 
         private bool _IsExpanded;
@@ -43,8 +59,8 @@ namespace FlipnoteDotNet.GUI.Controls
                 Height = HeaderPanel.Height + Content.Height;                
             }
             else
-            {                
-                Height = HeaderPanel.Height;                
+            {
+                Height = HeaderPanel.Height;
             }            
         }        
 
@@ -65,6 +81,32 @@ namespace FlipnoteDotNet.GUI.Controls
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public Panel ContentsPanel => Content;        
+        public Panel ContentsPanel => Content;
+
+
+        bool IsHovered = false;
+        private void HeaderPanel_MouseHover(object sender, EventArgs e)
+        {
+            IsHovered = true;
+            HeaderPanel.Invalidate();
+        }
+
+        private void HeaderPanel_MouseLeave(object sender, EventArgs e)
+        {
+            IsHovered = false;
+            HeaderPanel.Invalidate();
+        }
+
+        private void HeaderPanel_Paint(object sender, PaintEventArgs e)
+        {            
+            if(IsHovered)
+            {
+                e.Graphics.FillRectangle(Color.Black.Alpha(64).GetBrush(), e.ClipRectangle);
+            }
+
+            var sz = e.Graphics.MeasureString(Title, Font);
+
+            e.Graphics.DrawString(Title, Font, Brushes.Black, 20, (e.ClipRectangle.Height - sz.Height) / 2);
+        }
     }
 }

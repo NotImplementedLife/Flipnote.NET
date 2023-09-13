@@ -1,12 +1,16 @@
 ﻿using FlipnoteDotNet.Constants;
+using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI;
 using FlipnoteDotNet.GUI.Canvas.Components;
+using FlipnoteDotNet.GUI.Controls;
+using FlipnoteDotNet.GUI.Properties;
 using FlipnoteDotNet.GUI.Tracks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -75,6 +79,8 @@ namespace FlipnoteDotNet
 
             SequenceTrackViewer.AdjustSurfaceSize();
             SequenceTrackViewer.Invalidate();
+
+            PropertyEditor.Target = new Sequence() { Name = "mySequence" };
         }
 
         private void BackgroundControlPaint(object sender, PaintEventArgs e)
@@ -95,6 +101,30 @@ namespace FlipnoteDotNet
             var result = c.Location;
             result.Offset(GetLocationRelativeToForm(c.Parent));
             return result;
+        }
+
+        private void PropertiesExpander_Resize(object sender, EventArgs e)
+        {
+            PropertyEditor.Width = PropertiesExpander.Width - 20;
+        }
+
+        private void SequenceTracksEditor_SelectedElementChanged(object sender, SequenceTrack.Element e)
+        {
+            //PropertiesExpander.IsExpanded = false;
+            PropertyEditor.Target = e?.Sequence;
+            PropertiesExpander.IsExpanded = true;
+
+            Debug.WriteLine(PropertiesExpander.Width);
+            Debug.WriteLine(PropertyEditor.Width);
+        }
+
+        private void PropertyEditor_ObjectPropertyChanged(object sender, System.Reflection.PropertyInfo e)
+        {
+            if (PropertyEditor.Target is Sequence) 
+            {
+                SequenceTracksEditor.Viewer.InvalidateSurface();
+                return;
+            }            
         }
     }
 }

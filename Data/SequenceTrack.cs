@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FlipnoteDotNet.Data
 {
-    internal class SequenceTrack
+    public class SequenceTrack
     {
         public class Element
         {

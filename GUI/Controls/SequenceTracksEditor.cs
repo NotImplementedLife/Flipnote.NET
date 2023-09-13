@@ -1,4 +1,5 @@
-﻿using FlipnoteDotNet.GUI.Tracks;
+﻿using FlipnoteDotNet.Data;
+using FlipnoteDotNet.GUI.Tracks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,5 +38,12 @@ namespace FlipnoteDotNet.GUI.Controls
         {
             AddNewSequenceButton.Checked = false;
         }
+
+        private void SequenceTracksViewer_SelectedElementChanged(object sender, EventArgs e)
+        {
+            SelectedElementChanged?.Invoke(this, SequenceTracksViewer.SelectedElement);
+        }
+
+        public event EventHandler<SequenceTrack.Element> SelectedElementChanged;
     }
 }
