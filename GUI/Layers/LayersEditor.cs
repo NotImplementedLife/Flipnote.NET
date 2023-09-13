@@ -35,7 +35,7 @@ namespace FlipnoteDotNet.GUI.Layers
         {
             LayersListBox.SelectedIndexChanged -= LayersListBox_SelectedIndexChanged;
             LayersListBox.DataSource = null;
-            LayersListBox.DataSource = Sequence?.Elements;
+            LayersListBox.DataSource = Sequence?.Layers;
             LayersListBox.SelectedIndexChanged += LayersListBox_SelectedIndexChanged;
             LayersListBox.SelectedIndex = -1;
         }
@@ -50,25 +50,21 @@ namespace FlipnoteDotNet.GUI.Layers
             RemoveLayerButton.Enabled = LayersListBox.SelectedIndex >= 0;
 
             var selection = LayersListBox.SelectedItem;
-            if (selection is Sequence.Element elem)
-                SelectionChanged?.Invoke(this, new SelectionChangedEventArgs(elem, elem.Layer));
-            else if (selection is ILayer layer)
-                SelectionChanged?.Invoke(this, new SelectionChangedEventArgs(null, layer));
+            if (selection is ILayer layer)
+                SelectionChanged?.Invoke(this, new SelectionChangedEventArgs(layer));
             else
-                SelectionChanged?.Invoke(this, new SelectionChangedEventArgs(null, null));
+                SelectionChanged?.Invoke(this, new SelectionChangedEventArgs(null));
 
         }
 
         public event EventHandler<SelectionChangedEventArgs> SelectionChanged;
 
         public class SelectionChangedEventArgs
-        {
-            public Sequence.Element Element { get; }
+        {            
             public ILayer Layer { get; }
 
-            public SelectionChangedEventArgs(Sequence.Element element, ILayer layer)
-            {
-                Element = element;
+            public SelectionChangedEventArgs(ILayer layer)
+            {                
                 Layer = layer;
             }
         }

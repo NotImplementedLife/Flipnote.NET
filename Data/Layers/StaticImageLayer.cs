@@ -1,5 +1,6 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Data.Drawing;
+using FlipnoteDotNet.Utils;
 
 namespace FlipnoteDotNet.Data.Layers
 {
@@ -13,13 +14,10 @@ namespace FlipnoteDotNet.Data.Layers
         [DisplayName("Name")]
         public string DisplayName { get; set; }
 
-        public StaticImageLayer(int x, int y, FlipnoteVisualSource visualSource)
+        public StaticImageLayer(FlipnoteVisualSource visualSource)
         {
-            X = x;
-            Y = y;
             VisualSource = visualSource;
+            this.Initialize();
         }
-
-        public override ILayer Clone() => new StaticImageLayer(X, Y, VisualSource?.Clone());        
     }
 }

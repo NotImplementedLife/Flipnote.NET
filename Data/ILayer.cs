@@ -1,7 +1,10 @@
-﻿namespace FlipnoteDotNet.Data
+﻿using FlipnoteDotNet.Utils;
+using FlipnoteDotNet.Utils.Temporal;
+
+namespace FlipnoteDotNet.Data
 {
-    public interface ILayer : ICloneable
+    public interface ILayer : ITemporalContext, ITimeLocalizable
     {
-        new ILayer Clone();
+        
     }
 }

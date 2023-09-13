@@ -139,7 +139,7 @@ namespace FlipnoteDotNet
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9762, -13015);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9782, -13050);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
@@ -235,7 +235,6 @@ namespace FlipnoteDotNet
             this.PropertyEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PropertyEditor.AutoSize = true;
-            this.PropertyEditor.BackColor = System.Drawing.Color.IndianRed;
             this.PropertyEditor.Location = new System.Drawing.Point(0, -1);
             this.PropertyEditor.Name = "PropertyEditor";
             this.PropertyEditor.Size = new System.Drawing.Size(189, 20);

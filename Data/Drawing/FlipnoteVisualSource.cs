@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FlipnoteDotNet.Data.Drawing
 {
-    internal class FlipnoteVisualSource : ICloneable
+    internal class FlipnoteVisualSource
     {
         public int Width { get; }
         public int Height { get; }
@@ -26,13 +26,12 @@ namespace FlipnoteDotNet.Data.Drawing
             return buffer.ToBitmap32bppPArgb(Width, Height);
         }
 
-        public FlipnoteVisualSource Clone()
+        /*public FlipnoteVisualSource Clone()
         {
             var clone = new FlipnoteVisualSource(Width, Height);
             Array.Copy(Data, clone.Data, clone.Data.Length);
             return clone;
-        }
-
-        ICloneable ICloneable.Clone() => Clone();        
+        }*/
+             
     }
 }

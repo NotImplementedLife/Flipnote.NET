@@ -1,6 +1,7 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.Utils.Temporal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -65,8 +66,16 @@ namespace FlipnoteDotNet.GUI.Properties
                 };
 
                 Control editor = null;
+                bool IsTimeDependent = false;
 
-                if (Reflection.DefaultEditors.TryGetValue(prop.PropertyType, out Type editorType)) 
+                var targetType = prop.PropertyType;
+
+                if(prop.PropertyType.IsGenericConstruct(typeof(TimeDependentValue<>)))
+                {
+                    targetType = prop.PropertyType.GetGenericArguments()[0];                    
+                    IsTimeDependent = true;
+                }
+                if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType)) 
                 {
                     editor = Activator.CreateInstance(editorType) as Control;
                 }
@@ -87,14 +96,21 @@ namespace FlipnoteDotNet.GUI.Properties
                     editor.Anchor = AnchorStyles.Left | AnchorStyles.Top;
                     editor.Left = labelWidth;
                     editor.Top = 0;                    
-                    editor.Height = Math.Max(label.Height, editor.PreferredSize.Height);
+                    editor.Height = Math.Max(label.Height, editor.PreferredSize.Height);                    
 
                     Debug.WriteLine($"E : {editor.Width}: {editor.Right} : {editor.Left}");
 
                     if (editor is IPropertyEditorControl propEditorControl)
                     {
-                        propEditorControl.ObjectPropertyValue = prop.GetValue(Target);
-                        propEditorControl.ObjectPropertyValueChanged += PropEditorControl_ObjectPropertyValueChanged;
+                        if (!IsTimeDependent)
+                        {
+                            propEditorControl.ObjectPropertyValue = prop.GetValue(Target);
+                            propEditorControl.ObjectPropertyValueChanged += PropEditorControl_ObjectPropertyValueChanged;
+                        }
+                        else
+                        {
+                            //...
+                        }
                         Editors.Add(propEditorControl);
                     }
                 }
@@ -105,6 +121,9 @@ namespace FlipnoteDotNet.GUI.Properties
                 {
                     editor.Width = row.Width - labelWidth - 3;
                     editor.Anchor |= AnchorStyles.Right;
+                    editor.Top = (row.Height - editor.Height) / 2;
+                    label.Top = (row.Height - label.Height) / 2 - 2;
+
                 }
                 h += row.Height;
             }

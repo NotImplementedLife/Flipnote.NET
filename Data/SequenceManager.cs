@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace FlipnoteDotNet.Data
 {
@@ -11,6 +12,17 @@ namespace FlipnoteDotNet.Data
             for (int i = 0; i < tracksCount; i++)
                 AddNewTrack();
         }
+
+        public SequenceTrack.Element GetSequeceElement(Sequence sequence)
+        {
+            foreach (var track in Tracks)
+            {
+                var el = track.GetElement(sequence);
+                if (el != null) return el;
+            }
+            return null;
+        }   
+                    
 
         public void AddNewTrack()
         {

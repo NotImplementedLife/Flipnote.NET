@@ -24,6 +24,11 @@ namespace FlipnoteDotNet.Data
         private Dictionary<Sequence, Element> Elements { get; } = new Dictionary<Sequence, Element>();
         public IEnumerable<Element> GetElements() => Elements.Values.AsEnumerable();
 
+        public Element GetElement(Sequence s)
+        {
+            return Elements.Values.Where(_ => _.Sequence == s).FirstOrDefault();
+        }
+
         public void AddElement(Element elem)
         {
             Elements.Add(elem.Sequence, elem);

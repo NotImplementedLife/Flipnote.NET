@@ -104,9 +104,10 @@ namespace FlipnoteDotNet.GUI.Controls
                 e.Graphics.FillRectangle(Color.Black.Alpha(64).GetBrush(), e.ClipRectangle);
             }
 
-            var sz = e.Graphics.MeasureString(Title, Font);
+            var f = new Font(Font, FontStyle.Bold);
+            var sz = e.Graphics.MeasureString(Title, f);
 
-            e.Graphics.DrawString(Title, Font, Brushes.Black, 20, (e.ClipRectangle.Height - sz.Height) / 2);
+            e.Graphics.DrawString(Title, f, Brushes.Black, 20, (e.ClipRectangle.Height - sz.Height) / 2);
         }
     }
 }

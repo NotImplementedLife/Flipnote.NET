@@ -81,8 +81,8 @@ namespace FlipnoteDotNet
 
 
             var s = new Sequence();
-            s.AddLayer(new StaticImageLayer(10, 10, new Data.Drawing.FlipnoteVisualSource(5, 5)) { DisplayName = "xaxa" });
-            s.AddLayer(new StaticImageLayer(10, 10, new Data.Drawing.FlipnoteVisualSource(5, 5)));
+            s.AddLayer(new StaticImageLayer(new Data.Drawing.FlipnoteVisualSource(5, 5)) { DisplayName = "xaxa" });
+            s.AddLayer(new StaticImageLayer(new Data.Drawing.FlipnoteVisualSource(5, 5)));
 
             SequenceTrackViewer.SequenceManager.GetTrack(2).AddSequence(s, 16, 30);
 
@@ -142,7 +142,7 @@ namespace FlipnoteDotNet
 
         private void PropertyEditor_TargetChanged(object sender, EventArgs e)
         {
-            PropertiesExpander.IsExpanded = false;
+            //PropertiesExpander.IsExpanded = false;
             PropertiesExpander.IsExpanded = PropertyEditor.Target != null;
             Debug.WriteLine($"Target chnaged :{PropertyEditor.Target?.ToString() ?? "null"}");
             UpdateSelectedElementLabel();
@@ -154,12 +154,11 @@ namespace FlipnoteDotNet
                 ? PropertyEditor.Target.GetType().Name : "";
         }
 
-        private Sequence.Element SelectedLayerElement = null;
+        private ILayer SelectedLayerElement = null;
 
         private void LayersEditor_SelectionChanged(object sender, GUI.Layers.LayersEditor.SelectionChangedEventArgs e)
         {
-            SelectedLayerElement = e.Element;
-            PropertyEditor.Target = SelectedLayerElement?.Layer;
+            PropertyEditor.Target = SelectedLayerElement = e.Layer;
         }
     }
 }

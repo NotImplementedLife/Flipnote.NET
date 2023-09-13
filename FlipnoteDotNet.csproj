@@ -62,11 +62,7 @@
     <Compile Include="Constants\Colors.cs" />
     <Compile Include="Constants\Reflection.cs" />
     <Compile Include="Data\Drawing\FlipnoteVisualSource.cs" />
-    <Compile Include="Data\ICloneable.cs" />
     <Compile Include="Data\ILayer.cs" />
-    <Compile Include="Data\ILayerStateChanger.cs" />
-    <Compile Include="Data\IStateChangeGenerator.cs" />
-    <Compile Include="Data\IStateChanger.cs" />
     <Compile Include="Data\Layers\AbstractLayer.cs" />
     <Compile Include="Data\Layers\IDisplayLayer.cs" />
     <Compile Include="Data\Layers\LocalizableLayer.cs" />
@@ -74,13 +70,6 @@
     <Compile Include="Data\Sequence.cs" />
     <Compile Include="Data\SequenceManager.cs" />
     <Compile Include="Data\SequenceTrack.cs" />
-    <Compile Include="Data\StateChangeGenerators\CummulativeStateChangeGenerator.cs" />
-    <Compile Include="Data\StateChangeGenerators\GradualStateChangeGenerator.cs" />
-    <Compile Include="Data\StateChangeGenerators\MultipleStateChangeGenerator.cs" />
-    <Compile Include="Data\StateChangeGenerators\SingularStateChangeGenerator.cs" />
-    <Compile Include="Data\StateChangers\PropertyStateChanger.cs" />
-    <Compile Include="Data\StateChangers\PropertyStateConstantChanger.cs" />
-    <Compile Include="Data\TemporalStateChanger.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -140,6 +129,9 @@
     </Compile>
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
+    <Compile Include="GUI\Properties\EditorFields\IntEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Properties\EditorFields\StringEditor.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -167,6 +159,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\GDIJpegLayerExporter.cs" />
+    <Compile Include="Utils\IInitialize.cs" />
+    <Compile Include="Utils\Temporal\AbstractTransformableTemporalContext.cs" />
+    <Compile Include="Utils\Temporal\ITemporalContext.cs" />
+    <Compile Include="Utils\Temporal\ITimeLocalizable.cs" />
+    <Compile Include="Utils\Temporal\IValueChanger.cs" />
+    <Compile Include="Utils\Temporal\IValueTransformer.cs" />
+    <Compile Include="Utils\Temporal\TimeDependentValue.cs" />
+    <Compile Include="Utils\Temporal\ValueTransformers\AbstractValueTransformer.cs" />
+    <Compile Include="Utils\Temporal\ValueTransformers\ConstantValueTransformer.cs" />
+    <Compile Include="Utils\Temporal\ValueTransformers\SimpleValueTransformer.cs" />
     <EmbeddedResource Include="GUI\Canvas\CanvasSpaceControl.resx">
       <DependentUpon>CanvasSpaceControl.cs</DependentUpon>
     </EmbeddedResource>

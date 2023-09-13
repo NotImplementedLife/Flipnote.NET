@@ -28,10 +28,7 @@ namespace FlipnoteDotNet.GUI.Layers
             e.DrawBackground();
             if (e.Index >= 0 && e.Index < Items.Count)
             {
-                var displayItem = Items[e.Index];
-                if (displayItem is Sequence.Element element)
-                    displayItem = element.Layer;
-
+                var displayItem = Items[e.Index];                
 
                 if (displayItem is IDisplayLayer displayLayer)
                 {

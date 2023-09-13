@@ -1,24 +1,14 @@
 ﻿using FlipnoteDotNet.Attributes;
-using FlipnoteDotNet.Data.StateChangeGenerators;
+using FlipnoteDotNet.Utils;
+using FlipnoteDotNet.Utils.Temporal;
+using PPMLib.Data;
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace FlipnoteDotNet.Data
 {
-    public class Sequence : ICloneable
+    public class Sequence : AbstractTransformableTemporalContext
     {
-        public class Element
-        {
-            public ILayer Layer { get; }
-            public CummulativeStateChangeGenerator StateChangeGenerator = new CummulativeStateChangeGenerator();
-
-            public Element(ILayer layer)
-            {
-                Layer = layer;                
-            }
-        }
-        public List<Element> Elements { get; private set; } = new List<Element>();
-
         [Editable]
         [Atemporal]
         public string Name { get; set; } = "";
@@ -27,23 +17,41 @@ namespace FlipnoteDotNet.Data
         [Atemporal]
         public Color Color { get; set; } = Color.DodgerBlue;
 
-        public Sequence Clone()
+        [Editable]
+        public TimeDependentValue<FlipnotePen> Pen { get; }
+
+        [Editable]
+        public TimeDependentValue<FlipnotePaperColor> PaperColor { get; }
+
+        public override int StartTimestamp
         {
-            return new Sequence
+            get => base.StartTimestamp;
+            set
             {
-                Name = Name,
-                Color = Color,
-                Elements = Elements
-            };
+                int delta = value - base.StartTimestamp;
+                Layers.ForEach(l => l.StartTimestamp += delta);
+                base.StartTimestamp = value;
+            }
         }
 
+        public int StartFrame { get => StartTimestamp; set => StartTimestamp = value; }       
 
-        public Element AddLayer(ILayer layer)
+        public int EndFrame { get; set; }        
+
+        public Sequence()
         {
-            var elem = new Element(layer);
-            Elements.Add(elem);
-            return elem;
+            Pen = new TimeDependentValue<FlipnotePen>(this, FlipnotePen.PaperInverse);
+            PaperColor = new TimeDependentValue<FlipnotePaperColor>(this, FlipnotePaperColor.White);
+            this.Initialize();
         }
-        ICloneable ICloneable.Clone() => Clone();
+       
+        public List<ILayer> Layers { get; private set; } = new List<ILayer>();     
+
+
+        public ILayer AddLayer(ILayer layer)
+        {
+            Layers.Add(layer);
+            return layer;           
+        }    
     }
 }
