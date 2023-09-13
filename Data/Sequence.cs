@@ -12,6 +12,10 @@ namespace FlipnoteDotNet.Data
             public ILayer Layer { get; }
             public CummulativeStateChangeGenerator StateChangeGenerator = new CummulativeStateChangeGenerator();
 
+            public Element(ILayer layer)
+            {
+                Layer = layer;                
+            }
         }
         public List<Element> Elements { get; private set; } = new List<Element>();
 
@@ -33,6 +37,13 @@ namespace FlipnoteDotNet.Data
             };
         }
 
+
+        public Element AddLayer(ILayer layer)
+        {
+            var elem = new Element(layer);
+            Elements.Add(elem);
+            return elem;
+        }
         ICloneable ICloneable.Clone() => Clone();
     }
 }

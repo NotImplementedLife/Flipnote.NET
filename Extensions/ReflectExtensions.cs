@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace FlipnoteDotNet.Extensions
@@ -8,6 +9,8 @@ namespace FlipnoteDotNet.Extensions
     {
         public static IEnumerable<PropertyInfo> GetAllPublicProperties(this Type type)
         {
+            return type.GetProperties(BindingFlags.Public | BindingFlags.Instance).AsEnumerable();
+            /*
             foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 yield return property;
 
@@ -16,7 +19,7 @@ namespace FlipnoteDotNet.Extensions
                 yield break;
 
             foreach (var property in GetAllPublicProperties(baseType))
-                yield return property;
+                yield return property;*/
         }
     }
 }

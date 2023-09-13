@@ -29,13 +29,19 @@ namespace FlipnoteDotNet.GUI.Properties
             {
                 _Target = value;
                 ReloadFields();
+                TargetChanged?.Invoke(this, new EventArgs());
             }
         }
 
+        public event EventHandler TargetChanged;
+
+        private List<IPropertyEditorControl> Editors { get; } = new List<IPropertyEditorControl>();
 
         private void ReloadFields()
         {
-            //SuspendLayout();
+
+            Editors.ForEach(e => e.ObjectPropertyValueChanged -= PropEditorControl_ObjectPropertyValueChanged);
+            Editors.Clear();
             Controls.Clear();
             if (Target == null) return;
             var properties = Target.GetType().GetAllPublicProperties()
@@ -44,10 +50,20 @@ namespace FlipnoteDotNet.GUI.Properties
             properties.ForEach(_ => Debug.WriteLine(_));
 
             int labelWidth = 75;
+            int h = 0;
             
             foreach(var prop in properties)
             {
-                var label = new Label { Text = prop.Name, Width = labelWidth };
+                var label = new Label
+                {
+                    Text = prop.Name,
+                    AutoSize = false,
+                    Width = labelWidth,
+                    Height = 25,
+                    AutoEllipsis = true,
+                    TextAlign = System.Drawing.ContentAlignment.MiddleRight
+                };
+
                 Control editor = null;
 
                 if (Reflection.DefaultEditors.TryGetValue(prop.PropertyType, out Type editorType)) 
@@ -62,9 +78,9 @@ namespace FlipnoteDotNet.GUI.Properties
 
                 if(editor!=null)
                 {                                        
-                    editor.Tag = prop;                    
+                    editor.Tag = prop;
 
-                    label.Top = (editor.Height - label.Height) / 2 + 3;
+                    label.Top = (editor.Height - label.Height) / 2;
 
                     row.Controls.Add(editor);
 
@@ -79,6 +95,7 @@ namespace FlipnoteDotNet.GUI.Properties
                     {
                         propEditorControl.ObjectPropertyValue = prop.GetValue(Target);
                         propEditorControl.ObjectPropertyValueChanged += PropEditorControl_ObjectPropertyValueChanged;
+                        Editors.Add(propEditorControl);
                     }
                 }
                 row.AutoSize = true;
@@ -88,8 +105,11 @@ namespace FlipnoteDotNet.GUI.Properties
                 {
                     editor.Width = row.Width - labelWidth - 3;
                     editor.Anchor |= AnchorStyles.Right;
-                }                                
+                }
+                h += row.Height;
             }
+
+            Height = h;
             //ResumeLayout(true);
         }
 

@@ -317,7 +317,7 @@ namespace FlipnoteDotNet.GUI.Tracks
 
         public void InitializeComponent()
         {
-            SurfacePaint += SequenceTracksViewer_SurfacePaint;
+            SurfacePaint += SequenceTracksViewer_SurfacePaint;            
             Zoom = 100;
         }
 

@@ -36,13 +36,15 @@ namespace FlipnoteDotNet
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.MainContainer = new System.Windows.Forms.SplitContainer();
             this.LeftContainer = new System.Windows.Forms.SplitContainer();
-            this.RightContainer = new System.Windows.Forms.SplitContainer();
-            this.ContentPanel = new System.Windows.Forms.Panel();
             this.Canvas = new FlipnoteDotNet.GUI.Canvas.CanvasSpaceControl();
             this.SequenceTracksEditor = new FlipnoteDotNet.GUI.Controls.SequenceTracksEditor();
+            this.RightContainer = new System.Windows.Forms.SplitContainer();
+            this.LayersEditor = new FlipnoteDotNet.GUI.Layers.LayersEditor();
             this.expander2 = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
+            this.SelectedElementLabel = new System.Windows.Forms.Label();
+            this.ContentPanel = new System.Windows.Forms.Panel();
             this.FormMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
@@ -53,6 +55,7 @@ namespace FlipnoteDotNet
             this.LeftContainer.Panel2.SuspendLayout();
             this.LeftContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RightContainer)).BeginInit();
+            this.RightContainer.Panel1.SuspendLayout();
             this.RightContainer.Panel2.SuspendLayout();
             this.RightContainer.SuspendLayout();
             this.expander2.SuspendLayout();
@@ -133,42 +136,10 @@ namespace FlipnoteDotNet
             this.LeftContainer.TabStop = false;
             this.LeftContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
             // 
-            // RightContainer
-            // 
-            this.RightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RightContainer.Location = new System.Drawing.Point(0, 0);
-            this.RightContainer.Name = "RightContainer";
-            this.RightContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // RightContainer.Panel1
-            // 
-            this.RightContainer.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
-            // 
-            // RightContainer.Panel2
-            // 
-            this.RightContainer.Panel2.AutoScroll = true;
-            this.RightContainer.Panel2.Controls.Add(this.expander2);
-            this.RightContainer.Panel2.Controls.Add(this.PropertiesExpander);
-            this.RightContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
-            this.RightContainer.Size = new System.Drawing.Size(189, 412);
-            this.RightContainer.SplitterDistance = 165;
-            this.RightContainer.SplitterWidth = 2;
-            this.RightContainer.TabIndex = 0;
-            this.RightContainer.TabStop = false;
-            // 
-            // ContentPanel
-            // 
-            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContentPanel.Location = new System.Drawing.Point(0, 40);
-            this.ContentPanel.MinimumSize = new System.Drawing.Size(0, 100);
-            this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(189, 100);
-            this.ContentPanel.TabIndex = 1;
-            // 
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9482, -12525);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9762, -13015);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
@@ -184,6 +155,41 @@ namespace FlipnoteDotNet
             this.SequenceTracksEditor.TabIndex = 0;
             this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.SequenceTrack.Element>(this.SequenceTracksEditor_SelectedElementChanged);
             // 
+            // RightContainer
+            // 
+            this.RightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RightContainer.Location = new System.Drawing.Point(0, 0);
+            this.RightContainer.Name = "RightContainer";
+            this.RightContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // RightContainer.Panel1
+            // 
+            this.RightContainer.Panel1.Controls.Add(this.LayersEditor);
+            this.RightContainer.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
+            // 
+            // RightContainer.Panel2
+            // 
+            this.RightContainer.Panel2.AutoScroll = true;
+            this.RightContainer.Panel2.Controls.Add(this.expander2);
+            this.RightContainer.Panel2.Controls.Add(this.PropertiesExpander);
+            this.RightContainer.Panel2.Controls.Add(this.SelectedElementLabel);
+            this.RightContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
+            this.RightContainer.Size = new System.Drawing.Size(189, 412);
+            this.RightContainer.SplitterDistance = 165;
+            this.RightContainer.SplitterWidth = 2;
+            this.RightContainer.TabIndex = 0;
+            this.RightContainer.TabStop = false;
+            // 
+            // LayersEditor
+            // 
+            this.LayersEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LayersEditor.Location = new System.Drawing.Point(0, 0);
+            this.LayersEditor.Name = "LayersEditor";
+            this.LayersEditor.Sequence = null;
+            this.LayersEditor.Size = new System.Drawing.Size(189, 165);
+            this.LayersEditor.TabIndex = 0;
+            this.LayersEditor.SelectionChanged += new System.EventHandler<FlipnoteDotNet.GUI.Layers.LayersEditor.SelectionChangedEventArgs>(this.LayersEditor_SelectionChanged);
+            // 
             // expander2
             // 
             // 
@@ -196,7 +202,7 @@ namespace FlipnoteDotNet
             this.expander2.ContentsPanel.TabIndex = 1;
             this.expander2.Dock = System.Windows.Forms.DockStyle.Top;
             this.expander2.IsExpanded = false;
-            this.expander2.Location = new System.Drawing.Point(0, 40);
+            this.expander2.Location = new System.Drawing.Point(0, 60);
             this.expander2.Name = "expander2";
             this.expander2.Size = new System.Drawing.Size(189, 40);
             this.expander2.TabIndex = 1;
@@ -217,7 +223,7 @@ namespace FlipnoteDotNet
             this.PropertiesExpander.ContentsPanel.TabIndex = 1;
             this.PropertiesExpander.Dock = System.Windows.Forms.DockStyle.Top;
             this.PropertiesExpander.IsExpanded = false;
-            this.PropertiesExpander.Location = new System.Drawing.Point(0, 0);
+            this.PropertiesExpander.Location = new System.Drawing.Point(0, 20);
             this.PropertiesExpander.Name = "PropertiesExpander";
             this.PropertiesExpander.Size = new System.Drawing.Size(189, 40);
             this.PropertiesExpander.TabIndex = 2;
@@ -235,7 +241,29 @@ namespace FlipnoteDotNet
             this.PropertyEditor.Size = new System.Drawing.Size(189, 20);
             this.PropertyEditor.TabIndex = 0;
             this.PropertyEditor.Target = null;
+            this.PropertyEditor.TargetChanged += new System.EventHandler(this.PropertyEditor_TargetChanged);
             this.PropertyEditor.ObjectPropertyChanged += new System.EventHandler<System.Reflection.PropertyInfo>(this.PropertyEditor_ObjectPropertyChanged);
+            // 
+            // SelectedElementLabel
+            // 
+            this.SelectedElementLabel.AutoEllipsis = true;
+            this.SelectedElementLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(0)))));
+            this.SelectedElementLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SelectedElementLabel.ForeColor = System.Drawing.Color.White;
+            this.SelectedElementLabel.Location = new System.Drawing.Point(0, 0);
+            this.SelectedElementLabel.Name = "SelectedElementLabel";
+            this.SelectedElementLabel.Size = new System.Drawing.Size(189, 20);
+            this.SelectedElementLabel.TabIndex = 3;
+            this.SelectedElementLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContentPanel.Location = new System.Drawing.Point(0, 40);
+            this.ContentPanel.MinimumSize = new System.Drawing.Size(0, 100);
+            this.ContentPanel.Name = "ContentPanel";
+            this.ContentPanel.Size = new System.Drawing.Size(189, 100);
+            this.ContentPanel.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -263,6 +291,7 @@ namespace FlipnoteDotNet
             this.LeftContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.LeftContainer)).EndInit();
             this.LeftContainer.ResumeLayout(false);
+            this.RightContainer.Panel1.ResumeLayout(false);
             this.RightContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RightContainer)).EndInit();
             this.RightContainer.ResumeLayout(false);
@@ -290,6 +319,8 @@ namespace FlipnoteDotNet
         private GUI.Controls.Expander expander2;
         private GUI.Controls.Expander PropertiesExpander;
         private GUI.Properties.PropertyEditor PropertyEditor;
+        private GUI.Layers.LayersEditor LayersEditor;
+        private System.Windows.Forms.Label SelectedElementLabel;
     }
 }
 

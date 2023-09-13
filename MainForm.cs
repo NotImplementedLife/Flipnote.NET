@@ -1,5 +1,6 @@
 ﻿using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Data;
+using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI;
 using FlipnoteDotNet.GUI.Canvas.Components;
@@ -73,12 +74,22 @@ namespace FlipnoteDotNet
 
             SequenceTrackViewer.SequenceManager = new Data.SequenceManager(5);            
 
-            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Data.Sequence() { Name = "Tralalaala" }, 10, 25);
-            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Data.Sequence() { Name = "This Sequence", Color = Color.DarkBlue }, 16, 30);
 
+
+            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Data.Sequence() { Name = "Tralalaala" }, 10, 25);
+            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Data.Sequence() { Name = "This Sequence", Color = Color.DarkBlue }, 16, 30);            
+
+
+            var s = new Sequence();
+            s.AddLayer(new StaticImageLayer(10, 10, new Data.Drawing.FlipnoteVisualSource(5, 5)) { DisplayName = "xaxa" });
+            s.AddLayer(new StaticImageLayer(10, 10, new Data.Drawing.FlipnoteVisualSource(5, 5)));
+
+            SequenceTrackViewer.SequenceManager.GetTrack(2).AddSequence(s, 16, 30);
 
             SequenceTrackViewer.AdjustSurfaceSize();
             SequenceTrackViewer.Invalidate();
+
+            LayersEditor.Sequence = s;            
 
             PropertyEditor.Target = new Sequence() { Name = "mySequence" };
         }
@@ -110,21 +121,45 @@ namespace FlipnoteDotNet
 
         private void SequenceTracksEditor_SelectedElementChanged(object sender, SequenceTrack.Element e)
         {
-            //PropertiesExpander.IsExpanded = false;
-            PropertyEditor.Target = e?.Sequence;
-            PropertiesExpander.IsExpanded = true;
-
-            Debug.WriteLine(PropertiesExpander.Width);
-            Debug.WriteLine(PropertyEditor.Width);
+            LayersEditor.ClearSelection();
+            PropertyEditor.Target = LayersEditor.Sequence = e?.Sequence;            
         }
 
         private void PropertyEditor_ObjectPropertyChanged(object sender, System.Reflection.PropertyInfo e)
         {
+            UpdateSelectedElementLabel();
             if (PropertyEditor.Target is Sequence) 
-            {
+            {                
                 SequenceTracksEditor.Viewer.InvalidateSurface();
                 return;
-            }            
+            }          
+            if(PropertyEditor.Target is ILayer)
+            {
+                LayersEditor.LayersListBox.Invalidate();
+                return;
+            }
+        }
+
+        private void PropertyEditor_TargetChanged(object sender, EventArgs e)
+        {
+            PropertiesExpander.IsExpanded = false;
+            PropertiesExpander.IsExpanded = PropertyEditor.Target != null;
+            Debug.WriteLine($"Target chnaged :{PropertyEditor.Target?.ToString() ?? "null"}");
+            UpdateSelectedElementLabel();
+        }
+
+        private void UpdateSelectedElementLabel()
+        {
+            SelectedElementLabel.Text = PropertyEditor.Target != null
+                ? PropertyEditor.Target.GetType().Name : "";
+        }
+
+        private Sequence.Element SelectedLayerElement = null;
+
+        private void LayersEditor_SelectionChanged(object sender, GUI.Layers.LayersEditor.SelectionChangedEventArgs e)
+        {
+            SelectedLayerElement = e.Element;
+            PropertyEditor.Target = SelectedLayerElement?.Layer;
         }
     }
 }

@@ -68,6 +68,7 @@
     <Compile Include="Data\IStateChangeGenerator.cs" />
     <Compile Include="Data\IStateChanger.cs" />
     <Compile Include="Data\Layers\AbstractLayer.cs" />
+    <Compile Include="Data\Layers\IDisplayLayer.cs" />
     <Compile Include="Data\Layers\LocalizableLayer.cs" />
     <Compile Include="Data\Layers\StaticImageLayer.cs" />
     <Compile Include="Data\Sequence.cs" />
@@ -128,6 +129,15 @@
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
+    <Compile Include="GUI\Layers\LayersEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Layers\LayersEditor.Designer.cs">
+      <DependentUpon>LayersEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Layers\LayersListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
     <Compile Include="GUI\Properties\EditorFields\StringEditor.cs">
@@ -169,6 +179,9 @@
     <EmbeddedResource Include="GUI\Controls\SequenceTracksEditor.resx">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Layers\LayersEditor.resx">
+      <DependentUpon>LayersEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Properties\PropertyEditor.resx">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,6 +220,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\ic_layer_remove.png" />
+    <None Include="Resources\ic_layer_add.png" />
     <None Include="Resources\ic_seq_add.png" />
     <None Include="Resources\cur_cross.cur" />
   </ItemGroup>
