@@ -36,4 +36,26 @@ namespace FlipnoteDotNet.Utils.Temporal
 
         object IValueChanger.ChangeValue(object previousValue) => ChangeValue((T)previousValue);
     }
+
+    public class ConvertedValueChanger<T> : IValueChanger<T>
+    {
+        private readonly IValueChanger ValueChanger;
+
+        public ConvertedValueChanger(IValueChanger valueChanger)
+        {
+            ValueChanger = valueChanger;
+        }
+
+        public T ChangeValue(T previousValue)
+        {
+            var value = ValueChanger.ChangeValue(previousValue);
+
+            if (value == null && typeof(T).IsClass)
+                return (T)value;
+            if (value is T) return (T)value;
+            throw new InvalidCastException($"ConvertedValueChanger<>: Cannot cast {value.GetType()} to {typeof(T)}");
+        }
+
+        public object ChangeValue(object previousValue) => ChangeValue((T)previousValue);
+    }
 }

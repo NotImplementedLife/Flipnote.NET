@@ -67,6 +67,7 @@
             this.SequenceTracksViewer.TabIndex = 1;
             this.SequenceTracksViewer.TrackSignPosition = 0;
             this.SequenceTracksViewer.SequenceCreateModeEnded += new System.EventHandler(this.SequenceTracksViewer_SequenceCreateModeEnded);
+            this.SequenceTracksViewer.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksViewer_CurrentFrameChanged);
             this.SequenceTracksViewer.SelectedElementChanged += new System.EventHandler(this.SequenceTracksViewer_SelectedElementChanged);
             // 
             // SequenceTracksEditor

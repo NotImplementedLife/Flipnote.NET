@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,5 +30,7 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
 
         public event EventHandler ObjectPropertyValueChanged;
         public Panel KeyframesPanel { get; set; }
+        public bool IsTimeDependent { get; set; }
+        public PropertyInfo Property { get; set; }
     }
 }

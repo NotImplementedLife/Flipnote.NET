@@ -77,6 +77,7 @@
     <Compile Include="Extensions\IntException.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\QueueExtensions.cs" />
+    <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="Extensions\ReflectExtensions.cs" />
     <Compile Include="GUI\Canvas\CanvasComponentsCollection.cs">
       <SubType>UserControl</SubType>
@@ -99,6 +100,9 @@
     <Compile Include="GUI\Canvas\Drawing\Operations\DrawRectangle.cs" />
     <Compile Include="GUI\Canvas\ICanvasComponent.cs" />
     <Compile Include="GUI\Canvas\Misc\ResizePoint.cs" />
+    <Compile Include="GUI\Controls\EnumComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Controls\Expander.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,10 +136,28 @@
     <Compile Include="GUI\Properties\EditorFields\IntEditor.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Properties\EditorFields\PaperColorEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\EditorFields\PenEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Properties\EditorFields\StringEditor.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Properties\IPropertyEditorControl.cs" />
+    <Compile Include="GUI\Properties\KeyframeEditorRow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\KeyframeEditorRow.Designer.cs">
+      <DependentUpon>KeyframeEditorRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Properties\KeyFramesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\KeyFramesEditor.Designer.cs">
+      <DependentUpon>KeyFramesEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Properties\PropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -190,6 +212,12 @@
     <EmbeddedResource Include="GUI\Layers\LayersEditor.resx">
       <DependentUpon>LayersEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Properties\KeyframeEditorRow.resx">
+      <DependentUpon>KeyframeEditorRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Properties\KeyFramesEditor.resx">
+      <DependentUpon>KeyFramesEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Properties\PropertyEditor.resx">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -231,6 +259,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\ic_remove.png" />
     <None Include="Resources\ic_effects.png" />
     <None Include="Resources\ic_keyframes.png" />
     <None Include="Resources\ic_layer_remove.png" />

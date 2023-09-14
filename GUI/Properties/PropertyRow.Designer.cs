@@ -68,6 +68,7 @@
             this.EffectsButton.Size = new System.Drawing.Size(24, 24);
             this.EffectsButton.TabIndex = 3;
             this.EffectsButton.UseVisualStyleBackColor = true;
+            this.EffectsButton.Click += new System.EventHandler(this.EffectsButton_Click);
             // 
             // KeyframesButton
             // 
@@ -79,6 +80,7 @@
             this.KeyframesButton.Size = new System.Drawing.Size(24, 24);
             this.KeyframesButton.TabIndex = 2;
             this.KeyframesButton.UseVisualStyleBackColor = true;
+            this.KeyframesButton.Click += new System.EventHandler(this.KeyframesButton_Click);
             // 
             // PropertyRow
             // 

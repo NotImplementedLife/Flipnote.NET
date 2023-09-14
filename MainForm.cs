@@ -7,6 +7,7 @@ using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.Properties;
 using FlipnoteDotNet.GUI.Tracks;
+using FlipnoteDotNet.Utils.Temporal;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -115,6 +116,9 @@ namespace FlipnoteDotNet
 
         private void SequenceTracksEditor_SelectedElementChanged(object sender, SequenceTrack.Element e)
         {
+            if (e?.Sequence != null) 
+                e.Sequence.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
+
             LayersEditor.ClearSelection();
             PropertyEditor.Target = LayersEditor.Sequence = e?.Sequence;            
         }
@@ -152,7 +156,17 @@ namespace FlipnoteDotNet
 
         private void LayersEditor_SelectionChanged(object sender, GUI.Layers.LayersEditor.SelectionChangedEventArgs e)
         {
+            if (e.Layer != null)
+                e.Layer.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
             PropertyEditor.Target = SelectedLayerElement = e.Layer;
+        }
+
+        private void SequenceTracksEditor_CurrentFrameChanged(object sender, EventArgs e)
+        {
+            var editedElement = PropertyEditor.Target as ITemporalContext;
+            if (editedElement == null)
+                return;
+            editedElement.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
         }
     }
 }

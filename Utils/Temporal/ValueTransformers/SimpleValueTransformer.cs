@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace FlipnoteDotNet.Utils.Temporal.ValueTransformers
-{
+{   
     public class SimpleValueTransformer<T> : AbstractValueTransformer<T>
     {        
         private IValueChanger<T> _ValueChanger;
@@ -51,11 +50,11 @@ namespace FlipnoteDotNet.Utils.Temporal.ValueTransformers
                 valueStore.Value = t;
                 return ValueChanger.ChangeValue(t);
             });
-
+            
             yield return (timestamp, changer);
 
             if (!Persistent)
-            {
+            {                
                 // reset on the next timestamp
                 yield return (timestamp + 1, new FunctionalValueChanger<T>(t => valueStore.Value));
             }

@@ -139,7 +139,7 @@ namespace FlipnoteDotNet
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9802, -13085);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9822, -13120);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
@@ -154,6 +154,7 @@ namespace FlipnoteDotNet
             this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
             this.SequenceTracksEditor.TabIndex = 0;
             this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.SequenceTrack.Element>(this.SequenceTracksEditor_SelectedElementChanged);
+            this.SequenceTracksEditor.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksEditor_CurrentFrameChanged);
             // 
             // RightContainer
             // 
@@ -235,6 +236,7 @@ namespace FlipnoteDotNet
             this.PropertyEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PropertyEditor.AutoSize = true;
+            this.PropertyEditor.KeyFramesPanel = null;
             this.PropertyEditor.Location = new System.Drawing.Point(0, -1);
             this.PropertyEditor.Name = "PropertyEditor";
             this.PropertyEditor.Size = new System.Drawing.Size(189, 20);

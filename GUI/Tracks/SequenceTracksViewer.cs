@@ -213,6 +213,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             if (e.UserData is TrackSignMoveDragData) 
             {
                 TrackSignPosition = ScreenToTrackSignPosition(e.CurrentLocation.X);
+                CurrentFrameChanged?.Invoke(this, new EventArgs());
                 return;
             }
             if(e.UserData is SequenceResizeDragData resizeData)
@@ -285,8 +286,7 @@ namespace FlipnoteDotNet.GUI.Tracks
         private void MouseGesturesHandler_Drop(object sender, DropGestureArgs e)
         {
             if(e.UserData is TrackSignMoveDragData)
-            {
-                CurrentFrameChanged?.Invoke(this, new EventArgs());
+            {                
                 return;
             }
             if(e.UserData is SequenceCreateDragData createData)

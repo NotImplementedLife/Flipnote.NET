@@ -45,5 +45,11 @@ namespace FlipnoteDotNet.GUI.Controls
         }
 
         public event EventHandler<SequenceTrack.Element> SelectedElementChanged;
+        public event EventHandler CurrentFrameChanged;
+
+        private void SequenceTracksViewer_CurrentFrameChanged(object sender, EventArgs e)
+        {
+            CurrentFrameChanged?.Invoke(this, new EventArgs());
+        }
     }
 }

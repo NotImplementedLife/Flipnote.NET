@@ -2,6 +2,7 @@
 using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.Utils.Temporal;
+using FlipnoteDotNet.Utils.Temporal.ValueTransformers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +12,6 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Label = System.Windows.Forms.Label;
 
 namespace FlipnoteDotNet.GUI.Properties
 {
@@ -33,19 +33,48 @@ namespace FlipnoteDotNet.GUI.Properties
             get => _Target;
             set
             {
+                if (_Target is ITemporalContext tctx)                 
+                    tctx.CurrentTimestampChanged -= TemporalTarget_CurrentTimestampChanged;                
                 _Target = value;
-                ReloadFields();
+                if (_Target is ITemporalContext newTctx)
+                    newTctx.CurrentTimestampChanged += TemporalTarget_CurrentTimestampChanged;                
+
+                ReloadPropertyRows();
                 TargetChanged?.Invoke(this, new EventArgs());
             }
         }
 
+        private void TemporalTarget_CurrentTimestampChanged(object sender, EventArgs e)
+        {
+            Debug.WriteLine("TemporalTarget_CurrentTimestampChanged");
+            ReloadValues();
+        }
+
         public event EventHandler TargetChanged;
 
-        private List<IPropertyEditorControl> Editors { get; } = new List<IPropertyEditorControl>();
+        private List<IPropertyEditorControl> Editors { get; } = new List<IPropertyEditorControl>();        
 
-        private void ReloadFields()
+        private void ReloadValues()
         {
+            foreach(var editor in Editors)
+            {
+                if(!editor.IsTimeDependent)
+                {
+                    editor.ObjectPropertyValueChanged -= PropEditorControl_ObjectPropertyValueChanged;
+                    editor.ObjectPropertyValue = editor.Property.GetValue(Target);
+                    editor.ObjectPropertyValueChanged += PropEditorControl_ObjectPropertyValueChanged;
+                }
+                else
+                {
+                    editor.ObjectPropertyValueChanged -= TimeDepPropEditorControl_ObjectPropertyValueChanged;
+                    editor.ObjectPropertyValue = (editor.Property.GetValue(Target) as ITimeDependentValue).CurrentValue;
+                    editor.ObjectPropertyValueChanged += TimeDepPropEditorControl_ObjectPropertyValueChanged;
+                }              
+            }
+        }
 
+        private void ReloadPropertyRows()
+        {
             Editors.ForEach(e => e.ObjectPropertyValueChanged -= PropEditorControl_ObjectPropertyValueChanged);
             Editors.Clear();
             Controls.Clear();
@@ -63,12 +92,20 @@ namespace FlipnoteDotNet.GUI.Properties
                 Controls.Add(row);
                 row.Dock = DockStyle.Top;
                 Control editor = CreateEditor(prop, out bool isTimeDependent);                         
-                row.SetEditor(prop.Name, editor, isTimeDependent);          
+                row.SetEditor(prop.Name, editor, isTimeDependent);
+                row.SetPropertyTags(prop);
+
+                if (isTimeDependent)
+                {
+                    row.KeyframesButtonClick += PropertyRow_KeyframesButtonClick;
+                    row.EffectsButtonClick += PropertyRow_EffectsButtonClick;
+                }
+
                 h += row.Height;
             }
-
-            Height = h;            
-        }
+            Height = h;
+            ReloadValues();
+        }        
 
         private Control CreateEditor(PropertyInfo prop, out bool isTimeDependent)
         {
@@ -87,10 +124,12 @@ namespace FlipnoteDotNet.GUI.Properties
                 editor = Activator.CreateInstance(editorType) as Control;
             }
             if (editor == null) return null;
-
+            
             editor.Tag = prop;
             if (editor is IPropertyEditorControl propEditorControl)
             {
+                propEditorControl.Property = prop;
+                propEditorControl.IsTimeDependent = isTimeDependent;
                 if (!isTimeDependent)
                 {
                     propEditorControl.ObjectPropertyValue = prop.GetValue(Target);
@@ -99,7 +138,7 @@ namespace FlipnoteDotNet.GUI.Properties
                 else
                 {
                     propEditorControl.ObjectPropertyValue = (prop.GetValue(Target) as ITimeDependentValue).CurrentValue;
-                    propEditorControl.ObjectPropertyValueChanged += TimeDepPropEditorControl_ObjectPropertyValueChanged;
+                    propEditorControl.ObjectPropertyValueChanged += TimeDepPropEditorControl_ObjectPropertyValueChanged;                    
                 }
                 Editors.Add(propEditorControl);
             }
@@ -110,12 +149,24 @@ namespace FlipnoteDotNet.GUI.Properties
 
         private void TimeDepPropEditorControl_ObjectPropertyValueChanged(object sender, EventArgs e)
         {
-            
+            var prop = (sender as Control).Tag as PropertyInfo;
+            var val = (sender as IPropertyEditorControl).ObjectPropertyValue;           
+
+            var tdv = prop.GetValue(Target) as ITimeDependentValue;
+            tdv.PutTransformer(new ConstantValueTransformer(val), (Target as ITemporalContext).CurrentTimestamp);
+            tdv.UpdateTransformations();
+            tdv.UpdateTimestamps();       
         }
 
-        private void KeyframesViewLabel_Click(object sender, EventArgs e)
+        private void PropertyRow_EffectsButtonClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
+        }
+
+        private void PropertyRow_KeyframesButtonClick(object sender, EventArgs e)
+        {
+            var control = sender as Control;
+            MessageBox.Show($"{(control.Tag as PropertyInfo).Name}");
         }
 
         private void PropEditorControl_ObjectPropertyValueChanged(object sender, EventArgs e)

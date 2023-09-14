@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,5 +44,25 @@ namespace FlipnoteDotNet.GUI.Properties
                 Height = 28;
             }
         }
+
+        private void KeyframesButton_Click(object sender, EventArgs e)
+        {
+            KeyframesButtonClick?.Invoke(this, new EventArgs());
+        }
+
+        private void EffectsButton_Click(object sender, EventArgs e)
+        {
+            EffectsButtonClick?.Invoke(this, new EventArgs());
+        }
+
+        public void SetPropertyTags(PropertyInfo prop)
+        {
+            Tag = prop;
+            KeyframesButton.Tag = prop;
+            EffectsButton.Tag = prop;
+        }
+
+        public event EventHandler KeyframesButtonClick;
+        public event EventHandler EffectsButtonClick;
     }
 }

@@ -10,7 +10,18 @@ namespace FlipnoteDotNet.Utils.Temporal
     using TTemporalTransformers = Dictionary<ITimeDependentValue, Dictionary<IValueTransformer, int>>;
     public abstract class AbstractTransformableTemporalContext : ITimeLocalizable, IInitialize
     {
-        public int CurrentTimestamp { get; set; }
+        private int _CurrentTimestamp;
+
+        public int CurrentTimestamp 
+        {
+            get => _CurrentTimestamp;
+            set
+            {                
+                _CurrentTimestamp = value;
+                CurrentTimestampChanged?.Invoke(this, new EventArgs());
+            }
+        }
+        public event EventHandler CurrentTimestampChanged;
 
 
         private readonly TTemporalTransformers TemporalTransformers = new TTemporalTransformers();
@@ -25,7 +36,8 @@ namespace FlipnoteDotNet.Utils.Temporal
                 .ForEach(_ => TemporalTransformers[_] = new Dictionary<IValueTransformer, int>());
         }
 
-        private int _StartTimestamp;
+        private int _StartTimestamp;        
+
         public virtual int StartTimestamp 
         {
             get => _StartTimestamp;
@@ -65,7 +77,7 @@ namespace FlipnoteDotNet.Utils.Temporal
             foreach (var kv in GetTransformersDict(value))
             {
                 var transformer = kv.Key;
-                var timestamp = kv.Value;
+                var timestamp = kv.Value;                
                 ValueTransformer.Apply(transformer, value, timestamp);
             }            
         }

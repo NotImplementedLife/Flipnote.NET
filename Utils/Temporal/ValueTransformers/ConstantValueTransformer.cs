@@ -1,5 +1,12 @@
 ﻿namespace FlipnoteDotNet.Utils.Temporal.ValueTransformers
 {
+    public class ConstantValueTransformer : ConstantValueTransformer<object>
+    {
+        public ConstantValueTransformer(object value, bool persistent = true) : base(value, persistent)
+        {
+        }
+    }
+
     public class ConstantValueTransformer<T> : SimpleValueTransformer<T>
     {
         private T _Value;
