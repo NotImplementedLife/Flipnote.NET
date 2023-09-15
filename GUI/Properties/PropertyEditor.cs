@@ -168,10 +168,19 @@ namespace FlipnoteDotNet.GUI.Properties
                 targetType = prop.PropertyType.GetGenericArguments()[0];
                 isTimeDependent = true;
             }
-            if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
+
+            var propertyEditorControlType = prop.GetCustomAttribute<PropertyEditorControlAttribute>()?.Type;
+                       
+            if (propertyEditorControlType != null)
+            {                
+                editor = Activator.CreateInstance(propertyEditorControlType) as Control;
+            }
+            else if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
             {
                 editor = Activator.CreateInstance(editorType) as Control;
-            }
+            }            
+
+
             if (editor == null) return null;
             
             editor.Tag = prop;

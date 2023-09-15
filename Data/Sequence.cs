@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.Attributes;
+using FlipnoteDotNet.GUI.Properties.EditorFields;
 using FlipnoteDotNet.Utils;
 using FlipnoteDotNet.Utils.Temporal;
 using PPMLib.Data;
@@ -9,12 +10,11 @@ namespace FlipnoteDotNet.Data
 {
     public class Sequence : AbstractTransformableTemporalContext
     {
-        [Editable]
-        [Atemporal]
+        [Editable]        
         public string Name { get; set; } = "";
 
         [Editable]
-        [Atemporal]
+        [PropertyEditorControl(typeof(SequenceColorEditor))]
         public Color Color { get; set; } = Color.DodgerBlue;
 
         [Editable]

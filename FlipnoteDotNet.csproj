@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\AtemporalAttribute.cs" />
     <Compile Include="Attributes\AttributeManager.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Attributes\EditableAttribute.cs" />
@@ -123,6 +122,9 @@
     <Compile Include="GUI\Controls\SequenceTracksEditor.Designer.cs">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\StaticComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
     <Compile Include="GUI\Layers\LayersEditor.cs">
       <SubType>UserControl</SubType>
@@ -142,6 +144,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Properties\EditorFields\PenEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\EditorFields\SequenceColorEditor.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Properties\EditorFields\StringEditor.cs">

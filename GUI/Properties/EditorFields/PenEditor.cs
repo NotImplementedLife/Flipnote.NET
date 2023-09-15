@@ -1,13 +1,8 @@
 ﻿using FlipnoteDotNet.Attributes;
 using PPMLib.Data;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using System.Windows.Forms;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.Constants;
