@@ -12,7 +12,9 @@ namespace FlipnoteDotNet.Attributes
         {
             TypeRecords = AppDomain.CurrentDomain.GetAssemblies()
                        .SelectMany(t => t.GetTypes())
-                       .Where(t => t.IsSubclassOf(typeof(T)) && t.GetCustomAttribute(typeof(A)) != null)
+                       .Where(t => 
+                            ((typeof(T).IsInterface && t.GetInterfaces().Contains(typeof(T)))
+                            || t.IsSubclassOf(typeof(T))) && t.GetCustomAttribute(typeof(A)) != null)
                        .Select(t => new TypeRecord { Type = t })
                        .ToArray();
         }

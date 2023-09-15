@@ -59,7 +59,6 @@ namespace FlipnoteDotNet.Data
        
         public List<ILayer> Layers { get; private set; } = new List<ILayer>();     
 
-
         public ILayer AddLayer(ILayer layer)
         {
             Layers.Add(layer);

@@ -1,14 +1,15 @@
 ﻿using FlipnoteDotNet.GUI.Canvas.Drawing;
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace FlipnoteDotNet.GUI.Canvas.Components
 {
     internal class BitmapComponent : CanvasComponent
     {        
         public Bitmap Bitmap { get; }
-        public override bool IsResizeable => true;
+        public override bool IsResizeable { get => true; set => throw new InvalidOperationException(); }
+
+        public BitmapComponent(Bitmap bitmap) : this(bitmap, Point.Empty) { }        
 
         public BitmapComponent(Bitmap bitmap, Point location)
         {

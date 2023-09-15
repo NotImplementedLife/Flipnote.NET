@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.Utils.Temporal.ValueTransformers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -116,6 +117,16 @@ namespace FlipnoteDotNet.Utils.Temporal
             set => SetCurrentValue(value);
         }
         object ITimeDependentValue.CurrentValue { get => CurrentValue; set => CurrentValue = (T)value; }
+
+        public void PutCurrentConstantTransformer(T value, int timestamp, bool autoUpdate = false)
+        {
+            PutTransformer(new ConstantValueTransformer<T>(value), timestamp);
+            if(autoUpdate)
+            {
+                UpdateTransformations();
+                UpdateTimestamps();
+            }
+        }       
 
         public void PutTransformer(IValueTransformer transformer, int timestamp)
         {

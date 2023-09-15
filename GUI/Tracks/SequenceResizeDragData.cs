@@ -33,6 +33,8 @@ namespace FlipnoteDotNet.GUI.Tracks
                 e = Position + dx;
             }
 
+            if (s < 0 || e > 999) return;
+
             if (s < e) 
             {
                 Element.StartFrame = s;

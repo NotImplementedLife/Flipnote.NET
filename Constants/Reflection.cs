@@ -1,6 +1,8 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.GUI.Canvas;
+using FlipnoteDotNet.Rendering;
 using FlipnoteDotNet.Utils.Temporal;
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,8 @@ namespace FlipnoteDotNet.Constants
     {
         public static Dictionary<Type, Type> DefaultEditors { get; private set; }
 
-        //public static Dictionary<Type, List<PropertyInfo>> TimeDependendProperties { get; private set; }
+        public static Dictionary<Type, Type> LayerCanvasComponents { get; private set; }
+        
             
         public static void Init()
         {
@@ -23,35 +26,20 @@ namespace FlipnoteDotNet.Constants
                 .GroupBy(_ => _.Attribute.Type).Select(g => g.First())
                 .ToDictionary(r => r.Attribute.Type, r => r.Type);
 
-            //foreach (var kv in DefaultEditors) Debug.WriteLine($"{kv.Key} -> {kv.Value}");
+            LayerCanvasComponents = new AttributesManager<CanvasComponentAttribute, ILayerCanvasComponent>()                
+                .GroupBy(_ => _.Attribute.ObjectType).Select(g => g.First())
+                .ToDictionary(r => r.Attribute.ObjectType, r => r.Type);
 
-
-            /*TimeDependendProperties = AppDomain.CurrentDomain.GetAssemblies()
-                       .SelectMany(t => t.GetTypes())
-                       .Where(t => t.IsClass && typeof(ITemporalContext).IsAssignableFrom(t))
-                       .Select(t =>
-                       {
-                           var props = t.GetAllPublicProperties()
-                           .Where(_ => _.PropertyType.IsConstructedGenericType
-                            && _.PropertyType.GetGenericTypeDefinition() == typeof(TimeDependentValue<>))
-                           .ToList();
-                           return (Type: t, Props: props);
-                       }).ToDictionary(_ => _.Type, _ => _.Props);
-
-            foreach (var kv in TimeDependendProperties)
+            foreach(var kv in LayerCanvasComponents)
             {
-                Debug.WriteLine($"{kv.Key} -> {kv.Value.JoinToString(", ")}");
-            }*/
+                Debug.WriteLine($"{kv.Key} => {kv.Value}");
+            }
 
             Debug.WriteLine("--------------------------------");
             Debug.WriteLine("");
             Debug.WriteLine("");
             Debug.WriteLine("");
-
         }
-
-
-
 
 
     }

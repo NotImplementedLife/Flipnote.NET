@@ -1,6 +1,7 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.GUI.Properties.EditorFields;
 using FlipnoteDotNet.Utils.Temporal;
 using FlipnoteDotNet.Utils.Temporal.ValueTransformers;
 using System;
@@ -178,10 +179,11 @@ namespace FlipnoteDotNet.GUI.Properties
             else if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
             {
                 editor = Activator.CreateInstance(editorType) as Control;
-            }            
+            }
 
 
-            if (editor == null) return null;
+            if (editor == null)
+                editor = new DefaultNonEditable();
             
             editor.Tag = prop;
             if (editor is IPropertyEditorControl propEditorControl)
