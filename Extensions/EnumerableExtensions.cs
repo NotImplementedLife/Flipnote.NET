@@ -22,6 +22,15 @@ namespace FlipnoteDotNet.Extensions
                 action(item);
         }
 
+        public static IEnumerable<T> Peek<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items) 
+            {
+                action(item);
+                yield return item;
+            }
+        }
+
         public static Bitmap ToBitmap32bppPArgb(this uint[] data, int width, int height)
         {
             unsafe

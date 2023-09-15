@@ -1,6 +1,7 @@
 ﻿using FlipnoteDotNet.Extensions;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -99,6 +100,52 @@ namespace FlipnoteDotNet.GUI.Controls
             RefreshScrollbars();            
         }
 
-        public void InvalidateSurface() => ScrollContainer.Invalidate();       
+        public void InvalidateSurface() => ScrollContainer.Invalidate();
+
+        // https://www.philosophicalgeek.com/2007/07/27/mouse-tilt-wheel-horizontal-scrolling-in-c/
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            if (m.HWnd != this.Handle)
+            {
+                return;
+            }
+            switch (m.Msg)
+            {
+                case Win32Messages.WM_MOUSEHWHEEL:
+                    FireMouseHWheel(m.WParam, m.LParam);
+                    m.Result = (IntPtr)1;
+                    break;
+                default:
+                    break;
+            }
+        }
+    
+        abstract class Win32Messages
+        {
+            public const int WM_MOUSEHWHEEL = 0x020E;
+        }
+
+        public event EventHandler<MouseEventArgs> MouseHWheel;
+        protected void FireMouseHWheel(IntPtr wParam, IntPtr lParam)
+        {
+
+            int tilt = HiWord(wParam);
+            int keys = LoWord(wParam);
+            int x = LoWord(lParam);
+            int y = HiWord(lParam);
+            FireMouseHWheel(MouseButtons.None, 0, x, y, tilt);
+        }
+
+        protected void FireMouseHWheel(MouseButtons buttons, int clicks, int x, int y, int delta)
+        {
+            MouseEventArgs args = new MouseEventArgs(buttons, clicks, x, y, delta);
+            MouseHWheel?.Invoke(this, args);
+            //Debug.WriteLine($"HSCROLL {x} {y} {delta}");
+            HScrollBar.Value = (HScrollBar.Value + delta / SystemInformation.MouseWheelScrollDelta).Clamp(HScrollBar.Minimum, HScrollBar.Maximum);
+        }
+
+        private int HiWord(IntPtr x) => (short)((int)(long)x >> 16);
+        private int LoWord(IntPtr x) => (short)((int)(long)x & 0xFFFF);
     }
 }

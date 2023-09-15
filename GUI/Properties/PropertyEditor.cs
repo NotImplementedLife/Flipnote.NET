@@ -141,6 +141,7 @@ namespace FlipnoteDotNet.GUI.Properties
                 Control editor = CreateEditor(prop, out bool isTimeDependent);                         
                 row.SetEditor(prop.Name, editor, isTimeDependent);
                 row.SetPropertyTags(prop);
+                row.BringToFront();
 
                 if (isTimeDependent)
                 {

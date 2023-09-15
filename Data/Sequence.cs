@@ -18,7 +18,10 @@ namespace FlipnoteDotNet.Data
         public Color Color { get; set; } = Color.DodgerBlue;
 
         [Editable]
-        public TimeDependentValue<FlipnotePen> Pen { get; }
+        public TimeDependentValue<FlipnotePen> Pen1 { get; }
+
+        [Editable]
+        public TimeDependentValue<FlipnotePen> Pen2 { get; }
 
         [Editable]
         public TimeDependentValue<FlipnotePaperColor> PaperColor { get; }
@@ -42,7 +45,8 @@ namespace FlipnoteDotNet.Data
 
         public Sequence()
         {
-            Pen = new TimeDependentValue<FlipnotePen>(this, FlipnotePen.PaperInverse);
+            Pen1 = new TimeDependentValue<FlipnotePen>(this, FlipnotePen.PaperInverse);
+            Pen2 = new TimeDependentValue<FlipnotePen>(this, FlipnotePen.Red);
             PaperColor = new TimeDependentValue<FlipnotePaperColor>(this, FlipnotePaperColor.White);
             this.Initialize();
         }
