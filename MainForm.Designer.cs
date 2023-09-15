@@ -153,7 +153,7 @@ namespace FlipnoteDotNet
             this.SequenceTracksEditor.Name = "SequenceTracksEditor";
             this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
             this.SequenceTracksEditor.TabIndex = 0;
-            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.SequenceTrack.Element>(this.SequenceTracksEditor_SelectedElementChanged);
+            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.Sequence>(this.SequenceTracksEditor_SelectedElementChanged);
             this.SequenceTracksEditor.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksEditor_CurrentFrameChanged);
             // 
             // RightContainer

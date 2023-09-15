@@ -6,6 +6,6 @@ namespace FlipnoteDotNet.Utils.Temporal
     {
         int CurrentTimestamp { get; set; }
 
-        event EventHandler CurrentTimestampChanged;
+        event EventHandler<PropertyChanedEventArgs<int>> CurrentTimestampChanged;
     }
 }

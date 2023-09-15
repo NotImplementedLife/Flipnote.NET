@@ -33,6 +33,7 @@ namespace FlipnoteDotNet.GUI.Layers
 
         public void ReloadSequence()
         {
+            AddLayerButton.Enabled = Sequence != null;
             LayersListBox.SelectedIndexChanged -= LayersListBox_SelectedIndexChanged;
             LayersListBox.DataSource = null;
             LayersListBox.DataSource = Sequence?.Layers;

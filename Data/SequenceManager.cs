@@ -11,22 +11,11 @@ namespace FlipnoteDotNet.Data
         {
             for (int i = 0; i < tracksCount; i++)
                 AddNewTrack();
-        }
-
-        public SequenceTrack.Element GetSequeceElement(Sequence sequence)
-        {
-            foreach (var track in Tracks)
-            {
-                var el = track.GetElement(sequence);
-                if (el != null) return el;
-            }
-            return null;
-        }   
-                    
+        }     
 
         public void AddNewTrack()
         {
-            var track=new SequenceTrack();
+            var track=new SequenceTrack();            
             track.ElementAdded += Track_ElementAdded;
             track.ElementRemoved += Track_ElementRemoved;
             Tracks.Add(track);
@@ -35,18 +24,18 @@ namespace FlipnoteDotNet.Data
         public SequenceTrack GetTrack(int index) => Tracks[index];
         public int TracksCount => Tracks.Count;
 
-        private void Track_ElementRemoved(object sender, SequenceTrack.Element e)
+        private void Track_ElementRemoved(object sender, Sequence e)
         {
             ElementRemoved?.Invoke(this, sender as SequenceTrack, e);
         }
 
-        private void Track_ElementAdded(object sender, SequenceTrack.Element e)
+        private void Track_ElementAdded(object sender, Sequence e)
         {
             ElementAdded?.Invoke(this, sender as SequenceTrack, e);
         }
 
-        public delegate void OnElementAdded(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e);
-        public delegate void OnElementRemoved(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e);
+        public delegate void OnElementAdded(SequenceManager sender, SequenceTrack track, Sequence e);
+        public delegate void OnElementRemoved(SequenceManager sender, SequenceTrack track, Sequence e);
 
         public event OnElementAdded ElementAdded;
         public event OnElementRemoved ElementRemoved;

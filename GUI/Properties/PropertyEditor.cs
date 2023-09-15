@@ -34,19 +34,26 @@ namespace FlipnoteDotNet.GUI.Properties
             set
             {
                 if (_Target is ITemporalContext tctx)                 
-                    tctx.CurrentTimestampChanged -= TemporalTarget_CurrentTimestampChanged;                
+                    tctx.CurrentTimestampChanged -= TemporalTarget_CurrentTimestampChanged;
+                if(_Target is ITimeLocalizable tloc)
+                    tloc.StartTimestampChanged += TemporalTarget_StartTimestampChanged;
                 _Target = value;
                 if (_Target is ITemporalContext newTctx)
-                    newTctx.CurrentTimestampChanged += TemporalTarget_CurrentTimestampChanged;                
-
+                    newTctx.CurrentTimestampChanged += TemporalTarget_CurrentTimestampChanged;
+                if (_Target is ITimeLocalizable newTloc)
+                    newTloc.StartTimestampChanged += TemporalTarget_StartTimestampChanged;
                 ReloadPropertyRows();
                 TargetChanged?.Invoke(this, new EventArgs());
             }
         }
 
-        private void TemporalTarget_CurrentTimestampChanged(object sender, EventArgs e)
+        private void TemporalTarget_StartTimestampChanged(object sender, PropertyChanedEventArgs<int> e)
         {
-            Debug.WriteLine("TemporalTarget_CurrentTimestampChanged");
+            ReloadValues();
+        }
+
+        private void TemporalTarget_CurrentTimestampChanged(object sender, PropertyChanedEventArgs<int> e)
+        {            
             ReloadValues();
         }
 

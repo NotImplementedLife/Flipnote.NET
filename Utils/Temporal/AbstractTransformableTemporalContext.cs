@@ -16,13 +16,14 @@ namespace FlipnoteDotNet.Utils.Temporal
         {
             get => _CurrentTimestamp;
             set
-            {                
+            {
+                var oldValue = _CurrentTimestamp;
                 _CurrentTimestamp = value;
-                CurrentTimestampChanged?.Invoke(this, new EventArgs());
+                CurrentTimestampChanged?.Invoke(this, new PropertyChanedEventArgs<int>(oldValue, value));
             }
         }
-        public event EventHandler CurrentTimestampChanged;
-
+        public event EventHandler<PropertyChanedEventArgs<int>> CurrentTimestampChanged;
+        public event EventHandler<PropertyChanedEventArgs<int>> StartTimestampChanged;
 
         private readonly TTemporalTransformers TemporalTransformers = new TTemporalTransformers();
 
@@ -44,16 +45,20 @@ namespace FlipnoteDotNet.Utils.Temporal
             set
             {
                 var dt = value - _StartTimestamp;
+                if (dt == 0) return;
                 foreach(var transformersDict in TemporalTransformers.Values)
                 {
                     foreach (var transformer in transformersDict.Keys.ToArray()) 
                     {
                         Debug.WriteLine($"Old = {transformersDict[transformer]}");
                         transformersDict[transformer] += dt;
-                        Debug.WriteLine($"New = {transformersDict[transformer]}");
+                        Debug.WriteLine($"New = {transformersDict[transformer]}");                        
                     }
                 }
+                var oldValue = _StartTimestamp;
                 _StartTimestamp = value;
+                UpdateAllTimeDependentValues();
+                StartTimestampChanged?.Invoke(this, new PropertyChanedEventArgs<int>(oldValue, value));
             }
         }
 
@@ -69,6 +74,15 @@ namespace FlipnoteDotNet.Utils.Temporal
         public void RemoveTransformer(ITimeDependentValue value, IValueTransformer transformer)
         {
             GetTransformersDict(value).Remove(transformer);            
+        }
+
+        public void UpdateAllTimeDependentValues()
+        {
+            TemporalTransformers.Keys.ForEach(_ =>
+            {
+                UpdateTransformations(_);
+                _.UpdateTimestamps();
+            });            
         }
 
         public void UpdateTransformations(ITimeDependentValue value)

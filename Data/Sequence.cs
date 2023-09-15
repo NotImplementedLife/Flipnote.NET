@@ -23,6 +23,8 @@ namespace FlipnoteDotNet.Data
         [Editable]
         public TimeDependentValue<FlipnotePaperColor> PaperColor { get; }
 
+        public SequenceTrack Track { get; set; }
+
         public override int StartTimestamp
         {
             get => base.StartTimestamp;
@@ -43,6 +45,12 @@ namespace FlipnoteDotNet.Data
             Pen = new TimeDependentValue<FlipnotePen>(this, FlipnotePen.PaperInverse);
             PaperColor = new TimeDependentValue<FlipnotePaperColor>(this, FlipnotePaperColor.White);
             this.Initialize();
+        }
+
+        public Sequence(int startFrame, int endFrame) : this()
+        {
+            StartFrame = startFrame;
+            EndFrame = endFrame;
         }
        
         public List<ILayer> Layers { get; private set; } = new List<ILayer>();     

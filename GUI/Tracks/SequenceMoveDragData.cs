@@ -4,15 +4,15 @@ namespace FlipnoteDotNet.GUI.Tracks
 {
     internal class SequenceMoveDragData
     {
-        public SequenceTrack.Element Element { get; }
+        public Sequence Element { get; }
         public int Start { get; }
         public int End { get; }
 
-        public SequenceMoveDragData(SequenceTrack.Element element)
+        public SequenceMoveDragData(Sequence element)
         {
             Element = element;
-            Start = Element.TimestampStart;
-            End = Element.TimestampEnd;
+            Start = Element.StartFrame;
+            End = Element.EndFrame;
         }
 
         public void Move(int dx)
@@ -22,8 +22,8 @@ namespace FlipnoteDotNet.GUI.Tracks
 
             if (s < 0 || e > 999) return;
 
-            Element.TimestampStart = s;
-            Element.TimestampEnd = e;
+            Element.StartFrame = s;
+            Element.EndFrame = e;
         }
 
 

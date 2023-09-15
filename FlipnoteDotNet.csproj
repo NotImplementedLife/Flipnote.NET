@@ -193,6 +193,7 @@
     <Compile Include="Utils\Temporal\ITimeLocalizable.cs" />
     <Compile Include="Utils\Temporal\IValueChanger.cs" />
     <Compile Include="Utils\Temporal\IValueTransformer.cs" />
+    <Compile Include="Utils\Temporal\PropertyChanedEventArgs.cs" />
     <Compile Include="Utils\Temporal\TimeDependentValue.cs" />
     <Compile Include="Utils\Temporal\ValueTransformers\AbstractValueTransformer.cs" />
     <Compile Include="Utils\Temporal\ValueTransformers\ConstantValueTransformer.cs" />

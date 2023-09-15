@@ -34,6 +34,7 @@ namespace FlipnoteDotNet
 
             ToolStrip.Renderer = new ToolStripEmptyRenderer();
 
+            SequenceTracksEditor.Viewer.Zoom = int.MaxValue;
             SequenceTracksEditor.ToolStrip.Paint += BackgroundControlPaint;
 
             PropertyEditor.KeyFramesPanel = KeyframesExpander.ContentsPanel;
@@ -71,22 +72,18 @@ namespace FlipnoteDotNet
 
             SequenceTrackViewer.SequenceManager = new Data.SequenceManager(5);
 
-            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Sequence() { Name = "Tralalaala" }, 10, 25);
-            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Sequence() { Name = "This Sequence", Color = Color.DarkBlue }, 16, 30);            
+            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Sequence(0, 7) { Name = "Tralalaala" });
+            SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Sequence(1, 5) { Name = "This Sequence", Color = Color.DarkBlue });
 
 
-            var s = new Sequence();
+            var s = new Sequence(2, 8) { Name = "otherSeq" };
             s.AddLayer(new StaticImageLayer(new Data.Drawing.FlipnoteVisualSource(5, 5)) { DisplayName = "xaxa" });
             s.AddLayer(new StaticImageLayer(new Data.Drawing.FlipnoteVisualSource(5, 5)));
 
-            SequenceTrackViewer.SequenceManager.GetTrack(2).AddSequence(s, 16, 30);
+            SequenceTrackViewer.SequenceManager.GetTrack(2).AddSequence(s);
 
             SequenceTrackViewer.AdjustSurfaceSize();
             SequenceTrackViewer.Invalidate();
-
-            LayersEditor.Sequence = s;            
-
-            PropertyEditor.Target = new Sequence() { Name = "mySequence" };
         }
 
         private void BackgroundControlPaint(object sender, PaintEventArgs e)
@@ -114,13 +111,13 @@ namespace FlipnoteDotNet
             PropertyEditor.Width = PropertiesExpander.Width - 20;
         }
 
-        private void SequenceTracksEditor_SelectedElementChanged(object sender, SequenceTrack.Element e)
+        private void SequenceTracksEditor_SelectedElementChanged(object sender, Sequence e)
         {
-            if (e?.Sequence != null) 
-                e.Sequence.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
+            if (e != null) 
+                e.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
 
             LayersEditor.ClearSelection();
-            PropertyEditor.Target = LayersEditor.Sequence = e?.Sequence;            
+            PropertyEditor.Target = LayersEditor.Sequence = e; ;
         }
 
         private void PropertyEditor_ObjectPropertyChanged(object sender, System.Reflection.PropertyInfo e)

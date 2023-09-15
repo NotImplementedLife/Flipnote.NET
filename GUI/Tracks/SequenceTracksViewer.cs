@@ -55,7 +55,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             ScrollContainer.MouseMove += ScrollContainer_MouseMove;
         }
 
-        private IEnumerable<(SequenceTrack.Element Element, Rectangle Bounds, int TrackId)> GetVisibleElements()
+        private IEnumerable<(Sequence Element, Rectangle Bounds, int TrackId)> GetVisibleElements()
         {
             var rect = TracksPanelBounds;
             int y = rect.Top - ScrollY;            
@@ -64,12 +64,12 @@ namespace FlipnoteDotNet.GUI.Tracks
                 if (y < rect.Top - TrackHeight) 
                     continue;
                 var track = SequenceManager.GetTrack(i);
-                foreach (var elem in track.GetElements())
+                foreach (var elem in track.GetSequences()) 
                 {
-                    var x1 = TrackToScreen(elem.TimestampStart);
-                    var x2 = TrackToScreen(elem.TimestampEnd);
+                    var x1 = TrackToScreen(elem.StartFrame);
+                    var x2 = TrackToScreen(elem.EndFrame);
                     if (x2 < rect.Left || x1 >= rect.Right) continue;
-                    var r = new Rectangle(x1, y + TrackPadding, x2 - x1, TrackHeight - 2 * TrackPadding);
+                    var r = new Rectangle(x1, y + TrackPadding, Math.Max(1, x2 - x1), TrackHeight - 2 * TrackPadding);
                     yield return (elem, r, i);
                 }
             }
@@ -98,7 +98,7 @@ namespace FlipnoteDotNet.GUI.Tracks
 
         private bool ElementRemovedEventActive = true;
 
-        private void SequenceManager_ElementRemoved(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e)
+        private void SequenceManager_ElementRemoved(SequenceManager sender, SequenceTrack track, Sequence e)
         {
             if (!ElementRemovedEventActive) return;
             if(e==SelectedElement)
@@ -110,7 +110,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             InvalidateSurface();
         }
 
-        private void SequenceManager_ElementAdded(SequenceManager sender, SequenceTrack track, SequenceTrack.Element e)
+        private void SequenceManager_ElementAdded(SequenceManager sender, SequenceTrack track, Sequence e)
         {
             InvalidateSurface();
         }
@@ -201,7 +201,7 @@ namespace FlipnoteDotNet.GUI.Tracks
             }
         }
 
-        private void SelectElement(SequenceTrack.Element e)
+        private void SelectElement(Sequence e)
         {
             if (SelectedElement == e) return;
             _SelectedElement = e;
@@ -225,15 +225,15 @@ namespace FlipnoteDotNet.GUI.Tracks
             if(e.UserData is SequenceMoveDragData moveData)
             {
                 var elem = moveData.Element;
-                int oldS = elem.TimestampStart;
-                int oldE = elem.TimestampEnd;
+                int oldS = elem.StartFrame;
+                int oldE = elem.EndFrame;
                 moveData.Move(e.DeltaLocation.X * 100 / Zoom);                
                 
                 int trackId = ScreenToTrackLineId(e.CurrentLocation.Y).Clamp(0, SequenceManager.TracksCount - 1);                
 
                 bool trackChanged = SequenceManager.GetTrack(trackId) != elem.Track;
                                 
-                var newR = GetScreenRectangleOnTrack(trackId, elem.TimestampStart, elem.TimestampEnd);
+                var newR = GetScreenRectangleOnTrack(trackId, elem.StartFrame, elem.EndFrame);
 
                 var crsOverlappedElem = GetVisibleElements()
                     .Where(_ => _.Element != elem && (_.TrackId == trackId || SequenceManager.GetTrack(_.TrackId) == elem.Track) && _.Bounds.IntersectsWith(newR))
@@ -243,14 +243,14 @@ namespace FlipnoteDotNet.GUI.Tracks
                 if (!crsOverlapsElems)
                 {
                     ElementRemovedEventActive = false;
-                    elem.Track.RemoveSequence(elem.Sequence);
-                    SequenceManager.GetTrack(trackId).AddElement(elem);
+                    elem.Track.RemoveSequence(elem);
+                    SequenceManager.GetTrack(trackId).AddSequence(elem);
                     ElementRemovedEventActive = true;
                 }
                 else if (!trackChanged)
                 {                
-                    elem.TimestampStart = oldS;
-                    elem.TimestampEnd = oldE;
+                    elem.StartFrame = oldS;
+                    elem.EndFrame = oldE;
                 }                
                 else
                 {
@@ -259,11 +259,11 @@ namespace FlipnoteDotNet.GUI.Tracks
                         .FirstOrDefault();
                     if(q.Element!=null)
                     {
-                        newR = GetScreenRectangleOnTrack(q.TrackId, elem.TimestampStart, elem.TimestampEnd);
+                        newR = GetScreenRectangleOnTrack(q.TrackId, elem.StartFrame, elem.EndFrame);
                         if(q.Bounds.IntersectsWith(newR))
                         {
-                            elem.TimestampStart = oldS;
-                            elem.TimestampEnd = oldE;
+                            elem.StartFrame = oldS;
+                            elem.EndFrame = oldE;
                         }
                     }                
                 }
@@ -298,7 +298,7 @@ namespace FlipnoteDotNet.GUI.Tracks
                 bool overlapsElems = GetVisibleElements().Where(_ => _.TrackId == trackId && _.Bounds.IntersectsWith(newR)).Any();
                 if(!overlapsElems)
                 {
-                    SequenceManager.GetTrack(trackId).AddSequence(new Sequence(), startX, endX);
+                    SequenceManager.GetTrack(trackId).AddSequence(new Sequence(startX, endX));
                 }
 
                 EndSequenceCreateMode();
@@ -382,8 +382,8 @@ namespace FlipnoteDotNet.GUI.Tracks
             ClipDraw(DrawTrackLabels, e.Graphics, new Rectangle(0, TrackBarPanelHeight, LeftPanelWidth, bottomBarY - TrackBarPanelHeight));
         }
 
-        private SequenceTrack.Element _SelectedElement = null;
-        public SequenceTrack.Element SelectedElement => _SelectedElement;
+        private Sequence _SelectedElement = null;
+        public Sequence SelectedElement => _SelectedElement;
 
         public event EventHandler SelectedElementChanged;
 
@@ -409,17 +409,17 @@ namespace FlipnoteDotNet.GUI.Tracks
             {                
                 var color2 = elem == _SelectedElement ? Color.Yellow : Color.White;
 
-                var brush = new LinearGradientBrush(r, elem.Sequence.Color, color2, 90f);
+                var brush = new LinearGradientBrush(r, elem.Color, color2, 90f);
                 var blend = new Blend();
                 blend.Positions = new float[] { 0.0f, 0.8f, 1.0f };
                 blend.Factors = new float[] { 0.0f, 0.2f, 1.0f };
                 brush.Blend = blend;
                 g.FillRoundedRectangle(brush, r, 5);
-                g.DrawRoundedRectangle(elem.Sequence.Color.GetPen(1), r, 5);
+                g.DrawRoundedRectangle(elem.Color.GetPen(1), r, 5);
 
                 var textR = new Rectangle(r.X + 5, r.Y + 5, r.Width - 10, r.Height - 10);
                 var format = new StringFormat(StringFormatFlags.NoWrap);
-                g.DrawString(elem.Sequence.Name, Font, color2.GetBrush(), textR, format);
+                g.DrawString(elem.Name, Font, color2.GetBrush(), textR, format);
             }            
             g.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(2), rect.Left, rect.Bottom, rect.Right, rect.Bottom);            
             g.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(3), trackSignX, rect.Top, trackSignX, rect.Bottom);

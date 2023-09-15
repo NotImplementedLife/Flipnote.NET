@@ -6,23 +6,23 @@ namespace FlipnoteDotNet.GUI.Tracks
     {
         public enum _Direction { Left,Right }
 
-        public SequenceTrack.Element Element { get; }
+        public Sequence Element { get; }
 
         public _Direction Direction { get; }
 
         public int Position { get; }
 
-        public SequenceResizeDragData(SequenceTrack.Element element, _Direction direction)
+        public SequenceResizeDragData(Sequence element, _Direction direction)
         {
             Element = element;
             Direction = direction;
-            Position = Direction == _Direction.Left ? Element.TimestampStart : Element.TimestampEnd;
+            Position = Direction == _Direction.Left ? Element.StartFrame : Element.EndFrame;
         }               
 
         public void Resize(int dx)
         {
-            int s = Element.TimestampStart;
-            int e = Element.TimestampEnd;
+            int s = Element.StartFrame;
+            int e = Element.EndFrame;
 
             if(Direction==_Direction.Left)
             {
@@ -33,10 +33,10 @@ namespace FlipnoteDotNet.GUI.Tracks
                 e = Position + dx;
             }
 
-            if (s + 1 < e)
+            if (s < e) 
             {
-                Element.TimestampStart = s;
-                Element.TimestampEnd = e;
+                Element.StartFrame = s;
+                Element.EndFrame = e;
             }
         }
     }
