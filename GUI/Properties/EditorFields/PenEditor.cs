@@ -30,9 +30,19 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
 
         private void PaperColorEditor_DrawItem(object sender, DrawItemEventArgs e)
         {
+            if (e.Index < 0)
+            {
+                e.DrawBackground();
+                e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+                e.Graphics.DrawString("Error!", Font, Brushes.Red, e.Bounds);
+                e.DrawFocusRectangle();
+                return;
+            }
+
             Brush bgBrush;
-            Brush fgBrush;
-            var value = Values[e.Index].EnumInstance;
+            Brush fgBrush;            
+
+            var value =  Values[e.Index].EnumInstance;
 
             switch (value)
             {
@@ -51,18 +61,14 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
             }
 
             e.DrawBackground();
-
             var rect = e.Bounds.GetPaddedContent(3);
-
             e.Graphics.FillRectangle(bgBrush, rect);
-
             e.Graphics.DrawString(Enum.GetName(typeof(FlipnotePen), value), Font, fgBrush, rect);
-
             e.DrawFocusRectangle();
         }
 
-        public object ObjectPropertyValue { get => SelectedItem; set => SelectedItem = (FlipnotePen)value; }
-        public Panel KeyframesPanel { get; set; }
+        public object ObjectPropertyValue { get => SelectedEnumItem; set => SelectedEnumItem = (FlipnotePen)value; }
+        public KeyFramesEditor KeyframesEditor { get; set; }
         public bool IsTimeDependent { get; set; }
         public PropertyInfo Property { get; set; }
 

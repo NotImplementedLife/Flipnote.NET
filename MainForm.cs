@@ -37,7 +37,7 @@ namespace FlipnoteDotNet
             SequenceTracksEditor.Viewer.Zoom = int.MaxValue;
             SequenceTracksEditor.ToolStrip.Paint += BackgroundControlPaint;
 
-            PropertyEditor.KeyFramesPanel = KeyframesExpander.ContentsPanel;
+            PropertyEditor.KeyFramesEditor = KeyFramesEditor;
         }
 
 
@@ -108,7 +108,12 @@ namespace FlipnoteDotNet
 
         private void PropertiesExpander_Resize(object sender, EventArgs e)
         {
-            PropertyEditor.Width = PropertiesExpander.Width - 20;
+            PropertyEditor.Width = PropertiesExpander.Width;            
+        }
+
+        private void KeyframesExpander_Resize(object sender, EventArgs e)
+        {
+            KeyFramesEditor.Width = PropertiesExpander.Width;            
         }
 
         private void SequenceTracksEditor_SelectedElementChanged(object sender, Sequence e)
@@ -141,6 +146,8 @@ namespace FlipnoteDotNet
             PropertiesExpander.IsExpanded = PropertyEditor.Target != null;
             Debug.WriteLine($"Target chnaged :{PropertyEditor.Target?.ToString() ?? "null"}");
             UpdateSelectedElementLabel();
+
+            KeyFramesEditor.ClearEditors();
         }
 
         private void UpdateSelectedElementLabel()
@@ -164,6 +171,6 @@ namespace FlipnoteDotNet
             if (editedElement == null)
                 return;
             editedElement.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
-        }
+        }        
     }
 }

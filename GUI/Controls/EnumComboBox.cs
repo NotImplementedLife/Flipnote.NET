@@ -1,8 +1,5 @@
-﻿using FlipnoteDotNet.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -14,28 +11,30 @@ namespace FlipnoteDotNet.GUI.Controls
         {
             public string Name { get; }
             public E EnumInstance { get; }
+            public int Index { get; }
 
-            public Item(E enumInstance)
+            public Item(E enumInstance, int index)
             {                
                 EnumInstance = enumInstance;
                 Name = Enum.GetName(typeof(E), EnumInstance);
+                Index = index;
             }
         }
 
-        protected List<Item> Values = new List<Item>();
-        BindingList<Item> BindingValues;
+        protected List<Item> Values = new List<Item>();        
         public EnumComboBox()
         {
             if (!typeof(E).IsEnum)
                 throw new InvalidOperationException("EnumComboBox template argument must be of an enum type");
 
+            int i = 0;
             foreach (E e in Enum.GetValues(typeof(E)))
-                Values.Add(new Item(e));            
+                Values.Add(new Item(e, i++));
 
-            DataSource = null;
-            BindingValues = new BindingList<Item>(Values);            
-            DataSource = BindingValues;            
+            Items.AddRange(Values.ToArray());
+            
             DisplayMember = "Name";
+            SelectedIndex = 0;
             SelectedIndexChanged += EnumComboBox_SelectedIndexChanged;            
             
         }
@@ -46,10 +45,13 @@ namespace FlipnoteDotNet.GUI.Controls
                 SelectedIndex = 0;            
         }
 
-        public new E SelectedItem
+        public E SelectedEnumItem
         {
-            get => (base.SelectedItem as Item)?.EnumInstance ?? Values[0].EnumInstance;
-            set => base.SelectedItem = Values.Where(_ => Equals(_.EnumInstance, value)).FirstOrDefault() ?? Values[0];
+            get
+            {
+                return Values[SelectedIndex < 0 ? 0 : SelectedIndex].EnumInstance;
+            }
+            set => SelectedIndex = (Values.Where(_ => Equals(_.EnumInstance, value)).FirstOrDefault() ?? Values[0]).Index;
         }
     }
 }

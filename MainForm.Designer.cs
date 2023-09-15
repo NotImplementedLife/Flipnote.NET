@@ -36,15 +36,16 @@ namespace FlipnoteDotNet
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.MainContainer = new System.Windows.Forms.SplitContainer();
             this.LeftContainer = new System.Windows.Forms.SplitContainer();
-            this.Canvas = new FlipnoteDotNet.GUI.Canvas.CanvasSpaceControl();
-            this.SequenceTracksEditor = new FlipnoteDotNet.GUI.Controls.SequenceTracksEditor();
             this.RightContainer = new System.Windows.Forms.SplitContainer();
-            this.LayersEditor = new FlipnoteDotNet.GUI.Layers.LayersEditor();
-            this.KeyframesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
-            this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
-            this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
             this.SelectedElementLabel = new System.Windows.Forms.Label();
             this.ContentPanel = new System.Windows.Forms.Panel();
+            this.Canvas = new FlipnoteDotNet.GUI.Canvas.CanvasSpaceControl();
+            this.SequenceTracksEditor = new FlipnoteDotNet.GUI.Controls.SequenceTracksEditor();
+            this.LayersEditor = new FlipnoteDotNet.GUI.Layers.LayersEditor();
+            this.KeyframesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
+            this.KeyFramesEditor = new FlipnoteDotNet.GUI.Properties.KeyFramesEditor();
+            this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
+            this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
             this.FormMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
@@ -58,6 +59,7 @@ namespace FlipnoteDotNet
             this.RightContainer.Panel1.SuspendLayout();
             this.RightContainer.Panel2.SuspendLayout();
             this.RightContainer.SuspendLayout();
+            this.KeyframesExpander.ContentsPanel.SuspendLayout();
             this.KeyframesExpander.SuspendLayout();
             this.PropertiesExpander.ContentsPanel.SuspendLayout();
             this.PropertiesExpander.SuspendLayout();
@@ -136,26 +138,6 @@ namespace FlipnoteDotNet
             this.LeftContainer.TabStop = false;
             this.LeftContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
             // 
-            // Canvas
-            // 
-            this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(9822, -13120);
-            this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Canvas.Location = new System.Drawing.Point(2, 2);
-            this.Canvas.Name = "Canvas";
-            this.Canvas.Size = new System.Drawing.Size(487, 204);
-            this.Canvas.TabIndex = 0;
-            // 
-            // SequenceTracksEditor
-            // 
-            this.SequenceTracksEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SequenceTracksEditor.Location = new System.Drawing.Point(0, 0);
-            this.SequenceTracksEditor.Name = "SequenceTracksEditor";
-            this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
-            this.SequenceTracksEditor.TabIndex = 0;
-            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.Sequence>(this.SequenceTracksEditor_SelectedElementChanged);
-            this.SequenceTracksEditor.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksEditor_CurrentFrameChanged);
-            // 
             // RightContainer
             // 
             this.RightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -181,6 +163,47 @@ namespace FlipnoteDotNet
             this.RightContainer.TabIndex = 0;
             this.RightContainer.TabStop = false;
             // 
+            // SelectedElementLabel
+            // 
+            this.SelectedElementLabel.AutoEllipsis = true;
+            this.SelectedElementLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(0)))));
+            this.SelectedElementLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SelectedElementLabel.ForeColor = System.Drawing.Color.White;
+            this.SelectedElementLabel.Location = new System.Drawing.Point(0, 0);
+            this.SelectedElementLabel.Name = "SelectedElementLabel";
+            this.SelectedElementLabel.Size = new System.Drawing.Size(189, 20);
+            this.SelectedElementLabel.TabIndex = 3;
+            this.SelectedElementLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContentPanel.Location = new System.Drawing.Point(0, 40);
+            this.ContentPanel.MinimumSize = new System.Drawing.Size(0, 100);
+            this.ContentPanel.Name = "ContentPanel";
+            this.ContentPanel.Size = new System.Drawing.Size(189, 100);
+            this.ContentPanel.TabIndex = 1;
+            // 
+            // Canvas
+            // 
+            this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10262, -13890);
+            this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Canvas.Location = new System.Drawing.Point(2, 2);
+            this.Canvas.Name = "Canvas";
+            this.Canvas.Size = new System.Drawing.Size(487, 204);
+            this.Canvas.TabIndex = 0;
+            // 
+            // SequenceTracksEditor
+            // 
+            this.SequenceTracksEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SequenceTracksEditor.Location = new System.Drawing.Point(0, 0);
+            this.SequenceTracksEditor.Name = "SequenceTracksEditor";
+            this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
+            this.SequenceTracksEditor.TabIndex = 0;
+            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.Sequence>(this.SequenceTracksEditor_SelectedElementChanged);
+            this.SequenceTracksEditor.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksEditor_CurrentFrameChanged);
+            // 
             // LayersEditor
             // 
             this.LayersEditor.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -196,10 +219,11 @@ namespace FlipnoteDotNet
             // 
             // KeyframesExpander.ContentsPanel
             // 
-            this.KeyframesExpander.ContentsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.KeyframesExpander.ContentsPanel.AutoSize = true;
+            this.KeyframesExpander.ContentsPanel.Controls.Add(this.KeyFramesEditor);
             this.KeyframesExpander.ContentsPanel.Location = new System.Drawing.Point(0, 40);
             this.KeyframesExpander.ContentsPanel.Name = "ContentsPanel";
-            this.KeyframesExpander.ContentsPanel.Size = new System.Drawing.Size(189, 0);
+            this.KeyframesExpander.ContentsPanel.Size = new System.Drawing.Size(189, 40);
             this.KeyframesExpander.ContentsPanel.TabIndex = 1;
             this.KeyframesExpander.Dock = System.Windows.Forms.DockStyle.Top;
             this.KeyframesExpander.IsExpanded = false;
@@ -208,6 +232,15 @@ namespace FlipnoteDotNet
             this.KeyframesExpander.Size = new System.Drawing.Size(189, 40);
             this.KeyframesExpander.TabIndex = 1;
             this.KeyframesExpander.Title = "Keyframes";
+            this.KeyframesExpander.Resize += new System.EventHandler(this.KeyframesExpander_Resize);
+            // 
+            // KeyFramesEditor
+            // 
+            this.KeyFramesEditor.AutoSize = true;
+            this.KeyFramesEditor.Location = new System.Drawing.Point(0, 0);
+            this.KeyFramesEditor.Name = "KeyFramesEditor";
+            this.KeyFramesEditor.Size = new System.Drawing.Size(88, 21);
+            this.KeyFramesEditor.TabIndex = 0;
             // 
             // PropertiesExpander
             // 
@@ -236,7 +269,7 @@ namespace FlipnoteDotNet
             this.PropertyEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PropertyEditor.AutoSize = true;
-            this.PropertyEditor.KeyFramesPanel = null;
+            this.PropertyEditor.KeyFramesEditor = null;
             this.PropertyEditor.Location = new System.Drawing.Point(0, -1);
             this.PropertyEditor.Name = "PropertyEditor";
             this.PropertyEditor.Size = new System.Drawing.Size(189, 20);
@@ -244,27 +277,6 @@ namespace FlipnoteDotNet
             this.PropertyEditor.Target = null;
             this.PropertyEditor.TargetChanged += new System.EventHandler(this.PropertyEditor_TargetChanged);
             this.PropertyEditor.ObjectPropertyChanged += new System.EventHandler<System.Reflection.PropertyInfo>(this.PropertyEditor_ObjectPropertyChanged);
-            // 
-            // SelectedElementLabel
-            // 
-            this.SelectedElementLabel.AutoEllipsis = true;
-            this.SelectedElementLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(0)))));
-            this.SelectedElementLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SelectedElementLabel.ForeColor = System.Drawing.Color.White;
-            this.SelectedElementLabel.Location = new System.Drawing.Point(0, 0);
-            this.SelectedElementLabel.Name = "SelectedElementLabel";
-            this.SelectedElementLabel.Size = new System.Drawing.Size(189, 20);
-            this.SelectedElementLabel.TabIndex = 3;
-            this.SelectedElementLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ContentPanel
-            // 
-            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContentPanel.Location = new System.Drawing.Point(0, 40);
-            this.ContentPanel.MinimumSize = new System.Drawing.Size(0, 100);
-            this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(189, 100);
-            this.ContentPanel.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -296,7 +308,10 @@ namespace FlipnoteDotNet
             this.RightContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RightContainer)).EndInit();
             this.RightContainer.ResumeLayout(false);
+            this.KeyframesExpander.ContentsPanel.ResumeLayout(false);
+            this.KeyframesExpander.ContentsPanel.PerformLayout();
             this.KeyframesExpander.ResumeLayout(false);
+            this.KeyframesExpander.PerformLayout();
             this.PropertiesExpander.ContentsPanel.ResumeLayout(false);
             this.PropertiesExpander.ContentsPanel.PerformLayout();
             this.PropertiesExpander.ResumeLayout(false);
@@ -322,6 +337,7 @@ namespace FlipnoteDotNet
         private GUI.Properties.PropertyEditor PropertyEditor;
         private GUI.Layers.LayersEditor LayersEditor;
         private System.Windows.Forms.Label SelectedElementLabel;
+        private GUI.Properties.KeyFramesEditor KeyFramesEditor;
     }
 }
 

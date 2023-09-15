@@ -1,6 +1,6 @@
 ﻿namespace FlipnoteDotNet.GUI.Properties
 {
-    partial class KeyframeEditorRow
+    partial class KeyFrameEditorRow
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.FrameLabel = new System.Windows.Forms.Label();
             this.FrameNoLabel = new System.Windows.Forms.Label();
             this.EditorPanel = new System.Windows.Forms.Panel();
             this.RemoveButton = new System.Windows.Forms.Button();
+            this.RemoveButtonTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // FrameLabel
@@ -58,9 +60,10 @@
             // 
             this.EditorPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.EditorPanel.AutoSize = true;
             this.EditorPanel.Location = new System.Drawing.Point(6, 33);
             this.EditorPanel.Name = "EditorPanel";
-            this.EditorPanel.Size = new System.Drawing.Size(378, 44);
+            this.EditorPanel.Size = new System.Drawing.Size(327, 12);
             this.EditorPanel.TabIndex = 2;
             // 
             // RemoveButton
@@ -70,13 +73,13 @@
             this.RemoveButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.RemoveButton.FlatAppearance.BorderSize = 0;
             this.RemoveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RemoveButton.Location = new System.Drawing.Point(360, 3);
+            this.RemoveButton.Location = new System.Drawing.Point(309, 3);
             this.RemoveButton.Name = "RemoveButton";
             this.RemoveButton.Size = new System.Drawing.Size(24, 24);
             this.RemoveButton.TabIndex = 3;
             this.RemoveButton.UseVisualStyleBackColor = true;
             // 
-            // KeyframeEditorRow
+            // KeyFrameEditorRow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,8 +88,8 @@
             this.Controls.Add(this.EditorPanel);
             this.Controls.Add(this.FrameNoLabel);
             this.Controls.Add(this.FrameLabel);
-            this.Name = "KeyframeEditorRow";
-            this.Size = new System.Drawing.Size(387, 80);
+            this.Name = "KeyFrameEditorRow";
+            this.Size = new System.Drawing.Size(336, 48);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -98,5 +101,6 @@
         private System.Windows.Forms.Label FrameNoLabel;
         private System.Windows.Forms.Panel EditorPanel;
         private System.Windows.Forms.Button RemoveButton;
+        private System.Windows.Forms.ToolTip RemoveButtonTooltip;
     }
 }

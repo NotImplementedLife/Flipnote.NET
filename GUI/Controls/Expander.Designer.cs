@@ -54,6 +54,7 @@
             this.Content.Size = new System.Drawing.Size(243, 121);
             this.Content.TabIndex = 1;
             this.Content.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel_Paint);
+            this.Content.Resize += new System.EventHandler(this.Content_Resize);
             // 
             // Expander
             // 

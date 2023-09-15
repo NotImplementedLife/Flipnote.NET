@@ -62,7 +62,9 @@
             // 
             this.EffectsButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.EffectsButton.BackgroundImage = global::FlipnoteDotNet.Properties.Resources.ic_effects;
-            this.EffectsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.EffectsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.EffectsButton.FlatAppearance.BorderSize = 0;
+            this.EffectsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EffectsButton.Location = new System.Drawing.Point(257, 1);
             this.EffectsButton.Name = "EffectsButton";
             this.EffectsButton.Size = new System.Drawing.Size(24, 24);
@@ -74,7 +76,9 @@
             // 
             this.KeyframesButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.KeyframesButton.BackgroundImage = global::FlipnoteDotNet.Properties.Resources.ic_keyframes;
-            this.KeyframesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.KeyframesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.KeyframesButton.FlatAppearance.BorderSize = 0;
+            this.KeyframesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.KeyframesButton.Location = new System.Drawing.Point(227, 1);
             this.KeyframesButton.Name = "KeyframesButton";
             this.KeyframesButton.Size = new System.Drawing.Size(24, 24);

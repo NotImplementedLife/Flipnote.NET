@@ -52,8 +52,8 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
             e.DrawFocusRectangle();
         }
 
-        public object ObjectPropertyValue { get => SelectedItem; set => SelectedItem = (FlipnotePaperColor)value; }
-        public Panel KeyframesPanel { get; set; }
+        public object ObjectPropertyValue { get => SelectedEnumItem; set => SelectedEnumItem = (FlipnotePaperColor)value; }
+        public KeyFramesEditor KeyframesEditor { get; set; }
         public bool IsTimeDependent { get; set; }
         public PropertyInfo Property { get; set; }
 

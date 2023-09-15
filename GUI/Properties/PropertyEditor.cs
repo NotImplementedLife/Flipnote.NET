@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -23,7 +22,7 @@ namespace FlipnoteDotNet.GUI.Properties
         }
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public Panel KeyFramesPanel { get; set; }
+        public KeyFramesEditor KeyFramesEditor { get; set; }
 
         private object _Target = null;
         [Browsable(false)]
@@ -48,8 +47,9 @@ namespace FlipnoteDotNet.GUI.Properties
         }
 
         private void TemporalTarget_StartTimestampChanged(object sender, PropertyChanedEventArgs<int> e)
-        {
+        {            
             ReloadValues();
+            KeyFramesEditor.ClearEditors();            
         }
 
         private void TemporalTarget_CurrentTimestampChanged(object sender, PropertyChanedEventArgs<int> e)
@@ -92,7 +92,8 @@ namespace FlipnoteDotNet.GUI.Properties
             properties.ForEach(_ => Debug.WriteLine(_));
           
             int h = 0;
-            
+
+            SuspendLayout();
             foreach(var prop in properties)
             {
                 var row = new PropertyRow();
@@ -111,6 +112,7 @@ namespace FlipnoteDotNet.GUI.Properties
                 h += row.Height;
             }
             Height = h;
+            ResumeLayout(true);
             ReloadValues();
         }        
 
@@ -135,6 +137,7 @@ namespace FlipnoteDotNet.GUI.Properties
             editor.Tag = prop;
             if (editor is IPropertyEditorControl propEditorControl)
             {
+                propEditorControl.KeyframesEditor = KeyFramesEditor;
                 propEditorControl.Property = prop;
                 propEditorControl.IsTimeDependent = isTimeDependent;
                 if (!isTimeDependent)
@@ -157,12 +160,20 @@ namespace FlipnoteDotNet.GUI.Properties
         private void TimeDepPropEditorControl_ObjectPropertyValueChanged(object sender, EventArgs e)
         {
             var prop = (sender as Control).Tag as PropertyInfo;
-            var val = (sender as IPropertyEditorControl).ObjectPropertyValue;           
+            var val = (sender as IPropertyEditorControl).ObjectPropertyValue;
+            var innerPropType = prop.PropertyType.GetGenericArguments()[0];
 
             var tdv = prop.GetValue(Target) as ITimeDependentValue;
-            tdv.PutTransformer(new ConstantValueTransformer(val), (Target as ITemporalContext).CurrentTimestamp);
+            tdv.PutTransformer(ConstantValueTransformer
+                .MakeFromType(innerPropType, val), (Target as ITemporalContext).CurrentTimestamp);
+            //tdv.PutTransformer(new ConstantValueTransformer(val), (Target as ITemporalContext).CurrentTimestamp);
             tdv.UpdateTransformations();
-            tdv.UpdateTimestamps();       
+            tdv.UpdateTimestamps();
+
+            if (KeyFramesEditor.Property == prop) 
+            {
+                RefreshKeyFramesEditor();
+            }
         }
 
         private void PropertyRow_EffectsButtonClick(object sender, EventArgs e)
@@ -173,7 +184,29 @@ namespace FlipnoteDotNet.GUI.Properties
         private void PropertyRow_KeyframesButtonClick(object sender, EventArgs e)
         {
             var control = sender as Control;
-            MessageBox.Show($"{(control.Tag as PropertyInfo).Name}");
+            var prop = (control.Tag as PropertyInfo);
+
+            KeyFramesEditor.Property = prop;
+            RefreshKeyFramesEditor();
+        }
+
+        private void RefreshKeyFramesEditor()
+        {
+            KeyFramesEditor.SuspendLayout();
+            KeyFramesEditor.ClearEditors();
+            var ttctx = Target as AbstractTransformableTemporalContext;
+            if (ttctx == null) goto __end;
+            KeyFramesEditor.AddCaption("Property : " + KeyFramesEditor.Property?.Name);
+            var tdv = KeyFramesEditor.Property?.GetValue(Target) as ITimeDependentValue;
+            if (tdv == null) goto __end;
+            
+            foreach (var (transformer, timestamp) in ttctx.GetTransformers(tdv).OrderBy(_ => _.Timestamp)) 
+            {
+                KeyFramesEditor.AddEditor(KeyFrameEditorRow.CreateFromValueTransformer(transformer, timestamp));                
+            }
+
+            __end:
+            KeyFramesEditor.ResumeLayout(true);           
         }
 
         private void PropEditorControl_ObjectPropertyValueChanged(object sender, EventArgs e)

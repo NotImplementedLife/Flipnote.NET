@@ -26,7 +26,7 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
 
         public event EventHandler ObjectPropertyValueChanged;
 
-        public Panel KeyframesPanel { get; set; }
+        public KeyFramesEditor KeyframesEditor { get; set; }
         public bool IsTimeDependent { get; set; }
         public PropertyInfo Property { get; set; }
     }

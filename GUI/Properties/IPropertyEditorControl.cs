@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Properties
 {
@@ -9,7 +8,7 @@ namespace FlipnoteDotNet.GUI.Properties
         object ObjectPropertyValue { get; set; }
 
         event EventHandler ObjectPropertyValueChanged;
-        Panel KeyframesPanel { get; set; }
+        KeyFramesEditor KeyframesEditor { get; set; }
         bool IsTimeDependent { get; set; }
         PropertyInfo Property { get; set; }
     }

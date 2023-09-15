@@ -21,7 +21,8 @@ namespace FlipnoteDotNet.GUI.Controls
             Content.EnableDoubleBuffer();
             HeaderPanel.Paint += Panel_Paint;
             LocationChanged += Expander_LocationChanged;
-        }
+            
+        }      
 
         private void Expander_LocationChanged(object sender, EventArgs e)
         {
@@ -108,6 +109,18 @@ namespace FlipnoteDotNet.GUI.Controls
             var sz = e.Graphics.MeasureString(Title, f);
 
             e.Graphics.DrawString(Title, f, Brushes.Black, 20, (e.ClipRectangle.Height - sz.Height) / 2);
+        }
+
+        private void Content_Resize(object sender, EventArgs e)
+        {
+            if (IsExpanded)
+            {
+                Height = HeaderPanel.Height + Content.Height;
+            }
+            else
+            {
+                Height = HeaderPanel.Height;
+            }
         }
     }
 }

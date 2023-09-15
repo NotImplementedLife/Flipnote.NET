@@ -29,7 +29,7 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         public object ObjectPropertyValue { get => (int)Value; set => Value = (int)value; }
 
         public event EventHandler ObjectPropertyValueChanged;
-        public Panel KeyframesPanel { get; set; }
+        public KeyFramesEditor KeyframesEditor { get; set; }
         public bool IsTimeDependent { get; set; }
         public PropertyInfo Property { get; set; }
     }
