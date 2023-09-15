@@ -2,11 +2,8 @@
 using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Utils.Temporal;
 using System;
-using System.Diagnostics;
-using System.Drawing.Text;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -24,6 +21,11 @@ namespace FlipnoteDotNet.GUI.Properties
         {
             set => FrameNoLabel.Text = (value + 1).ToString();
         }
+        
+        public IValueTransformer Transformer { get; set; }
+
+        public event EventHandler<IValueTransformer> TransformerChanged;
+        public event EventHandler<IValueTransformer> RemoveButtonClicked;
 
 
         public static KeyFrameEditorRow CreateFromValueTransformer(IValueTransformer t, int timestamp)
@@ -37,6 +39,7 @@ namespace FlipnoteDotNet.GUI.Properties
 
             var row = new KeyFrameEditorRow();
             row.FrameIndex = timestamp;
+            row.Transformer = t;
 
             var editorWildcard = t.GetType().GetCustomAttribute<EditorWildcardAttribute>()?.Text ?? "<no editor>";
             var words = Regex.Split(editorWildcard, @"(%\d+)");
@@ -64,14 +67,11 @@ namespace FlipnoteDotNet.GUI.Properties
 
                     var editor = Activator.CreateInstance(editorType) as Control;
                     editor.Anchor = AnchorStyles.None;
-                    editor.Tag = t;
+                    editor.Tag = new TagValue(t, row, prop);                    
 
                     if(editor is IPropertyEditorControl pec)
                     {
-                        pec.Property = prop;
-
-                        Debug.WriteLine(t);
-                        Debug.WriteLine(prop.GetValue(t));
+                        pec.Property = prop;                        
                         pec.ObjectPropertyValue = prop.GetValue(t);
                         pec.ObjectPropertyValueChanged += Pec_ObjectPropertyValueChanged;
                     }
@@ -101,9 +101,30 @@ namespace FlipnoteDotNet.GUI.Properties
 
         private static void Pec_ObjectPropertyValueChanged(object sender, EventArgs e)
         {
-            var target = (sender as Control).Tag;
+            var tv = (sender as Control).Tag as TagValue;
             var pec = sender as IPropertyEditorControl;
-            pec.Property.SetValue(target, pec.ObjectPropertyValue);
+            tv.TranformerProperty.SetValue(tv.Target, pec.ObjectPropertyValue);
+            tv.Editor.TransformerChanged?.Invoke(tv.Editor, tv.Target);
+            
+        }
+
+        class TagValue
+        {
+            public IValueTransformer Target { get; }
+            public KeyFrameEditorRow Editor { get; }
+            public PropertyInfo TranformerProperty { get; }
+
+            public TagValue(IValueTransformer target, KeyFrameEditorRow editor, PropertyInfo tranformerProperty)
+            {
+                Target = target;
+                Editor = editor;
+                TranformerProperty = tranformerProperty;
+            }
+        }
+
+        private void RemoveButton_Click(object sender, EventArgs e)
+        {
+            RemoveButtonClicked?.Invoke(this, Transformer);            
         }
     }
 }

@@ -20,9 +20,48 @@ namespace FlipnoteDotNet.GUI.Properties
         {
             InitializeComponent();
         }
+
+        private KeyFramesEditor _KeyFramesEditor;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public KeyFramesEditor KeyFramesEditor { get; set; }
+        public KeyFramesEditor KeyFramesEditor 
+        { 
+            get=>_KeyFramesEditor;
+            set
+            {
+                if (_KeyFramesEditor != null)
+                {
+                    _KeyFramesEditor.TransformerChanged -= KeyFramesEditor_TransformerChanged;
+                    _KeyFramesEditor.TransformerRemoved -= KeyFramesEditor_TransformerRemoved;
+                }
+                if ((_KeyFramesEditor = value) != null) 
+                {
+                    _KeyFramesEditor.TransformerChanged += KeyFramesEditor_TransformerChanged;
+                    _KeyFramesEditor.TransformerRemoved += KeyFramesEditor_TransformerRemoved;
+                }
+            }
+        }
+
+        private void KeyFramesEditor_TransformerRemoved(object sender, IValueTransformer e)
+        {
+            if (!(Target is AbstractTransformableTemporalContext ttctx)) return;
+            var tdv = KeyFramesEditor.Property.GetValue(ttctx) as ITimeDependentValue;
+            ttctx.RemoveTransformer(tdv, e);
+            ttctx.UpdateTransformations(tdv);                        
+            tdv.UpdateTimestamps();
+            ReloadValues();
+        }
+
+        private void KeyFramesEditor_TransformerChanged(object sender, IValueTransformer e)
+        {
+            if (!(Target is AbstractTransformableTemporalContext ttctx)) return;
+            var tdv = KeyFramesEditor.Property.GetValue(ttctx) as ITimeDependentValue;
+            ttctx.UpdateTransformations(tdv);
+            tdv.UpdateTimestamps();
+            ReloadValues();
+
+        }
 
         private object _Target = null;
         [Browsable(false)]
@@ -188,7 +227,11 @@ namespace FlipnoteDotNet.GUI.Properties
 
             KeyFramesEditor.Property = prop;
             RefreshKeyFramesEditor();
+
+            KeyFramesButtonClick?.Invoke(this, new EventArgs());
         }
+
+        public event EventHandler KeyFramesButtonClick;
 
         private void RefreshKeyFramesEditor()
         {

@@ -78,6 +78,7 @@
             this.RemoveButton.Size = new System.Drawing.Size(24, 24);
             this.RemoveButton.TabIndex = 3;
             this.RemoveButton.UseVisualStyleBackColor = true;
+            this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
             // KeyFrameEditorRow
             // 

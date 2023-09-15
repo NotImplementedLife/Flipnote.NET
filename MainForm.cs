@@ -171,6 +171,11 @@ namespace FlipnoteDotNet
             if (editedElement == null)
                 return;
             editedElement.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
-        }        
+        }
+
+        private void PropertyEditor_KeyFramesButtonClick(object sender, EventArgs e)
+        {
+            KeyframesExpander.IsExpanded = true;
+        }
     }
 }

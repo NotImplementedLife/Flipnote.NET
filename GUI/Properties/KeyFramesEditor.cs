@@ -1,5 +1,7 @@
 ﻿using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.Utils.Temporal;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
@@ -24,9 +26,25 @@ namespace FlipnoteDotNet.GUI.Properties
         public void AddEditor(KeyFrameEditorRow row)
         {
             row.Dock = DockStyle.Top;
+            row.TransformerChanged += Row_TransformerChanged;
+            row.RemoveButtonClicked += Row_RemoveButtonClicked;
             Controls.Add(row);
             row.BringToFront();
+        }
+
+        public event EventHandler<IValueTransformer> TransformerChanged;
+        public event EventHandler<IValueTransformer> TransformerRemoved;
+
+        private void Row_RemoveButtonClicked(object sender, IValueTransformer e)
+        {
+            Controls.Remove(sender as Control);
+            TransformerRemoved?.Invoke(this, e);
         }        
+
+        private void Row_TransformerChanged(object sender, IValueTransformer e)
+        {
+            TransformerChanged?.Invoke(this, e);
+        }
 
         public void AddCaption(string text)
         {
