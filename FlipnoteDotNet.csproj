@@ -202,7 +202,7 @@
     <Compile Include="Rendering\Canvas\StaticImageLayerComponent.cs" />
     <Compile Include="Rendering\ILayerCanvasComponent.cs" />
     <Compile Include="Rendering\LayerRenderingOptions.cs" />
-    <Compile Include="Rendering\LayersManager.cs" />
+    <Compile Include="Rendering\LayerComponentsManager.cs" />
     <Compile Include="Utils\GDIJpegLayerExporter.cs" />
     <Compile Include="Utils\IInitialize.cs" />
     <Compile Include="Utils\Temporal\AbstractTransformableTemporalContext.cs" />

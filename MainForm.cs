@@ -3,14 +3,18 @@ using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI;
+using FlipnoteDotNet.GUI.Canvas;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.Properties;
 using FlipnoteDotNet.GUI.Tracks;
+using FlipnoteDotNet.Rendering;
 using FlipnoteDotNet.Utils.Temporal;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;
 
@@ -41,19 +45,8 @@ namespace FlipnoteDotNet
         }
 
 
-        SequenceTracksViewer SequenceTrackViewer => SequenceTracksEditor.Viewer;
-
-        private void BottomLine_Paint(object sender, PaintEventArgs e)
-        {
-            var control = sender as Control;
-            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, control.Height - 2, control.Width, control.Height - 2);
-        }
-
-        private void TopLine_Paint(object sender, PaintEventArgs e)
-        {
-            var control = sender as Control;
-            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, 2, control.Width, 2);
-        }
+        SequenceManager SequenceManager = new SequenceManager(5);
+        SequenceTracksViewer SequenceTrackViewer => SequenceTracksEditor.Viewer;        
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -70,7 +63,7 @@ namespace FlipnoteDotNet
             Canvas.CanvasComponents.Add(frame);
             Canvas.CanvasViewLocation = Point.Empty;
 
-            SequenceTrackViewer.SequenceManager = new Data.SequenceManager(5);
+            SequenceTrackViewer.SequenceManager = SequenceManager;
 
             SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Sequence(0, 7) { Name = "Tralalaala" });
             SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Sequence(1, 5) { Name = "This Sequence", Color = Color.DarkBlue });
@@ -165,17 +158,48 @@ namespace FlipnoteDotNet
             PropertyEditor.Target = SelectedLayerElement = e.Layer;
         }
 
+        LayerComponentsManager LayerComponentsManager = new LayerComponentsManager();
+
         private void SequenceTracksEditor_CurrentFrameChanged(object sender, EventArgs e)
-        {
+        {            
+            DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);            
+
             var editedElement = PropertyEditor.Target as ITemporalContext;
             if (editedElement == null)
                 return;
             editedElement.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
         }
 
+        private void DrawCanvasAt(int frame)
+        {
+            Debug.WriteLine($"LAYERS AT {frame}");
+            LayerComponentsManager.UpdateTimestamp(frame);
+
+            var newComps = new HashSet<ICanvasComponent>(LayerComponentsManager.GetFromSequenceManager(SequenceManager));
+            var oldComps = Canvas.CanvasComponents.ToList();
+            var commonComps = new HashSet<ICanvasComponent>(newComps.Intersect(oldComps));
+            oldComps.Where(_ => !commonComps.Contains(_)).ForEach(Canvas.CanvasComponents.Remove);
+            newComps.ForEach(Canvas.CanvasComponents.Add);
+            commonComps.ForEach(_ => (_ as ILayerCanvasComponent)?.Refresh());
+
+            Canvas.Invalidate();            
+        }
+
         private void PropertyEditor_KeyFramesButtonClick(object sender, EventArgs e)
         {
             KeyframesExpander.IsExpanded = true;
+        }
+
+        private void BottomLine_Paint(object sender, PaintEventArgs e)
+        {
+            var control = sender as Control;
+            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, control.Height - 2, control.Width, control.Height - 2);
+        }
+
+        private void TopLine_Paint(object sender, PaintEventArgs e)
+        {
+            var control = sender as Control;
+            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, 2, control.Width, 2);
         }
     }
 }

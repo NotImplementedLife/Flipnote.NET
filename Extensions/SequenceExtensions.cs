@@ -6,9 +6,9 @@ namespace FlipnoteDotNet.Extensions
     internal static class SequenceExtensions
     {
 
-        public static LayerRenderingOptions GetRenderingOptions(this Sequence s, int timestamp)
+        public static LayerRenderingOptions GetRenderingOptions(this Sequence s)
         {
-            return new LayerRenderingOptions(s.PaperColor, s.Pen1, s.Pen2, timestamp);
+            return new LayerRenderingOptions(s.PaperColor, s.Pen1, s.Pen2);
         }
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FlipnoteDotNet.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FlipnoteDotNet.Data
 {
     public class SequenceTrack
-    {       
+    {
         private List<Sequence> Sequences = new List<Sequence>();
 
         public void AddSequence(Sequence sequence)
@@ -13,6 +14,11 @@ namespace FlipnoteDotNet.Data
             Sequences.Add(sequence);
             sequence.Track = this;
             ElementAdded?.Invoke(this, sequence);          
+        }
+
+        public Sequence GetSequenceAtTimestamp(int timestamp)
+        {
+            return Sequences.Where(_ => timestamp.IsInRange(_.StartFrame, _.EndFrame)).FirstOrDefault();
         }
 
         public IEnumerable<Sequence> GetSequences() => Sequences.AsEnumerable();

@@ -7,6 +7,7 @@ namespace FlipnoteDotNet.Rendering
     {
         ILayer Layer { get; }
         int Timestamp { get; set; }
-        void Refresh(LayerRenderingOptions options);
+        void Initialize(ILayer layer, LayerRenderingOptions options, int timestamp);
+        void Refresh();
     }
 }

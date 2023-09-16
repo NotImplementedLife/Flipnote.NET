@@ -11,22 +11,27 @@ namespace FlipnoteDotNet.Rendering.Canvas
     internal class StaticImageLayerComponent : ILayerCanvasComponent
     {
 
-        private BitmapComponent BitmapComponent;
+        private BitmapComponent BitmapComponent;        
 
-        public StaticImageLayerComponent(StaticImageLayer layer, int timestamp)             
+        public void Initialize(StaticImageLayer layer, LayerRenderingOptions options, int timestamp)
         {
             Layer = layer;
+            LayerRenderingOptions = options;
             Timestamp = timestamp;
+            BuildBitmapComponent();
         }
 
-        private void BuildBitmapComponent(LayerRenderingOptions options)
+        void ILayerCanvasComponent.Initialize(ILayer layer, LayerRenderingOptions options, int timestamp)
+            => Initialize(layer as StaticImageLayer, options, timestamp);
+
+        private void BuildBitmapComponent()
         {
             BitmapComponent = new BitmapComponent(Layer.VisualSource
-                .ToBitmap(options.GetLayer1Color(Timestamp), options.GetLayer2Color(Timestamp)));
+                .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));
         }
 
         public int Timestamp { get; set; }
-        public StaticImageLayer Layer { get; }
+        public StaticImageLayer Layer { get; private set; }
         ILayer ILayerCanvasComponent.Layer => Layer;
 
         public Rectangle Bounds 
@@ -69,9 +74,11 @@ namespace FlipnoteDotNet.Rendering.Canvas
             BitmapComponent.OnPaint(g);
         }
 
-        public void Refresh(LayerRenderingOptions options)
+        private LayerRenderingOptions LayerRenderingOptions;
+
+        public void Refresh()
         {
-            BuildBitmapComponent(options);
-        }
+            BuildBitmapComponent();
+        }        
     }
 }
