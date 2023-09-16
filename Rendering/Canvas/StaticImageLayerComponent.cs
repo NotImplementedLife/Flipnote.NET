@@ -3,6 +3,7 @@ using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace FlipnoteDotNet.Rendering.Canvas
@@ -27,7 +28,7 @@ namespace FlipnoteDotNet.Rendering.Canvas
         private void BuildBitmapComponent()
         {
             BitmapComponent = new BitmapComponent(Layer.VisualSource
-                .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));
+                .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));            
         }
 
         public int Timestamp { get; set; }
@@ -39,8 +40,8 @@ namespace FlipnoteDotNet.Rendering.Canvas
             get => new Rectangle(Location, Size);
             set
             {
-                Location = Bounds.Location;
-                Size = Bounds.Size;
+                Location = value.Location;
+                Size = value.Size;
             }
         }
         public Point Location 
@@ -62,6 +63,7 @@ namespace FlipnoteDotNet.Rendering.Canvas
                 var h = Layer.VisualSource.Height == 0 ? 1.0f : 1.0f * value.Height / Layer.VisualSource.Height;
                 Layer.ScaleX.PutCurrentConstantTransformer(w, Timestamp, autoUpdate: true);
                 Layer.ScaleY.PutCurrentConstantTransformer(h, Timestamp, autoUpdate: true);
+                Debug.WriteLine($"Size set Scale={value.Width}, {value.Height}");
             }
         }
         public bool IsFixed { get; set; }
@@ -69,8 +71,8 @@ namespace FlipnoteDotNet.Rendering.Canvas
 
         public void OnPaint(CanvasGraphics g)
         {
-            BitmapComponent.Location = new Point(Layer.X, Layer.Y);
-            BitmapComponent.Size = Size;
+            BitmapComponent.Location = new Point(Layer.X.GetValueAt(Timestamp), Layer.Y.GetValueAt(Timestamp));
+            BitmapComponent.Size = Size;            
             BitmapComponent.OnPaint(g);
         }
 

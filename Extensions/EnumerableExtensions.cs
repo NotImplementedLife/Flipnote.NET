@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,11 +43,11 @@ namespace FlipnoteDotNet.Extensions
 
         public static Bitmap ToBitmap32bppPArgb(this int[] data, int width, int height)
         {
-            unsafe
-            {
-                fixed (int* ptr = data)
-                    return new Bitmap(width, height, 4 * width, PixelFormat.Format32bppPArgb, new IntPtr(ptr));
-            }
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
+            var bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppPArgb);
+            Marshal.Copy(data, 0, bmpData.Scan0, 0);
+            bmp.UnlockBits(bmpData);
+            return bmp;            
         }
 
         public static string JoinToString<T>(this IEnumerable<T> items, string separator = "\n")

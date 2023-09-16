@@ -2,13 +2,9 @@
 using System;
 
 namespace FlipnoteDotNet.Utils.Temporal.ValueTransformers
-{
-    public class ConstantValueTransformer : ConstantValueTransformer<object>
-    {
-        public ConstantValueTransformer(object value, bool persistent = true) : base(value, persistent)
-        {
-        }
-
+{    
+    public static class ConstantValueTransformerFactory
+    {       
         public static IValueTransformer MakeFromType(Type type, object value, bool persistent = true)
         {
             var vtype = typeof(ConstantValueTransformer<>).MakeGenericType(type);
@@ -16,6 +12,7 @@ namespace FlipnoteDotNet.Utils.Temporal.ValueTransformers
         }
     }
 
+    [Exclusive]
     [EditorWildcard("Set Value %1")]
     public class ConstantValueTransformer<T> : SimpleValueTransformer<T>
     {

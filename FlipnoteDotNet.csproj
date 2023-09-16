@@ -58,6 +58,7 @@
     <Compile Include="Attributes\EditableAttribute.cs" />
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
     <Compile Include="Attributes\EditorWildcardAttribute.cs" />
+    <Compile Include="Attributes\ExclusiveAttribute.cs" />
     <Compile Include="Attributes\ParameterWildcard.cs" />
     <Compile Include="Attributes\PropertyEditorControlAttribute.cs" />
     <Compile Include="Constants\Brushes.cs" />

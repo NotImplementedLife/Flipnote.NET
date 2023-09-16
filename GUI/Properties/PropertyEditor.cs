@@ -215,7 +215,7 @@ namespace FlipnoteDotNet.GUI.Properties
             var innerPropType = prop.PropertyType.GetGenericArguments()[0];
 
             var tdv = prop.GetValue(Target) as ITimeDependentValue;
-            tdv.PutTransformer(ConstantValueTransformer
+            tdv.PutTransformer(ConstantValueTransformerFactory
                 .MakeFromType(innerPropType, val), (Target as ITemporalContext).CurrentTimestamp);
             //tdv.PutTransformer(new ConstantValueTransformer(val), (Target as ITemporalContext).CurrentTimestamp);
             tdv.UpdateTransformations();

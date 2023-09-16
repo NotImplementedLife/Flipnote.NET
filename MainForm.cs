@@ -52,15 +52,15 @@ namespace FlipnoteDotNet
         {
             var frame = new SimpleRectangle(new Rectangle(0, 0, 256, 192));
             frame.Pen = Colors.FlipnoteThemeMainColor.GetPen(2, System.Drawing.Drawing2D.DashStyle.Dash);
-            frame.IsFixed = true;
+            frame.IsFixed = true;            
 
-            Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(0, 0, 256, 192)) { Brush = Brushes.White, IsFixed = true });
+            /*Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(0, 0, 256, 192)) { Brush = Brushes.White, IsFixed = true });
 
             Canvas.CanvasComponents.Add(new BitmapComponent(new Bitmap(@"C:\Users\NotImpLife\Desktop\test.jpg"), 50, 70, 100, 100));
 
             Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(50, 64, 32, 32)));
             Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(100, 26, 64, 32)));
-            Canvas.CanvasComponents.Add(frame);
+            Canvas.CanvasComponents.Add(frame);*/
             Canvas.CanvasViewLocation = Point.Empty;
 
             SequenceTrackViewer.SequenceManager = SequenceManager;
@@ -77,6 +77,9 @@ namespace FlipnoteDotNet
 
             SequenceTrackViewer.AdjustSurfaceSize();
             SequenceTrackViewer.Invalidate();
+
+            DrawCanvasAt(0);
+            Canvas.CanvasComponents.Add(new BitmapComponent(new Bitmap(@"C:\Users\NotImpLife\Desktop\test.jpg"), 50, 70, 100, 100));
         }
 
         private void BackgroundControlPaint(object sender, PaintEventArgs e)
@@ -173,15 +176,15 @@ namespace FlipnoteDotNet
         private void DrawCanvasAt(int frame)
         {
             Debug.WriteLine($"LAYERS AT {frame}");
-            LayerComponentsManager.UpdateTimestamp(frame);
+            LayerComponentsManager.UpdateTimestamp(frame);            
 
-            var newComps = new HashSet<ICanvasComponent>(LayerComponentsManager.GetFromSequenceManager(SequenceManager));
-            var oldComps = Canvas.CanvasComponents.ToList();
-            var commonComps = new HashSet<ICanvasComponent>(newComps.Intersect(oldComps));
-            oldComps.Where(_ => !commonComps.Contains(_)).ForEach(Canvas.CanvasComponents.Remove);
+            var newComps = LayerComponentsManager.GetFromSequenceManager(SequenceManager).ToList();
+            Canvas.CanvasComponents.Clear();
             newComps.ForEach(Canvas.CanvasComponents.Add);
-            commonComps.ForEach(_ => (_ as ILayerCanvasComponent)?.Refresh());
 
+            Canvas.CanvasComponents.ForEach(_ => Debug.WriteLine(_));
+
+        
             Canvas.Invalidate();            
         }
 

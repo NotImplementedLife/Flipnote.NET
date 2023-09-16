@@ -32,6 +32,8 @@ namespace FlipnoteDotNet.Data.Drawing
             Array.Copy(Data, clone.Data, clone.Data.Length);
             return clone;
         }*/
-             
+
+
+        public override string ToString() => $"Visual Source {Width}x{Height}px";
     }
 }

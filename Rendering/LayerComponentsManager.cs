@@ -2,8 +2,11 @@
 using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas;
+using FlipnoteDotNet.GUI.Canvas.Components;
+using PPMLib.Data;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
@@ -12,7 +15,7 @@ namespace FlipnoteDotNet.Rendering
     internal class LayerComponentsManager
     {
         private Dictionary<ILayer, ILayerCanvasComponent> Components = new Dictionary<ILayer, ILayerCanvasComponent>();
-        
+
         public int Timestamp { get; private set; }        
 
         public ILayerCanvasComponent FindComponent(ILayer layer)
@@ -38,7 +41,7 @@ namespace FlipnoteDotNet.Rendering
                 yield return FindComponent(layer) ?? CreateComponent(layer, renderOpts);
         }
 
-        public IEnumerable<ILayerCanvasComponent> GetFromSequenceManager(SequenceManager manager)
+        public IEnumerable<ICanvasComponent> GetFromSequenceManager(SequenceManager manager)
         {
             var seqs = new List<Sequence>();
 
@@ -48,12 +51,38 @@ namespace FlipnoteDotNet.Rendering
                 var seq = track.GetSequenceAtTimestamp(Timestamp);
                 if (seq != null) seqs.Add(seq);                
             }
-            if (seqs.Count == 0) yield break;
+            if (seqs.Count == 0)
+            {
+                yield return new SimpleRectangle(new Rectangle(0, 0, 256, 192))
+                {
+                    Brush = FlipnotePaperColor.White.ToBrush(),
+                    IsFixed = true
+                };
+                yield return new SimpleRectangle(new Rectangle(0, 0, 256, 192))
+                {
+                    Pen = Colors.FlipnoteThemeMainColor.GetPen(2, System.Drawing.Drawing2D.DashStyle.Dash),
+                    IsFixed = true
+                };
+                yield break;
+            }
 
             var renderOpts = seqs.Last().GetRenderingOptions();
+
+            yield return new SimpleRectangle(new Rectangle(0, 0, 256, 192))
+            {
+                Brush = renderOpts.PaperColor.GetValueAt(Timestamp).ToBrush(),
+                IsFixed = true
+            };
+
             foreach (var seq in seqs)
                 foreach (var comp in GetFromSequence(seq, renderOpts))
                     yield return comp;
+
+            yield return new SimpleRectangle(new Rectangle(0, 0, 256, 192))
+            {
+                Pen = Colors.FlipnoteThemeMainColor.GetPen(2, System.Drawing.Drawing2D.DashStyle.Dash),
+                IsFixed = true
+            };            
         }
 
         public void UpdateTimestamp(int timestamp)
