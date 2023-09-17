@@ -35,7 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "KeyFramesEditor";
-            this.Size = new System.Drawing.Size(239, 147);
+            this.Size = new System.Drawing.Size(267, 147);
             this.ResumeLayout(false);
 
         }

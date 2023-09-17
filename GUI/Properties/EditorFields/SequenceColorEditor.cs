@@ -4,18 +4,28 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace FlipnoteDotNet.GUI.Properties.EditorFields
 {
-    internal class SequenceColorEditor : StaticComboBox<Color>, IPropertyEditorControl
+    internal class SequenceColorEditor : StaticComboBox<Color>, IPropertyEditorControl, IDataGridViewEditingControl
     {
+        protected object m_oSelection = null;
+        protected IWindowsFormsEditorService m_iwsService = null;
+
+        public SequenceColorEditor(object selection, IWindowsFormsEditorService edsvc) : this()
+        {
+            m_oSelection = selection;
+            m_iwsService = edsvc;            
+        }        
+
         public SequenceColorEditor() : base(Colors)
         {
-            DropDownStyle = ComboBoxStyle.DropDownList;
-            SelectedIndexChanged += SequenceColorEditor_SelectedIndexChanged; ;
+            SelectedIndexChanged += SequenceColorEditor_SelectedIndexChanged;
             ItemHeight = 20;
             DrawMode = DrawMode.OwnerDrawFixed;
-            DrawItem += SequenceColorEditor_DrawItem; ;
+            DropDownStyle = ComboBoxStyle.DropDownList;
+            DrawItem += SequenceColorEditor_DrawItem;            
         }
 
         private void SequenceColorEditor_DrawItem(object sender, DrawItemEventArgs e)
@@ -37,8 +47,11 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
             e.DrawFocusRectangle();
         }
 
+        public object Selection => m_oSelection;
+
         private void SequenceColorEditor_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {            
+            m_oSelection = ObjectPropertyValue ?? m_oSelection;
             ObjectPropertyValueChanged?.Invoke(this, new EventArgs());
         }
 
@@ -56,6 +69,44 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         public object ObjectPropertyValue { get => SelectedValueItem; set => SelectedValueItem = (Color)value; }
         public KeyFramesEditor KeyframesEditor { get; set; }
         public bool IsTimeDependent { get; set; }
-        public PropertyInfo Property { get; set; }
+        public PropertyInfo Property { get; set; }        
+
+        protected override void OnClick(EventArgs e)
+        {
+            base.OnClick(e);
+            m_iwsService?.CloseDropDown();                    
+        }
+
+        #region DataGridView
+        public DataGridView EditingControlDataGridView { get; set; }
+        public object EditingControlFormattedValue
+        {
+            get => ObjectPropertyValue;
+            set
+            {
+                ObjectPropertyValue = value;
+            }
+        }
+        public int EditingControlRowIndex { get; set; }
+        public bool EditingControlValueChanged { get; set; }
+        public Cursor EditingPanelCursor => base.Cursor;
+        public bool RepositionEditingControlOnValueChange => false;
+
+        public void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle) { }        
+
+        public bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
+        {
+            return true;
+        }
+
+        public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
+        {
+            return EditingControlFormattedValue;
+        }
+
+        public void PrepareEditingControlForEdit(bool selectAll)
+        {            
+        }
+        #endregion DataGridView
     }
 }

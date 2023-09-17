@@ -166,7 +166,8 @@ namespace FlipnoteDotNet.GUI.Canvas
 
         private void CanvasSpaceControl_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Constants.Brushes.TransparentBackgroundBrush, 0, 0, Width, Height);
+            e.Graphics.FillRectangle(Constants.Brushes.TransparentBackgroundBrush, 0, 0, Width, Height);                    
+
             //e.Graphics.Clear(Color.White);
             var canvasRenderer = new CanvasGraphicsRenderer(e.Graphics, CanvasViewScale, CanvasViewLocation);
             var canvasGraphics = new CanvasGraphics(canvasRenderer);
@@ -197,11 +198,31 @@ namespace FlipnoteDotNet.GUI.Canvas
             });
             canvasGraphics.Flush();
 
+            if (CanvasViewScaleFactor > 500)
+            {
+                var topLeft = ScreenToCanvas(Point.Empty);
+                var bottomRight = ScreenToCanvas(new Point(Width, Height));
+                var pen = new Pen(Color.Black.Alpha(64).GetBrush(), 1);
+                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+
+                for (int y = topLeft.Y; y < bottomRight.Y; y++)
+                {
+                    var cy = CanvasToScreen(new Point(0, y)).Y;
+                    e.Graphics.DrawLine(pen, 0, cy, Width, cy);
+                }
+
+                for (int x = topLeft.X; x < bottomRight.X; x++)
+                {
+                    var cx = CanvasToScreen(new Point(x, 0)).X;
+                    e.Graphics.DrawLine(pen, cx, 0, cx, Height);
+                }
+            }
+
             foreach (var l in resizePointsLocations)
             {
                 e.Graphics.FillRectangle(System.Drawing.Brushes.White, l.X - 3, l.Y - 3, 6, 6);
                 e.Graphics.DrawRectangle(Color.Blue.GetPen(2), l.X - 3, l.Y - 3, 6, 6);
-            }
+            }            
         }
 
         protected override CreateParams CreateParams

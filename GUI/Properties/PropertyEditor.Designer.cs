@@ -28,33 +28,77 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.dataGridViewColumn1 = new System.Windows.Forms.DataGridViewColumn();
+            this.dataGridViewColumn2 = new System.Windows.Forms.DataGridViewColumn();
+            this.dataGridViewColumn3 = new System.Windows.Forms.DataGridViewColumn();
+            this.dataGridViewColumn4 = new System.Windows.Forms.DataGridViewColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SuspendLayout();
             // 
-            // label1
+            // dataGridViewColumn1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "PropertyEditor";
+            this.dataGridViewColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewColumn1.HeaderText = "Property";
+            this.dataGridViewColumn1.Name = "dataGridViewColumn1";
+            // 
+            // dataGridViewColumn2
+            // 
+            this.dataGridViewColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewColumn2.HeaderText = "Value";
+            this.dataGridViewColumn2.Name = "dataGridViewColumn2";
+            // 
+            // dataGridViewColumn3
+            // 
+            this.dataGridViewColumn3.FillWeight = 50F;
+            this.dataGridViewColumn3.HeaderText = "Keyframes";
+            this.dataGridViewColumn3.Name = "dataGridViewColumn3";
+            this.dataGridViewColumn3.Width = 30;
+            // 
+            // dataGridViewColumn4
+            // 
+            this.dataGridViewColumn4.FillWeight = 50F;
+            this.dataGridViewColumn4.HeaderText = "Effects";
+            this.dataGridViewColumn4.Name = "dataGridViewColumn4";
+            this.dataGridViewColumn4.Width = 30;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
             // 
             // PropertyEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.Controls.Add(this.label1);
             this.Name = "PropertyEditor";
-            this.Size = new System.Drawing.Size(289, 198);
+            this.Size = new System.Drawing.Size(280, 20);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewColumn dataGridViewColumn1;
+        private System.Windows.Forms.DataGridViewColumn dataGridViewColumn2;
+        private System.Windows.Forms.DataGridViewColumn dataGridViewColumn3;
+        private System.Windows.Forms.DataGridViewColumn dataGridViewColumn4;
     }
 }

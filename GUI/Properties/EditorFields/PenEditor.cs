@@ -12,7 +12,7 @@ using Brushes = System.Drawing.Brushes;
 namespace FlipnoteDotNet.GUI.Properties.EditorFields
 {
     [PropertyEditorControl(typeof(FlipnotePen))]
-    internal class PenEditor : EnumComboBox<FlipnotePen>, IPropertyEditorControl
+    internal class PenEditor : EnumComboBox<FlipnotePen>, IPropertyEditorControl, IDataGridViewEditingControl
     {
         public PenEditor()
         {
@@ -21,6 +21,12 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
             ItemHeight = 20;
             DrawMode = DrawMode.OwnerDrawFixed;
             DrawItem += PaperColorEditor_DrawItem;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            base.OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, e.ClipRectangle, 0, DrawItemState.Default));
         }
 
         private void PaperColorEditor_DrawItem(object sender, DrawItemEventArgs e)
@@ -73,5 +79,38 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         {
             ObjectPropertyValueChanged?.Invoke(this, new EventArgs());
         }
+
+
+        #region DataGridView
+        public DataGridView EditingControlDataGridView { get; set; }
+        public object EditingControlFormattedValue
+        {
+            get => ObjectPropertyValue;
+            set
+            {
+                ObjectPropertyValue = value;
+            }
+        }
+        public int EditingControlRowIndex { get; set; }
+        public bool EditingControlValueChanged { get; set; }
+        public Cursor EditingPanelCursor => base.Cursor;
+        public bool RepositionEditingControlOnValueChange => false;
+
+        public void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle) { }
+
+        public bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
+        {
+            return true;
+        }
+
+        public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
+        {
+            return EditingControlFormattedValue;
+        }
+
+        public void PrepareEditingControlForEdit(bool selectAll)
+        {
+        }
+        #endregion DataGridView
     }
 }

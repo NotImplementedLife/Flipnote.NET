@@ -118,7 +118,7 @@ namespace FlipnoteDotNet
                 e.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
 
             LayersEditor.ClearSelection();
-            PropertyEditor.Target = LayersEditor.Sequence = e; ;
+            PropertyEditor.Target = LayersEditor.Sequence = e;
         }
 
         private void PropertyEditor_ObjectPropertyChanged(object sender, System.Reflection.PropertyInfo e)

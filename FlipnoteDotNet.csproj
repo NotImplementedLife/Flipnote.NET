@@ -129,7 +129,16 @@
     <Compile Include="GUI\Controls\StaticComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Controls\StaticListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
+    <Compile Include="GUI\Forms\VisualSourceEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\VisualSourceEditorForm.Designer.cs">
+      <DependentUpon>VisualSourceEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Layers\LayersEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -178,12 +187,14 @@
     <Compile Include="GUI\Properties\PropertyEditor.Designer.cs">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Properties\PropertyEditorData.cs" />
     <Compile Include="GUI\Properties\PropertyRow.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI\Properties\PropertyRow.Designer.cs">
       <DependentUpon>PropertyRow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Properties\TypeEditors\SequenceColorEditor.cs" />
     <Compile Include="GUI\ToolStripEmptyRenderer.cs" />
     <Compile Include="GUI\Tracks\SequenceCreateDragData.cs" />
     <Compile Include="GUI\Tracks\SequenceMoveDragData.cs" />
@@ -227,6 +238,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\SequenceTracksEditor.resx">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Forms\VisualSourceEditorForm.resx">
+      <DependentUpon>VisualSourceEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Layers\LayersEditor.resx">
       <DependentUpon>LayersEditor.cs</DependentUpon>

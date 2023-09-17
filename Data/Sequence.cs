@@ -4,7 +4,9 @@ using FlipnoteDotNet.Utils;
 using FlipnoteDotNet.Utils.Temporal;
 using PPMLib.Data;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 
 namespace FlipnoteDotNet.Data
 {
@@ -15,6 +17,7 @@ namespace FlipnoteDotNet.Data
 
         [Editable]
         [PropertyEditorControl(typeof(SequenceColorEditor))]
+        [Editor(typeof(GUI.Properties.TypeEditors.SequenceColorEditor), typeof(UITypeEditor))]
         public Color Color { get; set; } = Color.DodgerBlue;
 
         [Editable]
@@ -27,7 +30,7 @@ namespace FlipnoteDotNet.Data
         public TimeDependentValue<FlipnotePaperColor> PaperColor { get; }
 
         public SequenceTrack Track { get; set; }
-
+        
         public override int StartTimestamp
         {
             get => base.StartTimestamp;
