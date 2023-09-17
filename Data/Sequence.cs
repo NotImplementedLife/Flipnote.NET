@@ -16,8 +16,7 @@ namespace FlipnoteDotNet.Data
         public string Name { get; set; } = "";
 
         [Editable]
-        [PropertyEditorControl(typeof(SequenceColorEditor))]
-        [Editor(typeof(GUI.Properties.TypeEditors.SequenceColorEditor), typeof(UITypeEditor))]
+        [PropertyEditorControl(typeof(SequenceColorEditor))]        
         public Color Color { get; set; } = Color.DodgerBlue;
 
         [Editable]

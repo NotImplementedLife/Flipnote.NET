@@ -43,9 +43,9 @@ namespace FlipnoteDotNet.Extensions
 
         public static Bitmap ToBitmap32bppPArgb(this int[] data, int width, int height)
         {
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
-            var bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppPArgb);
-            Marshal.Copy(data, 0, bmpData.Scan0, 0);
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            var bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+            Marshal.Copy(data, 0, bmpData.Scan0, width * height);
             bmp.UnlockBits(bmpData);
             return bmp;            
         }

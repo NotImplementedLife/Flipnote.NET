@@ -59,6 +59,7 @@
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
     <Compile Include="Attributes\EditorWildcardAttribute.cs" />
     <Compile Include="Attributes\ExclusiveAttribute.cs" />
+    <Compile Include="Attributes\PaintToolAttribute.cs" />
     <Compile Include="Attributes\ParameterWildcard.cs" />
     <Compile Include="Attributes\PropertyEditorControlAttribute.cs" />
     <Compile Include="Constants\Brushes.cs" />
@@ -133,6 +134,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
+    <Compile Include="GUI\Forms\Controls\PaintDeviceCanvas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GUI\Forms\VisualSourceEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,9 +157,16 @@
     <Compile Include="GUI\Properties\EditorFields\DefaultNonEditable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Properties\EditorFields\FormBasedEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\EditorFields\FormBasedEditor.Designer.cs">
+      <DependentUpon>FormBasedEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Properties\EditorFields\IntEditor.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Properties\EditorFields\IObjectHolder.cs" />
     <Compile Include="GUI\Properties\EditorFields\PaperColorEditor.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -194,7 +205,6 @@
     <Compile Include="GUI\Properties\PropertyRow.Designer.cs">
       <DependentUpon>PropertyRow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Properties\TypeEditors\SequenceColorEditor.cs" />
     <Compile Include="GUI\ToolStripEmptyRenderer.cs" />
     <Compile Include="GUI\Tracks\SequenceCreateDragData.cs" />
     <Compile Include="GUI\Tracks\SequenceMoveDragData.cs" />
@@ -215,8 +225,16 @@
     <Compile Include="Rendering\ILayerCanvasComponent.cs" />
     <Compile Include="Rendering\LayerRenderingOptions.cs" />
     <Compile Include="Rendering\LayerComponentsManager.cs" />
+    <Compile Include="Utils\Algorithms.cs" />
     <Compile Include="Utils\GDIJpegLayerExporter.cs" />
     <Compile Include="Utils\IInitialize.cs" />
+    <Compile Include="Utils\Paint\IPaintDevice.cs" />
+    <Compile Include="Utils\Paint\IPaintOperation.cs" />
+    <Compile Include="Utils\Paint\IPaintTool.cs" />
+    <Compile Include="Utils\Paint\Operations\PenOperation.cs" />
+    <Compile Include="Utils\Paint\PaintContext.cs" />
+    <Compile Include="Utils\Paint\Tools\PenTool.cs" />
+    <Compile Include="Utils\Paint\Tools\PreviewPoint.cs" />
     <Compile Include="Utils\Temporal\AbstractTransformableTemporalContext.cs" />
     <Compile Include="Utils\Temporal\ITemporalContext.cs" />
     <Compile Include="Utils\Temporal\ITimeLocalizable.cs" />
@@ -244,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Layers\LayersEditor.resx">
       <DependentUpon>LayersEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Properties\EditorFields\FormBasedEditor.resx">
+      <DependentUpon>FormBasedEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Properties\KeyFrameEditorRow.resx">
       <DependentUpon>KeyFrameEditorRow.cs</DependentUpon>
@@ -292,6 +313,21 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\ic_paint_zoom.png" />
+    <None Include="Resources\ic_paint_text.png" />
+    <None Include="Resources\ic_paint_spray.png" />
+    <None Include="Resources\ic_paint_shape_rounded_rectangle.png" />
+    <None Include="Resources\ic_paint_shape_rectangle.png" />
+    <None Include="Resources\ic_paint_shape_ellipse.png" />
+    <None Include="Resources\ic_paint_select.png" />
+    <None Include="Resources\ic_paint_picker.png" />
+    <None Include="Resources\ic_paint_pen.png" />
+    <None Include="Resources\ic_paint_line.png" />
+    <None Include="Resources\ic_paint_eraser.png" />
+    <None Include="Resources\ic_paint_cursor.png" />
+    <None Include="Resources\ic_paint_can.png" />
+    <None Include="Resources\ic_paint_brush.png" />
+    <None Include="Resources\ic_paint_bezier.png" />
     <None Include="Resources\ic_remove.png" />
     <None Include="Resources\ic_effects.png" />
     <None Include="Resources\ic_keyframes.png" />

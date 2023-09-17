@@ -7,7 +7,7 @@ namespace FlipnoteDotNet.GUI.Canvas.Components
     internal class BitmapComponent : CanvasComponent
     {        
         public Bitmap Bitmap { get; }
-        public override bool IsResizeable { get => true; set => throw new InvalidOperationException(); }
+        public override bool IsResizeable { get; set; } = true;
 
         public BitmapComponent(Bitmap bitmap) : this(bitmap, Point.Empty) { }        
 

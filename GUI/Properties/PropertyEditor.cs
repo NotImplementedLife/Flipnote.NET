@@ -253,6 +253,12 @@ namespace FlipnoteDotNet.GUI.Properties
             Invalidate();
         }
 
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            Invalidate();
+        }
+
         private Control CreateEditor(PropertyInfo prop, out bool isTimeDependent, out Type editType)
         {
             Control editor = null;
@@ -268,14 +274,21 @@ namespace FlipnoteDotNet.GUI.Properties
             editType = targetType;
 
             var propertyEditorControlType = prop.GetCustomAttribute<PropertyEditorControlAttribute>()?.Type;
-                       
+            
+            Control CreateEditorControlFromType(Type type)
+            {
+                if (type.GetInterfaces().Contains(typeof(IObjectHolderDialog)))
+                    return new FormBasedEditor(type);
+                return Activator.CreateInstance(type) as Control;
+            }
+
             if (propertyEditorControlType != null)
-            {                
-                editor = Activator.CreateInstance(propertyEditorControlType) as Control;
+            {                                
+                editor = CreateEditorControlFromType(propertyEditorControlType);
             }
             else if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
             {
-                editor = Activator.CreateInstance(editorType) as Control;
+                editor = CreateEditorControlFromType(editorType);
             }
 
 

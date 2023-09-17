@@ -8,7 +8,7 @@ using System.Windows.Forms.Design;
 
 namespace FlipnoteDotNet.GUI.Properties.EditorFields
 {
-    internal class SequenceColorEditor : StaticComboBox<Color>, IPropertyEditorControl, IDataGridViewEditingControl
+    internal class SequenceColorEditor : StaticComboBox<Color>, IPropertyEditorControl
     {
         protected object m_oSelection = null;
         protected IWindowsFormsEditorService m_iwsService = null;
@@ -76,37 +76,5 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
             base.OnClick(e);
             m_iwsService?.CloseDropDown();                    
         }
-
-        #region DataGridView
-        public DataGridView EditingControlDataGridView { get; set; }
-        public object EditingControlFormattedValue
-        {
-            get => ObjectPropertyValue;
-            set
-            {
-                ObjectPropertyValue = value;
-            }
-        }
-        public int EditingControlRowIndex { get; set; }
-        public bool EditingControlValueChanged { get; set; }
-        public Cursor EditingPanelCursor => base.Cursor;
-        public bool RepositionEditingControlOnValueChange => false;
-
-        public void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle) { }        
-
-        public bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
-        {
-            return true;
-        }
-
-        public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
-        {
-            return EditingControlFormattedValue;
-        }
-
-        public void PrepareEditingControlForEdit(bool selectAll)
-        {            
-        }
-        #endregion DataGridView
     }
 }

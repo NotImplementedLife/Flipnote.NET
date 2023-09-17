@@ -1,15 +1,16 @@
 ﻿using FlipnoteDotNet.Extensions;
-using System;
 using System.Drawing;
 using System.Linq;
 
 namespace FlipnoteDotNet.Data.Drawing
 {
-    internal class FlipnoteVisualSource
+    public class FlipnoteVisualSource
     {
         public int Width { get; }
         public int Height { get; }
         public byte[] Data { get; }
+
+        public Size Size => new Size(Width, Height);
 
         public FlipnoteVisualSource(int width, int height)
         {
