@@ -11,6 +11,14 @@ namespace FlipnoteDotNet.GUI.Canvas
     {
         public class CanvasComponentsCollection : IList<ICanvasComponent>
         {
+
+            public CanvasSpaceControl Canvas { get; }
+
+            public CanvasComponentsCollection(CanvasSpaceControl canvas)
+            {
+                Canvas = canvas;
+            }
+
             private List<ICanvasComponent> CanvasComponents { get; } = new List<ICanvasComponent>();            
             private HashSet<ICanvasComponent> _SelectedComponents { get; } = new HashSet<ICanvasComponent>();
 
@@ -23,6 +31,8 @@ namespace FlipnoteDotNet.GUI.Canvas
                     _SelectedComponents.Add(component);
                 else
                     _SelectedComponents.Remove(component);
+
+                Canvas.SelectionChanged?.Invoke(Canvas, new EventArgs());
             }
 
             public void ToggleSelected(ICanvasComponent component)
@@ -32,6 +42,7 @@ namespace FlipnoteDotNet.GUI.Canvas
                     _SelectedComponents.Remove(component);
                 else
                     _SelectedComponents.Add(component);
+                Canvas.SelectionChanged?.Invoke(Canvas, new EventArgs());
             }
 
             public bool IsSelected(ICanvasComponent component)
@@ -43,18 +54,24 @@ namespace FlipnoteDotNet.GUI.Canvas
             {
                 if (component == null)
                 {
-                    _SelectedComponents.Clear();
+                    if (_SelectedComponents.Count > 0)
+                    {
+                        _SelectedComponents.Clear();
+                        Canvas.SelectionChanged?.Invoke(Canvas, new EventArgs());
+                    }
                     return;
                 }
 
                 if (!CanvasComponents.Contains(component)) return;
                 _SelectedComponents.Clear();                
                 _SelectedComponents.Add(component);
+                Canvas.SelectionChanged?.Invoke(Canvas, new EventArgs());
             }
 
             public bool IsSelectionEmpty => _SelectedComponents.Count == 0;
 
             public IEnumerable<ICanvasComponent> SelectedComponents => _SelectedComponents.AsEnumerable();
+            public int SelectedComponentsCount => _SelectedComponents.Count;
 
             #endregion
 

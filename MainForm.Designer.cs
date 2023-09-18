@@ -141,12 +141,13 @@ namespace FlipnoteDotNet
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10302, -13960);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10322, -13995);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
             this.Canvas.Size = new System.Drawing.Size(487, 204);
             this.Canvas.TabIndex = 0;
+            this.Canvas.SelectionChanged += new System.EventHandler(this.Canvas_SelectionChanged);
             // 
             // SequenceTracksEditor
             // 

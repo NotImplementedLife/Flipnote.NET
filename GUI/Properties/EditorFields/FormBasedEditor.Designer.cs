@@ -34,10 +34,10 @@
             // 
             // OpenFormButton
             // 
-            this.OpenFormButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.OpenFormButton.Location = new System.Drawing.Point(192, 0);
+            this.OpenFormButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.OpenFormButton.Location = new System.Drawing.Point(193, 2);
             this.OpenFormButton.Name = "OpenFormButton";
-            this.OpenFormButton.Size = new System.Drawing.Size(33, 25);
+            this.OpenFormButton.Size = new System.Drawing.Size(33, 22);
             this.OpenFormButton.TabIndex = 0;
             this.OpenFormButton.Text = "...";
             this.OpenFormButton.UseVisualStyleBackColor = true;
@@ -45,12 +45,11 @@
             // 
             // DisplayBox
             // 
-            this.DisplayBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DisplayBox.Location = new System.Drawing.Point(0, 0);
-            this.DisplayBox.Multiline = true;
+            this.DisplayBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.DisplayBox.Location = new System.Drawing.Point(0, 4);
             this.DisplayBox.Name = "DisplayBox";
             this.DisplayBox.ReadOnly = true;
-            this.DisplayBox.Size = new System.Drawing.Size(192, 25);
+            this.DisplayBox.Size = new System.Drawing.Size(193, 20);
             this.DisplayBox.TabIndex = 1;
             // 
             // FormBasedEditor
@@ -60,7 +59,7 @@
             this.Controls.Add(this.DisplayBox);
             this.Controls.Add(this.OpenFormButton);
             this.Name = "FormBasedEditor";
-            this.Size = new System.Drawing.Size(225, 25);
+            this.Size = new System.Drawing.Size(226, 26);
             this.ResumeLayout(false);
             this.PerformLayout();
 

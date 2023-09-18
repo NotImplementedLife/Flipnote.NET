@@ -19,7 +19,7 @@ namespace FlipnoteDotNet.GUI.Canvas
 {
     public partial class CanvasSpaceControl : UserControl
     {
-        public CanvasComponentsCollection CanvasComponents { get; } = new CanvasComponentsCollection();
+        public CanvasComponentsCollection CanvasComponents { get; }
 
         MouseGesturesHandler MouseGesturesHandler = new MouseGesturesHandler();
 
@@ -36,6 +36,7 @@ namespace FlipnoteDotNet.GUI.Canvas
         public CanvasSpaceControl()
         {
             InitializeComponent();
+            CanvasComponents = new CanvasComponentsCollection(this);
 
             MouseGesturesHandler.DragStart += MouseGesturesHandler_DragStart;
             MouseGesturesHandler.Drag += MouseGesturesHandler_Drag;
@@ -333,6 +334,7 @@ namespace FlipnoteDotNet.GUI.Canvas
             }
         }
         
+        public event EventHandler SelectionChanged;
 
     }
 }

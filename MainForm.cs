@@ -169,8 +169,7 @@ namespace FlipnoteDotNet
             var newComps = LayerComponentsManager.GetFromSequenceManager(SequenceManager).ToList();
             Canvas.CanvasComponents.Clear();
             newComps.ForEach(Canvas.CanvasComponents.Add);
-
-            //Canvas.CanvasComponents.ForEach(_ => Debug.WriteLine(_));
+            
             Canvas.CanvasComponents.ForEach(_ =>
                 {
                     if(_ is ILayerCanvasComponent lcc)
@@ -182,8 +181,8 @@ namespace FlipnoteDotNet
         }
 
         private void Layer_UserUpdate(object sender, EventArgs e)
-        {
-            if (sender != PropertyEditor.Target) return;
+        {            
+            if (sender != PropertyEditor.Target) return;            
             PropertyEditor.ReloadValues();                      
         }
 
@@ -202,6 +201,22 @@ namespace FlipnoteDotNet
         {
             var control = sender as Control;
             e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, 2, control.Width, 2);
+        }
+
+        private void Canvas_SelectionChanged(object sender, EventArgs e)
+        {
+            if (Canvas.CanvasComponents.SelectedComponentsCount != 1)
+            {
+
+            }
+            else
+            {
+                var selection = Canvas.CanvasComponents.SelectedComponents.First() as ILayerCanvasComponent;
+                if (selection == null)
+                    return;
+                selection.Layer.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
+                PropertyEditor.Target = selection.Layer;
+            }
         }
     }
 }
