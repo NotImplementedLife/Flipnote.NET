@@ -59,6 +59,7 @@
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
     <Compile Include="Attributes\EditorWildcardAttribute.cs" />
     <Compile Include="Attributes\ExclusiveAttribute.cs" />
+    <Compile Include="Attributes\LayerAttribute.cs" />
     <Compile Include="Attributes\PaintToolAttribute.cs" />
     <Compile Include="Attributes\ParameterWildcard.cs" />
     <Compile Include="Attributes\PropertyEditorControlAttribute.cs" />
@@ -136,6 +137,19 @@
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
     <Compile Include="GUI\Forms\Controls\PaintDeviceCanvas.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\Controls\VisualSourceEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\Controls\VisualSourceEditorControl.Designer.cs">
+      <DependentUpon>VisualSourceEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Forms\ILayerCreatorForm.cs" />
+    <Compile Include="GUI\Forms\LayerCreators\StaticImageLayerCreatorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\LayerCreators\StaticImageLayerCreatorForm.Designer.cs">
+      <DependentUpon>StaticImageLayerCreatorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Forms\VisualSourceEditorForm.cs">
       <SubType>Form</SubType>
@@ -256,6 +270,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\SequenceTracksEditor.resx">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Forms\Controls\VisualSourceEditorControl.resx">
+      <DependentUpon>VisualSourceEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Forms\LayerCreators\StaticImageLayerCreatorForm.resx">
+      <DependentUpon>StaticImageLayerCreatorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Forms\VisualSourceEditorForm.resx">
       <DependentUpon>VisualSourceEditorForm.cs</DependentUpon>

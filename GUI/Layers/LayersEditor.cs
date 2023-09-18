@@ -1,12 +1,13 @@
-﻿using FlipnoteDotNet.Data;
+﻿using FlipnoteDotNet.Attributes;
+using FlipnoteDotNet.Data;
+using FlipnoteDotNet.GUI.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Layers
@@ -15,7 +16,8 @@ namespace FlipnoteDotNet.GUI.Layers
     {
         public LayersEditor()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            InitAddLayerContextMenu();
         }
 
         private Sequence _Sequence=null;
@@ -73,6 +75,41 @@ namespace FlipnoteDotNet.GUI.Layers
         private void LayersListBox_DataSourceChanged(object sender, EventArgs e)
         {
             LayersListBox.ClearSelected();            
+        }
+
+        private void InitAddLayerContextMenu()
+        {
+            Constants.Reflection.LayerTypes.ForEach(ltype =>
+            {
+                var attr = ltype.GetCustomAttribute<LayerAttribute>();
+                if (attr == null) return;
+                if (attr.CreatorForm == null) return;
+
+                var item = new ToolStripMenuItem();
+                item.Text = attr.DisplayName;
+                item.Tag = attr;
+
+                item.Click += (o, ev) =>
+                {
+                    var a = (o as ToolStripMenuItem).Tag as LayerAttribute;
+                    var form = Activator.CreateInstance(a.CreatorForm) as ILayerCreatorForm;
+                    if(form.ShowDialog()==DialogResult.OK)
+                    {
+                        var layer = form.Layer;
+                        Sequence.AddLayer(layer);
+                        ReloadSequence();
+                    }
+                };
+
+
+                AddLayerContextMenuStrip.Items.Add(item);
+            });
+           
+        }
+
+        private void AddLayerButton_Click(object sender, EventArgs e)
+        {
+            AddLayerContextMenuStrip.Show(Cursor.Position);
         }
     }
 }

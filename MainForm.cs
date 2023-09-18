@@ -182,8 +182,8 @@ namespace FlipnoteDotNet
 
         private void Layer_UserUpdate(object sender, EventArgs e)
         {            
-            if (sender != PropertyEditor.Target) return;            
-            PropertyEditor.ReloadValues();                      
+            if (sender != PropertyEditor.Target) return;
+            PropertyEditor.ReloadValues();
         }
 
         private void PropertyEditor_KeyFramesButtonClick(object sender, EventArgs e)

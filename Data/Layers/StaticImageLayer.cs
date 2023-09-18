@@ -1,10 +1,12 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Data.Drawing;
+using FlipnoteDotNet.GUI.Forms.LayerCreators;
 using FlipnoteDotNet.Utils;
 using FlipnoteDotNet.Utils.Temporal;
 
 namespace FlipnoteDotNet.Data.Layers
 {
+    [Layer(DisplayName ="Static image layer", CreatorForm = typeof(StaticImageLayerCreatorForm))]
     internal class StaticImageLayer : LocalizableLayer, IDisplayLayer
     {
         [Editable]

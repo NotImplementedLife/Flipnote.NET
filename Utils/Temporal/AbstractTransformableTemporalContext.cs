@@ -109,7 +109,7 @@ namespace FlipnoteDotNet.Utils.Temporal
                 if (dt == 0) return;
                 foreach(var manager in TemporalTransformers.Values)
                 {
-                    foreach (var transformer in manager.GetAllTransformers()) 
+                    foreach (var transformer in manager.GetAllTransformers().ToArray()) 
                     {
                         manager.ShiftTimestamp(transformer, dt);                        
                     }

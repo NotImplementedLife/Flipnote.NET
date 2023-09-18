@@ -28,25 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.components = new System.ComponentModel.Container();
+            this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.AddLayerButton = new System.Windows.Forms.ToolStripButton();
             this.RemoveLayerButton = new System.Windows.Forms.ToolStripButton();
+            this.AddLayerContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.LayersListBox = new FlipnoteDotNet.GUI.Layers.LayersListBox();
-            this.toolStrip1.SuspendLayout();
+            this.ToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // ToolStrip
             // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.ToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddLayerButton,
             this.RemoveLayerButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(166, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.ToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.ToolStrip.Name = "ToolStrip";
+            this.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.ToolStrip.Size = new System.Drawing.Size(166, 25);
+            this.ToolStrip.TabIndex = 0;
+            this.ToolStrip.Text = "toolStrip1";
             // 
             // AddLayerButton
             // 
@@ -56,6 +58,7 @@
             this.AddLayerButton.Name = "AddLayerButton";
             this.AddLayerButton.Size = new System.Drawing.Size(23, 22);
             this.AddLayerButton.Text = "Add new layer";
+            this.AddLayerButton.Click += new System.EventHandler(this.AddLayerButton_Click);
             // 
             // RemoveLayerButton
             // 
@@ -66,6 +69,11 @@
             this.RemoveLayerButton.Name = "RemoveLayerButton";
             this.RemoveLayerButton.Size = new System.Drawing.Size(23, 22);
             this.RemoveLayerButton.Text = "Remove selected layer";
+            // 
+            // AddLayerContextMenuStrip
+            // 
+            this.AddLayerContextMenuStrip.Name = "AddLayerContextMenuStrip";
+            this.AddLayerContextMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // LayersListBox
             // 
@@ -85,11 +93,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.LayersListBox);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.ToolStrip);
             this.Name = "LayersEditor";
             this.Size = new System.Drawing.Size(166, 159);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.ToolStrip.ResumeLayout(false);
+            this.ToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -97,9 +105,10 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip ToolStrip;
         public LayersListBox LayersListBox;
         private System.Windows.Forms.ToolStripButton AddLayerButton;
         private System.Windows.Forms.ToolStripButton RemoveLayerButton;
+        private System.Windows.Forms.ContextMenuStrip AddLayerContextMenuStrip;
     }
 }

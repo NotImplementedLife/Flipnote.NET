@@ -20,75 +20,24 @@ namespace FlipnoteDotNet.GUI.Forms
 {
     [PropertyEditorControl(typeof(FlipnoteVisualSource))]
     public partial class VisualSourceEditorForm : Form, IObjectHolderDialog
-    {
-        private ToolStripButton ActiveToolButton;
-
-        PaintContext PaintContext = new PaintContext();
-
+    {        
         public VisualSourceEditorForm()
         {
-            InitializeComponent();
-            PaintContext.PenValue = 1;
-
-            foreach(var (ToolType, ToolName, ToolIcon) in Constants.Reflection.PaintTools)
-            {
-                var button = new ToolStripButton();
-                button.Image = ToolIcon;
-                button.ToolTipText = ToolName;
-                button.CheckOnClick = true;
-                button.Tag = ToolType;
-                ToolStrip.Items.Add(button);
-
-                button.Click += (sender, args) =>
-                {
-                    if (ActiveToolButton != null) ActiveToolButton.Checked = false;
-                    ActiveToolButton = null;
-                    Canvas.AttachOperation(null);
-
-                    var btn = sender as ToolStripButton;
-                    if (btn.Checked)                    
-                    {
-                        ActiveToolButton = btn;
-                        ActiveToolButton.Checked = true;
-
-                        var tool = Activator.CreateInstance(btn.Tag as Type) as IPaintTool;
-                        var operation = tool.CreateOperation();
-                        operation.PaintContext = PaintContext;
-                        Canvas.AttachOperation(operation);
-                    }                    
-                };
-            }
-            
-
-            UpdateVisuals();
-            Canvas.CanvasViewLocation = new Point(0, 0);
-            Canvas.CanvasViewScaleFactor = 700;
-
-            Canvas.DisableMouseGestures();
-            Canvas.EnableMouseGestures();
-        }
-
-        private void UpdateVisuals()
-        {
-            VisualSource = VisualSource ?? new FlipnoteVisualSource(8, 8);
-            Canvas.LoadFromFlipnoteVisualSoruce(VisualSource);
-        }
-
-        FlipnoteVisualSource VisualSource { get; set; }
+            InitializeComponent();                      
+        }              
 
         public object ObjectValue 
         { 
-            get=>VisualSource;
+            get=>VisualSourceEditorControl.VisualSource;
             set
             {
-                VisualSource = value as FlipnoteVisualSource;
-                UpdateVisuals();
+                VisualSourceEditorControl.VisualSource = value as FlipnoteVisualSource;                
             }
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ObjectValue = Canvas.ToFlipnoteVisualSource();
+            ObjectValue = VisualSourceEditorControl.GetVisualSourceFromCanvas();
             DialogResult = DialogResult.OK;
         }
 

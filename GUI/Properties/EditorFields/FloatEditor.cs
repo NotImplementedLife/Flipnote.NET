@@ -13,7 +13,7 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         {
             Minimum = -1000;
             Maximum = 1000;
-            DecimalPlaces = 4;            
+            DecimalPlaces = 6;
             ValueChanged += FloatEditor_ValueChanged;
         }
 

@@ -23,6 +23,8 @@ namespace FlipnoteDotNet.Constants
 
         public static List<(Type ToolType, string ToolName, Bitmap ToolIcon)> PaintTools { get; private set; }
         
+
+        public static List<Type> LayerTypes { get; private set; }
             
         public static void Init()
         {
@@ -43,6 +45,8 @@ namespace FlipnoteDotNet.Constants
                 })
                 .ToList();
 
+            LayerTypes = GetTypesFromAssembly(typeof(ILayer)).ToList();
+
 
             foreach (var kv in LayerCanvasComponents)
             {
@@ -60,6 +64,15 @@ namespace FlipnoteDotNet.Constants
                 .GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                 .GetValue(null);
 
+        public static IEnumerable<Type> GetTypesFromAssembly()
+        {
+            return AppDomain.CurrentDomain.GetAssemblies()
+                     .SelectMany(t => t.GetTypes());                     
+        }
+
+        public static IEnumerable<Type> GetTypesFromAssembly(Type baseType)
+            => GetTypesFromAssembly()
+                .Where(t => (baseType.IsInterface && t.GetInterfaces().Contains(baseType)) || t.IsSubclassOf(baseType));
 
     }
 }
