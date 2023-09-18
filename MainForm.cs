@@ -3,7 +3,6 @@ using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI;
-using FlipnoteDotNet.GUI.Canvas;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.Properties;
@@ -11,12 +10,10 @@ using FlipnoteDotNet.GUI.Tracks;
 using FlipnoteDotNet.Rendering;
 using FlipnoteDotNet.Utils.Temporal;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Brushes = System.Drawing.Brushes;
 
 namespace FlipnoteDotNet
 {
@@ -50,24 +47,12 @@ namespace FlipnoteDotNet
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var frame = new SimpleRectangle(new Rectangle(0, 0, 256, 192));
-            frame.Pen = Colors.FlipnoteThemeMainColor.GetPen(2, System.Drawing.Drawing2D.DashStyle.Dash);
-            frame.IsFixed = true;            
-
-            /*Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(0, 0, 256, 192)) { Brush = Brushes.White, IsFixed = true });
-
-            Canvas.CanvasComponents.Add(new BitmapComponent(new Bitmap(@"C:\Users\NotImpLife\Desktop\test.jpg"), 50, 70, 100, 100));
-
-            Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(50, 64, 32, 32)));
-            Canvas.CanvasComponents.Add(new SimpleRectangle(new Rectangle(100, 26, 64, 32)));
-            Canvas.CanvasComponents.Add(frame);*/
             Canvas.CanvasViewLocation = Point.Empty;
 
             SequenceTrackViewer.SequenceManager = SequenceManager;
 
             SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(new Sequence(0, 7) { Name = "Tralalaala" });
             SequenceTrackViewer.SequenceManager.GetTrack(1).AddSequence(new Sequence(1, 5) { Name = "This Sequence", Color = Color.DarkBlue });
-
 
             var s = new Sequence(2, 8) { Name = "otherSeq" };
             s.AddLayer(new StaticImageLayer(new Data.Drawing.FlipnoteVisualSource(5, 5)) { DisplayName = "xaxa" });
@@ -123,15 +108,18 @@ namespace FlipnoteDotNet
 
         private void PropertyEditor_ObjectPropertyChanged(object sender, System.Reflection.PropertyInfo e)
         {
+            Debug.WriteLine("Property changed");
             UpdateSelectedElementLabel();
             if (PropertyEditor.Target is Sequence) 
-            {                
+            {                                
                 SequenceTracksEditor.Viewer.InvalidateSurface();
+                DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
                 return;
             }          
             if(PropertyEditor.Target is ILayer)
-            {
+            {                
                 LayersEditor.LayersListBox.Invalidate();
+                DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
                 return;
             }
         }
@@ -182,10 +170,21 @@ namespace FlipnoteDotNet
             Canvas.CanvasComponents.Clear();
             newComps.ForEach(Canvas.CanvasComponents.Add);
 
-            Canvas.CanvasComponents.ForEach(_ => Debug.WriteLine(_));
+            //Canvas.CanvasComponents.ForEach(_ => Debug.WriteLine(_));
+            Canvas.CanvasComponents.ForEach(_ =>
+                {
+                    if(_ is ILayerCanvasComponent lcc)
+                        lcc.Layer.UserUpdate += Layer_UserUpdate;
+                });
 
         
             Canvas.Invalidate();            
+        }
+
+        private void Layer_UserUpdate(object sender, EventArgs e)
+        {
+            if (sender != PropertyEditor.Target) return;
+            PropertyEditor.ReloadValues();                      
         }
 
         private void PropertyEditor_KeyFramesButtonClick(object sender, EventArgs e)

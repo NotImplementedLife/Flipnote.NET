@@ -249,7 +249,7 @@ namespace FlipnoteDotNet.GUI.Forms.Controls
             foreach (var chunk in Chunks.Values)
             {
                 int cx = chunk.ChunkX * DrawingChunk.Width;
-                int cy = chunk.ChunkX * DrawingChunk.Height;
+                int cy = chunk.ChunkY * DrawingChunk.Height;
                 for (int y = 0; y < DrawingChunk.Height; y++) 
                 {
                     for (int x = 0; x < DrawingChunk.Width; x++)

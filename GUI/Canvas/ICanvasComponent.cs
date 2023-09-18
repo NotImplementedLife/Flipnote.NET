@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.GUI.Canvas.Drawing;
+using System;
 using System.Drawing;
 
 namespace FlipnoteDotNet.GUI.Canvas
@@ -10,7 +11,8 @@ namespace FlipnoteDotNet.GUI.Canvas
         Size Size { get; set; }
         bool IsFixed { get; set; }
         bool IsResizeable { get; set; }
-        void OnPaint(CanvasGraphics g);        
+        void OnPaint(CanvasGraphics g);
 
+        event EventHandler BoundsChanged;
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IPaintTool
     {
-        IPaintOperation InitOperation();
+        IPaintOperation CreateOperation();
     }
 }

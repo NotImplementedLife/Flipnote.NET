@@ -157,6 +157,9 @@
     <Compile Include="GUI\Properties\EditorFields\DefaultNonEditable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Properties\EditorFields\FloatEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Properties\EditorFields\FormBasedEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -183,7 +186,7 @@
     <Compile Include="GUI\Properties\KeyFrameEditorRow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\Properties\KeyFrameEditorRow.Designer.cs">
+    <Compile Include="GUI\Properties\KeyFrameEditorRow.designer.cs">
       <DependentUpon>KeyFrameEditorRow.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Properties\KeyFramesEditor.cs">
@@ -199,12 +202,6 @@
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Properties\PropertyEditorData.cs" />
-    <Compile Include="GUI\Properties\PropertyRow.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Properties\PropertyRow.Designer.cs">
-      <DependentUpon>PropertyRow.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\ToolStripEmptyRenderer.cs" />
     <Compile Include="GUI\Tracks\SequenceCreateDragData.cs" />
     <Compile Include="GUI\Tracks\SequenceMoveDragData.cs" />
@@ -231,8 +228,10 @@
     <Compile Include="Utils\Paint\IPaintDevice.cs" />
     <Compile Include="Utils\Paint\IPaintOperation.cs" />
     <Compile Include="Utils\Paint\IPaintTool.cs" />
+    <Compile Include="Utils\Paint\Operations\EraseOperation.cs" />
     <Compile Include="Utils\Paint\Operations\PenOperation.cs" />
     <Compile Include="Utils\Paint\PaintContext.cs" />
+    <Compile Include="Utils\Paint\Tools\EraseTool.cs" />
     <Compile Include="Utils\Paint\Tools\PenTool.cs" />
     <Compile Include="Utils\Paint\Tools\PreviewPoint.cs" />
     <Compile Include="Utils\Temporal\AbstractTransformableTemporalContext.cs" />
@@ -245,6 +244,7 @@
     <Compile Include="Utils\Temporal\ValueTransformers\AbstractValueTransformer.cs" />
     <Compile Include="Utils\Temporal\ValueTransformers\ConstantValueTransformer.cs" />
     <Compile Include="Utils\Temporal\ValueTransformers\SimpleValueTransformer.cs" />
+    <Compile Include="Utils\AsyncBitmap.cs" />
     <EmbeddedResource Include="GUI\Canvas\CanvasSpaceControl.resx">
       <DependentUpon>CanvasSpaceControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -274,9 +274,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Properties\PropertyEditor.resx">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Properties\PropertyRow.resx">
-      <DependentUpon>PropertyRow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -3,6 +3,8 @@ using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
+using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -42,6 +44,7 @@ namespace FlipnoteDotNet.Rendering.Canvas
             {
                 Location = value.Location;
                 Size = value.Size;
+                OnBoundsChanged();
             }
         }
         public Point Location 
@@ -51,6 +54,7 @@ namespace FlipnoteDotNet.Rendering.Canvas
             {
                 Layer.X.PutCurrentConstantTransformer(value.X, Timestamp, autoUpdate: true);
                 Layer.Y.PutCurrentConstantTransformer(value.Y, Timestamp, autoUpdate: true);
+                OnBoundsChanged();
             }                
         }
         public Size Size 
@@ -62,8 +66,8 @@ namespace FlipnoteDotNet.Rendering.Canvas
                 var w = Layer.VisualSource.Width == 0 ? 1.0f : 1.0f * value.Width / Layer.VisualSource.Width;
                 var h = Layer.VisualSource.Height == 0 ? 1.0f : 1.0f * value.Height / Layer.VisualSource.Height;
                 Layer.ScaleX.PutCurrentConstantTransformer(w, Timestamp, autoUpdate: true);
-                Layer.ScaleY.PutCurrentConstantTransformer(h, Timestamp, autoUpdate: true);
-                Debug.WriteLine($"Size set Scale={value.Width}, {value.Height}");
+                Layer.ScaleY.PutCurrentConstantTransformer(h, Timestamp, autoUpdate: true);                
+                OnBoundsChanged();
             }
         }
         public bool IsFixed { get; set; }
@@ -77,6 +81,14 @@ namespace FlipnoteDotNet.Rendering.Canvas
         }
 
         private LayerRenderingOptions LayerRenderingOptions;
+
+        public event EventHandler BoundsChanged;
+
+        protected void OnBoundsChanged()
+        {
+            BoundsChanged?.Invoke(this, new EventArgs());
+            Layer.TriggerUserUpdate();
+        }
 
         public void Refresh()
         {

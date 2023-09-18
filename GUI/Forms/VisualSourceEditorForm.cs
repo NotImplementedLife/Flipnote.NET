@@ -41,19 +41,18 @@ namespace FlipnoteDotNet.GUI.Forms
 
                 button.Click += (sender, args) =>
                 {
+                    if (ActiveToolButton != null) ActiveToolButton.Checked = false;
+                    ActiveToolButton = null;
+                    Canvas.AttachOperation(null);
+
                     var btn = sender as ToolStripButton;
-                    if (!btn.Checked)
-                    {
-                        ActiveToolButton = null;
-                        Canvas.AttachOperation(null);
-                    }
-                    else
+                    if (btn.Checked)                    
                     {
                         ActiveToolButton = btn;
                         ActiveToolButton.Checked = true;
 
                         var tool = Activator.CreateInstance(btn.Tag as Type) as IPaintTool;
-                        var operation = tool.InitOperation();
+                        var operation = tool.CreateOperation();
                         operation.PaintContext = PaintContext;
                         Canvas.AttachOperation(operation);
                     }                    
@@ -67,13 +66,13 @@ namespace FlipnoteDotNet.GUI.Forms
 
             Canvas.DisableMouseGestures();
             Canvas.EnableMouseGestures();
-        }        
+        }
 
         private void UpdateVisuals()
         {
             VisualSource = VisualSource ?? new FlipnoteVisualSource(8, 8);
-            Canvas.LoadFromFlipnoteVisualSoruce(VisualSource);            
-        }      
+            Canvas.LoadFromFlipnoteVisualSoruce(VisualSource);
+        }
 
         FlipnoteVisualSource VisualSource { get; set; }
 

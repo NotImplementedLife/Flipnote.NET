@@ -1,5 +1,6 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Constants;
+using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Properties.EditorFields;
 using FlipnoteDotNet.Properties;
@@ -105,7 +106,7 @@ namespace FlipnoteDotNet.GUI.Properties
 
         private List<IPropertyEditorControl> Editors { get; } = new List<IPropertyEditorControl>();        
 
-        private void ReloadValues()
+        public void ReloadValues()
         {
             foreach(var editor in Editors)
             {
@@ -133,7 +134,6 @@ namespace FlipnoteDotNet.GUI.Properties
             Editors.ForEach(e => e.ObjectPropertyValueChanged -= PropEditorControl_ObjectPropertyValueChanged);
             Editors.Clear();
             Controls.Clear();
-
             PropertyEditorRows.Clear();
 
             if (Target == null) return;
@@ -157,6 +157,9 @@ namespace FlipnoteDotNet.GUI.Properties
                 }
 
                 PropertyEditorRows.Add(ped);
+
+                if (editor is IPropertyEditorControl propEditor)
+                    Editors.Add(propEditor);
 
                 h += Math.Max(25, editor.Height) + 2 * RowPadding;
             }
@@ -335,6 +338,8 @@ namespace FlipnoteDotNet.GUI.Properties
             {
                 RefreshKeyFramesEditor();
             }
+
+            ObjectPropertyChanged?.Invoke(this, prop);
         }
 
         private void PropertyRow_EffectsButtonClick(object sender, EventArgs e)
@@ -379,6 +384,6 @@ namespace FlipnoteDotNet.GUI.Properties
             ObjectPropertyChanged?.Invoke(this, prop);
         }
 
-        public event EventHandler<PropertyInfo> ObjectPropertyChanged;
+        public event EventHandler<PropertyInfo> ObjectPropertyChanged;        
     }
 }

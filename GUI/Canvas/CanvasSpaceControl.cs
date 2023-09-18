@@ -1,15 +1,18 @@
 ﻿using FlipnoteDotNet.Constants;
+using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Drawing;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
 using FlipnoteDotNet.GUI.Canvas.Misc;
 using FlipnoteDotNet.GUI.MouseGestures;
+using FlipnoteDotNet.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Canvas
@@ -41,7 +44,15 @@ namespace FlipnoteDotNet.GUI.Canvas
             MouseGesturesHandler.Zoom += MouseGesturesHandler_Zoom;
             MouseGesturesHandler.AttachTarget(this);
 
+            GridBitmap = new AsyncBitmap(DrawGrid);
+            GridBitmap.Ready += GridBitmap_Ready;
+
             OldSize = Size;
+        }
+
+        private void GridBitmap_Ready(object sender, EventArgs e)
+        {
+            base.Invalidate();            
         }
 
         public void ClearComponents() => CanvasComponents.Clear();
@@ -72,7 +83,7 @@ namespace FlipnoteDotNet.GUI.Canvas
 
         private void MouseGesturesHandler_Zoom(object sender, ZoomGestureArgs e)
         {            
-            ScaleAroundPoint(e.CursorLocation, (CanvasViewScaleFactor + e.Factor).Clamp(25, 1000));            
+            ScaleAroundPoint(e.CursorLocation, (CanvasViewScaleFactor + e.Factor).Clamp(25, 1000));
             Invalidate();
         }
 
@@ -172,11 +183,35 @@ namespace FlipnoteDotNet.GUI.Canvas
             Debug.WriteLine($"Drop {e.StartLocation}; {e.CurrentLocation}");
         }
 
+        private AsyncBitmap GridBitmap;
+
+        private void DrawGrid(Graphics g)
+        {
+            var topLeft = ScreenToCanvas(Point.Empty);
+            var bottomRight = ScreenToCanvas(new Point(Width, Height));
+            var pen = new Pen(Color.Black.Alpha(64).GetBrush(), 1);
+            int w = (int)g.ClipBounds.Width;
+            int h = (int)g.ClipBounds.Height;
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+
+            for (int y = topLeft.Y; y < bottomRight.Y; y++)
+            {
+                var cy = CanvasToScreen(new Point(0, y)).Y;
+                g.DrawLine(pen, 0, cy, w, cy);
+            }
+
+            for (int x = topLeft.X; x < bottomRight.X; x++)
+            {
+                var cx = CanvasToScreen(new Point(x, 0)).X;
+                g.DrawLine(pen, cx, 0, cx, h);
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;           
 
             e.Graphics.FillRectangle(Constants.Brushes.TransparentBackgroundBrush, 0, 0, Width, Height);
 
@@ -211,21 +246,12 @@ namespace FlipnoteDotNet.GUI.Canvas
 
             if (CanvasViewScaleFactor > 500)
             {
-                var topLeft = ScreenToCanvas(Point.Empty);
-                var bottomRight = ScreenToCanvas(new Point(Width, Height));
-                var pen = new Pen(Color.Black.Alpha(64).GetBrush(), 1);
-                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-
-                for (int y = topLeft.Y; y < bottomRight.Y; y++)
+                if (GridBitmap.DisplayBitmap != null)// && !GridBitmap.IsBusy)
                 {
-                    var cy = CanvasToScreen(new Point(0, y)).Y;
-                    e.Graphics.DrawLine(pen, 0, cy, Width, cy);
-                }
-
-                for (int x = topLeft.X; x < bottomRight.X; x++)
-                {
-                    var cx = CanvasToScreen(new Point(x, 0)).X;
-                    e.Graphics.DrawLine(pen, cx, 0, cx, Height);
+                    Debug.WriteLine("MT Draw");                    
+                    lock(GridBitmap.Locker)
+                        e.Graphics.DrawImageUnscaled(GridBitmap.DisplayBitmap, Point.Empty);
+                    Debug.WriteLine("MT DEND");
                 }
             }
 
@@ -255,8 +281,7 @@ namespace FlipnoteDotNet.GUI.Canvas
             OldSize = Size;
             CanvasViewLocation = new Point(x, y);
             Invalidate();
-        }
-
+        }       
 
         class CanvasDragMoveData
         {
@@ -295,6 +320,19 @@ namespace FlipnoteDotNet.GUI.Canvas
             var hoveredResizePoint = ResizePoints.Where(_ => CanvasToScreen(_.CanvasLocation).IsInRange(cursor, 4)).FirstOrDefault();
 
             Cursor = hoveredResizePoint?.Cursor ?? Cursors.Default;
-        }        
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (CanvasViewScaleFactor > 500)
+            {
+                if (!GridBitmap.IsBusy)
+                {
+                    GridBitmap.Redraw(Width, Height);
+                }
+            }
+        }
+        
+
     }
 }

@@ -141,7 +141,7 @@ namespace FlipnoteDotNet
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10282, -13925);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10302, -13960);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
