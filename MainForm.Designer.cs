@@ -34,16 +34,16 @@
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.MainContainer = new System.Windows.Forms.SplitContainer();
             this.LeftContainer = new System.Windows.Forms.SplitContainer();
+            this.RightContainer = new System.Windows.Forms.SplitContainer();
+            this.SelectedElementLabel = new System.Windows.Forms.Label();
+            this.ContentPanel = new System.Windows.Forms.Panel();
             this.Canvas = new FlipnoteDotNet.GUI.Canvas.CanvasSpaceControl();
             this.SequenceTracksEditor = new FlipnoteDotNet.GUI.Controls.SequenceTracksEditor();
-            this.RightContainer = new System.Windows.Forms.SplitContainer();
             this.LayersEditor = new FlipnoteDotNet.GUI.Layers.LayersEditor();
             this.KeyframesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.KeyFramesEditor = new FlipnoteDotNet.GUI.Properties.KeyFramesEditor();
             this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
-            this.SelectedElementLabel = new System.Windows.Forms.Label();
-            this.ContentPanel = new System.Windows.Forms.Panel();
             this.FormMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
@@ -136,27 +136,6 @@
             this.LeftContainer.TabStop = false;
             this.LeftContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.BackgroundControlPaint);
             // 
-            // Canvas
-            // 
-            this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10322, -13995);
-            this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Canvas.Location = new System.Drawing.Point(2, 2);
-            this.Canvas.Name = "Canvas";
-            this.Canvas.Size = new System.Drawing.Size(487, 204);
-            this.Canvas.TabIndex = 0;
-            this.Canvas.SelectionChanged += new System.EventHandler(this.Canvas_SelectionChanged);
-            // 
-            // SequenceTracksEditor
-            // 
-            this.SequenceTracksEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SequenceTracksEditor.Location = new System.Drawing.Point(0, 0);
-            this.SequenceTracksEditor.Name = "SequenceTracksEditor";
-            this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
-            this.SequenceTracksEditor.TabIndex = 0;
-            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.Sequence>(this.SequenceTracksEditor_SelectedElementChanged);
-            this.SequenceTracksEditor.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksEditor_CurrentFrameChanged);
-            // 
             // RightContainer
             // 
             this.RightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -182,6 +161,48 @@
             this.RightContainer.TabIndex = 0;
             this.RightContainer.TabStop = false;
             // 
+            // SelectedElementLabel
+            // 
+            this.SelectedElementLabel.AutoEllipsis = true;
+            this.SelectedElementLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(0)))));
+            this.SelectedElementLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SelectedElementLabel.ForeColor = System.Drawing.Color.White;
+            this.SelectedElementLabel.Location = new System.Drawing.Point(0, 0);
+            this.SelectedElementLabel.Name = "SelectedElementLabel";
+            this.SelectedElementLabel.Size = new System.Drawing.Size(189, 20);
+            this.SelectedElementLabel.TabIndex = 3;
+            this.SelectedElementLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContentPanel.Location = new System.Drawing.Point(0, 40);
+            this.ContentPanel.MinimumSize = new System.Drawing.Size(0, 100);
+            this.ContentPanel.Name = "ContentPanel";
+            this.ContentPanel.Size = new System.Drawing.Size(189, 100);
+            this.ContentPanel.TabIndex = 1;
+            // 
+            // Canvas
+            // 
+            this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10382, -14100);
+            this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Canvas.Location = new System.Drawing.Point(2, 2);
+            this.Canvas.Name = "Canvas";
+            this.Canvas.Size = new System.Drawing.Size(487, 204);
+            this.Canvas.TabIndex = 0;
+            this.Canvas.SelectionChanged += new System.EventHandler(this.Canvas_SelectionChanged);
+            // 
+            // SequenceTracksEditor
+            // 
+            this.SequenceTracksEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SequenceTracksEditor.Location = new System.Drawing.Point(0, 0);
+            this.SequenceTracksEditor.Name = "SequenceTracksEditor";
+            this.SequenceTracksEditor.Size = new System.Drawing.Size(491, 200);
+            this.SequenceTracksEditor.TabIndex = 0;
+            this.SequenceTracksEditor.SelectedElementChanged += new System.EventHandler<FlipnoteDotNet.Data.Sequence>(this.SequenceTracksEditor_SelectedElementChanged);
+            this.SequenceTracksEditor.CurrentFrameChanged += new System.EventHandler(this.SequenceTracksEditor_CurrentFrameChanged);
+            // 
             // LayersEditor
             // 
             this.LayersEditor.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -191,6 +212,7 @@
             this.LayersEditor.Size = new System.Drawing.Size(189, 165);
             this.LayersEditor.TabIndex = 0;
             this.LayersEditor.SelectionChanged += new System.EventHandler<FlipnoteDotNet.GUI.Layers.LayersEditor.SelectionChangedEventArgs>(this.LayersEditor_SelectionChanged);
+            this.LayersEditor.LayersListChanged += new System.EventHandler(this.LayersEditor_LayersListChanged);
             // 
             // KeyframesExpander
             // 
@@ -257,27 +279,6 @@
             this.PropertyEditor.TargetChanged += new System.EventHandler(this.PropertyEditor_TargetChanged);
             this.PropertyEditor.KeyFramesButtonClick += new System.EventHandler(this.PropertyEditor_KeyFramesButtonClick);
             this.PropertyEditor.ObjectPropertyChanged += new System.EventHandler<System.Reflection.PropertyInfo>(this.PropertyEditor_ObjectPropertyChanged);
-            // 
-            // SelectedElementLabel
-            // 
-            this.SelectedElementLabel.AutoEllipsis = true;
-            this.SelectedElementLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(0)))));
-            this.SelectedElementLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SelectedElementLabel.ForeColor = System.Drawing.Color.White;
-            this.SelectedElementLabel.Location = new System.Drawing.Point(0, 0);
-            this.SelectedElementLabel.Name = "SelectedElementLabel";
-            this.SelectedElementLabel.Size = new System.Drawing.Size(189, 20);
-            this.SelectedElementLabel.TabIndex = 3;
-            this.SelectedElementLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ContentPanel
-            // 
-            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContentPanel.Location = new System.Drawing.Point(0, 40);
-            this.ContentPanel.MinimumSize = new System.Drawing.Size(0, 100);
-            this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(189, 100);
-            this.ContentPanel.TabIndex = 1;
             // 
             // MainForm
             // 

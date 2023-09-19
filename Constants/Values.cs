@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace FlipnoteDotNet
 {
@@ -7,10 +8,12 @@ namespace FlipnoteDotNet
         public static Control SnychronizingObject;
 
         public static void Init()
-        {            
-            SnychronizingObject = new Control();
+        {
+            SnychronizingObject = new Control();            
             Reflection.Init();
         }
 
+
+        public static bool IsDesignerMode => (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
     }
 }

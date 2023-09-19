@@ -14,6 +14,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using FlipnoteDotNet.GUI.Layers;
+using System.Reflection.Emit;
 
 namespace FlipnoteDotNet
 {
@@ -116,7 +118,7 @@ namespace FlipnoteDotNet
                 DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
                 return;
             }          
-            if(PropertyEditor.Target is ILayer)
+            if(PropertyEditor.Target is ILayer layer)
             {                
                 LayersEditor.LayersListBox.Invalidate();
                 DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
@@ -130,6 +132,12 @@ namespace FlipnoteDotNet
             PropertiesExpander.IsExpanded = PropertyEditor.Target != null;
             Debug.WriteLine($"Target chnaged :{PropertyEditor.Target?.ToString() ?? "null"}");
             UpdateSelectedElementLabel();
+
+            if (PropertyEditor.Target is ILayer layer)
+            {
+                Debug.WriteLine("Target changed!");
+                LayersEditor.LayersListBox.SelectLayer(layer);
+            }
 
             KeyFramesEditor.ClearEditors();
         }
@@ -217,6 +225,11 @@ namespace FlipnoteDotNet
                 selection.Layer.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
                 PropertyEditor.Target = selection.Layer;
             }
+        }
+
+        private void LayersEditor_LayersListChanged(object sender, EventArgs e)
+        {
+            DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
         }
     }
 }

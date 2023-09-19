@@ -105,5 +105,10 @@ namespace FlipnoteDotNet.GUI.Layers
             }
             e.DrawFocusRectangle();
         }
+
+        public void SelectLayer(ILayer layer)
+        {
+            SelectedIndex = LayersBinding.IndexOf(layer);
+        }
     }
 }

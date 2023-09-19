@@ -3,9 +3,8 @@ using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
+using FlipnoteDotNet.Utils;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace FlipnoteDotNet.Rendering.Canvas
@@ -25,7 +24,7 @@ namespace FlipnoteDotNet.Rendering.Canvas
         }
 
         void ILayerCanvasComponent.Initialize(ILayer layer, LayerRenderingOptions options, int timestamp)
-            => Initialize(layer as StaticImageLayer, options, timestamp);
+            => Initialize(layer as StaticImageLayer, options, timestamp);        
 
         private void BuildBitmapComponent()
         {

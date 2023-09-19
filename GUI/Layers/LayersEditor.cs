@@ -80,37 +80,40 @@ namespace FlipnoteDotNet.GUI.Layers
 
         private void InitAddLayerContextMenu()
         {
+            if (Constants.IsDesignerMode)
+                return;
             Constants.Reflection.LayerTypes.ForEach(ltype =>
             {
                 var attr = ltype.GetCustomAttribute<LayerAttribute>();
                 if (attr == null) return;
                 if (attr.CreatorForm == null) return;
-
                 var item = new ToolStripMenuItem();
                 item.Text = attr.DisplayName;
                 item.Tag = attr;
-
-                item.Click += (o, ev) =>
-                {
-                    var a = (o as ToolStripMenuItem).Tag as LayerAttribute;
-                    var form = Activator.CreateInstance(a.CreatorForm) as ILayerCreatorForm;
-                    if(form.ShowDialog()==DialogResult.OK)
-                    {
-                        var layer = form.Layer;
-                        Sequence.AddLayer(layer);
-                        ReloadSequence();
-                    }
-                };
-
-
+                item.Click += AddLayerItem_Click;
                 AddLayerContextMenuStrip.Items.Add(item);
             });
            
+        }
+
+        private void AddLayerItem_Click(object sender, EventArgs e)
+        {
+            var a = (sender as ToolStripMenuItem).Tag as LayerAttribute;
+            var form = Activator.CreateInstance(a.CreatorForm) as ILayerCreatorForm;
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                var layer = form.Layer;
+                Sequence.AddLayer(layer);
+                ReloadSequence();
+                LayersListChanged?.Invoke(this, new EventArgs());
+            }
         }
 
         private void AddLayerButton_Click(object sender, EventArgs e)
         {
             AddLayerContextMenuStrip.Show(Cursor.Position);
         }
+
+        public event EventHandler LayersListChanged;
     }
 }
