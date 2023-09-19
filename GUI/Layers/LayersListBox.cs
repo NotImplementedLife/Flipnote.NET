@@ -25,8 +25,8 @@ namespace FlipnoteDotNet.GUI.Layers
             DataSource = LayersBinding;
             DrawMode = DrawMode.OwnerDrawFixed;
             ItemHeight = 50;            
-        }        
-        BindingList<ILayer> LayersBinding { get; }
+        }
+        BindingList<ILayer> LayersBinding;
 
         public void LoadLayers(IEnumerable<ILayer> layers)
         {

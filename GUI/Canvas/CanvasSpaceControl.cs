@@ -86,6 +86,20 @@ namespace FlipnoteDotNet.GUI.Canvas
 
         private List<ResizePoint> ResizePoints = new List<ResizePoint>();
 
+        public void SelectSingle(ICanvasComponent canvasComponent)
+        {
+            CanvasComponents.SelectSingle(canvasComponent);
+            ResizePoints.Clear();
+            if (canvasComponent.IsResizeable)
+            {
+                foreach (ResizeDirection direction in Enum.GetValues(typeof(ResizeDirection)))
+                {
+                    ResizePoints.Add(new ResizePoint(canvasComponent, direction));
+                }
+            }                    
+            Invalidate();
+        }
+
         private void MouseGesturesHandler_Click(object sender, ClickGestureArgs e)
         {            
             Debug.WriteLine("Click");

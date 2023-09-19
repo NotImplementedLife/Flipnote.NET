@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace FlipnoteDotNet.Data.Layers
 {
-    public interface IDisplayLayer
+    public interface IDisplayLayer : ILayer
     {
         string DisplayName { get; set; }
 

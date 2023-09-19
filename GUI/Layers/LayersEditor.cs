@@ -51,7 +51,10 @@ namespace FlipnoteDotNet.GUI.Layers
 
         private void LayersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RemoveLayerButton.Enabled = LayersListBox.SelectedIndex >= 0;
+            RemoveLayerButton.Enabled
+                = LayerMoveDownButton.Enabled
+                = LayerMoveUpButton.Enabled
+                = LayersListBox.SelectedIndex >= 0;
 
             var selection = LayersListBox.SelectedItem;
             if (selection is ILayer layer)

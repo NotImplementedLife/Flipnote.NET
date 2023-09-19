@@ -77,6 +77,13 @@ namespace FlipnoteDotNet.GUI.Properties
             get => _Target;
             set
             {
+                if (_Target == value)
+                {
+                    Debug.WriteLine("ERE?");
+                    ReloadPropertyRows();
+                    return;
+                }
+
                 if (_Target is ITemporalContext tctx)                 
                     tctx.CurrentTimestampChanged -= TemporalTarget_CurrentTimestampChanged;
                 if(_Target is ITimeLocalizable tloc)

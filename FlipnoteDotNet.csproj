@@ -284,6 +284,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Layers\LayersEditor.resx">
       <DependentUpon>LayersEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Properties\EditorFields\FormBasedEditor.resx">
       <DependentUpon>FormBasedEditor.cs</DependentUpon>
@@ -332,6 +333,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\ic_layer_move_down.png" />
+    <None Include="Resources\ic_layer_move_up.png" />
     <None Include="Resources\ic_paint_zoom.png" />
     <None Include="Resources\ic_paint_text.png" />
     <None Include="Resources\ic_paint_spray.png" />

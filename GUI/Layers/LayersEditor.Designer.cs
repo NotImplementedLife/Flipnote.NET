@@ -29,11 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LayersEditor));
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.AddLayerButton = new System.Windows.Forms.ToolStripButton();
             this.RemoveLayerButton = new System.Windows.Forms.ToolStripButton();
             this.AddLayerContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.LayersListBox = new FlipnoteDotNet.GUI.Layers.LayersListBox();
+            this.LayerMoveUpButton = new System.Windows.Forms.ToolStripButton();
+            this.LayerMoveDownButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,7 +45,9 @@
             this.ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddLayerButton,
-            this.RemoveLayerButton});
+            this.RemoveLayerButton,
+            this.LayerMoveUpButton,
+            this.LayerMoveDownButton});
             this.ToolStrip.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip.Name = "ToolStrip";
             this.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -77,6 +82,7 @@
             // 
             // LayersListBox
             // 
+            this.LayersListBox.DataSource = ((object)(resources.GetObject("LayersListBox.DataSource")));
             this.LayersListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LayersListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.LayersListBox.FormattingEnabled = true;
@@ -87,6 +93,26 @@
             this.LayersListBox.TabIndex = 1;
             this.LayersListBox.SelectedIndexChanged += new System.EventHandler(this.LayersListBox_SelectedIndexChanged);
             this.LayersListBox.DataSourceChanged += new System.EventHandler(this.LayersListBox_DataSourceChanged);
+            // 
+            // LayerMoveUpButton
+            // 
+            this.LayerMoveUpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.LayerMoveUpButton.Enabled = false;
+            this.LayerMoveUpButton.Image = global::FlipnoteDotNet.Properties.Resources.ic_layer_move_up;
+            this.LayerMoveUpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LayerMoveUpButton.Name = "LayerMoveUpButton";
+            this.LayerMoveUpButton.Size = new System.Drawing.Size(23, 22);
+            this.LayerMoveUpButton.Text = "toolStripButton1";
+            // 
+            // LayerMoveDownButton
+            // 
+            this.LayerMoveDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.LayerMoveDownButton.Enabled = false;
+            this.LayerMoveDownButton.Image = global::FlipnoteDotNet.Properties.Resources.ic_layer_move_down;
+            this.LayerMoveDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LayerMoveDownButton.Name = "LayerMoveDownButton";
+            this.LayerMoveDownButton.Size = new System.Drawing.Size(23, 22);
+            this.LayerMoveDownButton.Text = "toolStripButton2";
             // 
             // LayersEditor
             // 
@@ -110,5 +136,7 @@
         private System.Windows.Forms.ToolStripButton AddLayerButton;
         private System.Windows.Forms.ToolStripButton RemoveLayerButton;
         private System.Windows.Forms.ContextMenuStrip AddLayerContextMenuStrip;
+        private System.Windows.Forms.ToolStripButton LayerMoveUpButton;
+        private System.Windows.Forms.ToolStripButton LayerMoveDownButton;
     }
 }

@@ -52,6 +52,8 @@ namespace FlipnoteDotNet.GUI.Canvas
 
             public void SelectSingle(ICanvasComponent component)
             {
+                //if (_SelectedComponents.Count == 1 && _SelectedComponents.First() == component)
+                    //return;
                 if (component == null)
                 {
                     if (_SelectedComponents.Count > 0)

@@ -121,19 +121,25 @@ namespace FlipnoteDotNet.GUI.Tracks
 
         private void MouseGesturesHandler_Click(object sender, ClickGestureArgs e)
         {
-            var oldSelection = _SelectedElement;
-            _SelectedElement = null;
+            Sequence currentSelection = null;
             foreach (var (elem, bounds, _) in GetVisibleElements()) 
             {
                 if (bounds.Contains(e.Location))
                 {
-                    _SelectedElement = elem;
+                    currentSelection = elem;
                     break;
                 }
-            }             
+            }
+            SelectSequence(currentSelection);            
+        }
+
+        public void SelectSequence(Sequence s)
+        {
+            var oldSelection = _SelectedElement;
+            _SelectedElement = s;
             InvalidateSurface();
 
-            if (oldSelection != _SelectedElement) 
+            if (oldSelection != _SelectedElement)
             {
                 SelectedElementChanged?.Invoke(this, new EventArgs());
             }
