@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using FlipnoteDotNet.GUI.Controls;
-using FlipnoteDotNet.Constants;
+using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
 using Brushes = System.Drawing.Brushes;
 

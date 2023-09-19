@@ -1,9 +1,8 @@
-﻿using FlipnoteDotNet.Constants;
+﻿using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Designers;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;

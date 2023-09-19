@@ -1,6 +1,4 @@
-﻿using FlipnoteDotNet.Constants;
-
-namespace FlipnoteDotNet
+﻿namespace FlipnoteDotNet
 {    
     partial class MainForm
     {

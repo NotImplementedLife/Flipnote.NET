@@ -1,4 +1,4 @@
-﻿using FlipnoteDotNet.Constants;
+﻿using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas;

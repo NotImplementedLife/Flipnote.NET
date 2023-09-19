@@ -1,5 +1,5 @@
 ﻿using FlipnoteDotNet.Attributes;
-using FlipnoteDotNet.Constants;
+using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Controls;
 using PPMLib.Data;

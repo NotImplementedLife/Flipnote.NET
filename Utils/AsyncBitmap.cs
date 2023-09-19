@@ -15,10 +15,10 @@ namespace FlipnoteDotNet.Utils
         public object Locker { get; } = new object();
 
         public Bitmap DisplayBitmap { get; private set; }
-        public Action<Graphics> RenderMethod { get; }
+        public Action<Graphics, Rectangle> RenderMethod { get; }
         public bool IsBusy { get; private set; }
 
-        public AsyncBitmap(Action<Graphics> renderMethod)
+        public AsyncBitmap(Action<Graphics, Rectangle> renderMethod)
         {
             RenderMethod = renderMethod;
         }
@@ -27,11 +27,11 @@ namespace FlipnoteDotNet.Utils
         {
             var bmp = new Bitmap(width, height, PixelFormat.Format32bppPArgb);           
             var g = Graphics.FromImage(bmp);
-            g.Clip = new Region(new Rectangle(Point.Empty, bmp.Size));
+            var bounds = new Rectangle(Point.Empty, bmp.Size);            
             Task.Run(() =>
             {                
-                IsBusy = true;                
-                RenderMethod?.Invoke(g);                
+                IsBusy = true;
+                RenderMethod?.Invoke(g, bounds);
                 g.Flush(FlushIntention.Sync);
                 g.Dispose();
 

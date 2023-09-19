@@ -1,16 +1,13 @@
 ﻿using FlipnoteDotNet.Attributes;
-using FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace FlipnoteDotNet.Utils.Temporal
-{
-    using TTemporalTransformers = Dictionary<ITimeDependentValue, Dictionary<IValueTransformer, int>>;
+{    
     public abstract class AbstractTransformableTemporalContext : ITimeLocalizable, IInitialize
     {
         private int _CurrentTimestamp;

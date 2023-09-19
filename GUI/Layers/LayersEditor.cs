@@ -37,8 +37,9 @@ namespace FlipnoteDotNet.GUI.Layers
         {
             AddLayerButton.Enabled = Sequence != null;
             LayersListBox.SelectedIndexChanged -= LayersListBox_SelectedIndexChanged;
-            LayersListBox.DataSource = null;
-            LayersListBox.DataSource = Sequence?.Layers;
+            LayersListBox.LoadLayers(Sequence?.Layers);
+            //LayersListBox.DataSource = null;
+            //LayersListBox.DataSource = Sequence?.Layers;
             LayersListBox.SelectedIndexChanged += LayersListBox_SelectedIndexChanged;
             LayersListBox.SelectedIndex = -1;
         }

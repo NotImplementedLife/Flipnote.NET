@@ -1,8 +1,6 @@
-﻿using FlipnoteDotNet.Constants;
-using FlipnoteDotNet.Extensions;
+﻿using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Utils.Temporal;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;

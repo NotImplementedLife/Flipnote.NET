@@ -66,6 +66,7 @@
     <Compile Include="Constants\Brushes.cs" />
     <Compile Include="Constants\Colors.cs" />
     <Compile Include="Constants\Reflection.cs" />
+    <Compile Include="Constants\Values.cs" />
     <Compile Include="Data\Drawing\FlipnoteVisualSource.cs" />
     <Compile Include="Data\ILayer.cs" />
     <Compile Include="Data\Layers\AbstractLayer.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Utils\Paint\Tools\EraseTool.cs" />
     <Compile Include="Utils\Paint\Tools\PenTool.cs" />
     <Compile Include="Utils\Paint\Tools\PreviewPoint.cs" />
+    <Compile Include="Utils\Synchronizer.cs" />
     <Compile Include="Utils\Temporal\AbstractTransformableTemporalContext.cs" />
     <Compile Include="Utils\Temporal\ITemporalContext.cs" />
     <Compile Include="Utils\Temporal\ITimeLocalizable.cs" />

@@ -1,5 +1,4 @@
-﻿using FlipnoteDotNet.Constants;
-using FlipnoteDotNet.Data;
+﻿using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.MouseGestures;
@@ -7,14 +6,13 @@ using FlipnoteDotNet.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;
+using static FlipnoteDotNet.Constants;
 
 namespace FlipnoteDotNet.GUI.Tracks
 {
@@ -100,6 +98,11 @@ namespace FlipnoteDotNet.GUI.Tracks
 
         private void SequenceManager_ElementRemoved(SequenceManager sender, SequenceTrack track, Sequence e)
         {
+            var oldStartFrame = e.StartFrame;
+            var oldEndFrame = e.EndFrame;
+            e.StartFrame = e.EndFrame = 0;
+            SequenceMoved(e, oldStartFrame, oldEndFrame);
+
             if (!ElementRemovedEventActive) return;
             if(e==SelectedElement)
             {
@@ -113,6 +116,7 @@ namespace FlipnoteDotNet.GUI.Tracks
         private void SequenceManager_ElementAdded(SequenceManager sender, SequenceTrack track, Sequence e)
         {
             InvalidateSurface();
+            SequenceMoved(e, 0, 0);
         }
 
         private void MouseGesturesHandler_Click(object sender, ClickGestureArgs e)
@@ -213,12 +217,15 @@ namespace FlipnoteDotNet.GUI.Tracks
             if (e.UserData is TrackSignMoveDragData) 
             {
                 TrackSignPosition = ScreenToTrackSignPosition(e.CurrentLocation.X);
-                CurrentFrameChanged?.Invoke(this, new EventArgs());
+                CurrentFrameChanged?.Invoke(this, new EventArgs());                
                 return;
             }
             if(e.UserData is SequenceResizeDragData resizeData)
-            {                
+            {
+                var oldStart = resizeData.Element.StartFrame;
+                var oldEnd = resizeData.Element.EndFrame;
                 resizeData.Resize(e.DeltaLocation.X * 100 / Zoom);
+                SequenceMoved(resizeData.Element, oldStart, oldEnd);
                 InvalidateSurface();
                 return;
             }
@@ -267,6 +274,7 @@ namespace FlipnoteDotNet.GUI.Tracks
                         }
                     }                
                 }
+                SequenceMoved(elem, oldS, oldE);
                 InvalidateSurface();
                 return;
             }
@@ -297,7 +305,7 @@ namespace FlipnoteDotNet.GUI.Tracks
                 var newR = GetScreenRectangleOnTrack(trackId, startX, endX);
                 bool overlapsElems = GetVisibleElements().Where(_ => _.TrackId == trackId && _.Bounds.IntersectsWith(newR)).Any();
                 if(!overlapsElems)
-                {
+                {                    
                     SequenceManager.GetTrack(trackId).AddSequence(new Sequence(startX, endX));
                 }
 
@@ -550,5 +558,14 @@ namespace FlipnoteDotNet.GUI.Tracks
             var x2 = TrackToScreen(endTX);
             return new Rectangle(x1, tb.Top, x2 - x1, tb.Bottom - tb.Top);
         }
+
+        void SequenceMoved(Sequence s, int oldStartTs, int oldEndTs)
+        {
+            if (TrackSignPosition.IsInRange(s.StartFrame, s.EndFrame)
+                || TrackSignPosition.IsInRange(oldStartTs, oldEndTs))
+            {                
+                CurrentFrameChanged?.Invoke(this, new EventArgs());
+            }
+        }        
     }
 }

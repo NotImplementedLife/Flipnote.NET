@@ -1,5 +1,5 @@
 ﻿using FlipnoteDotNet.Attributes;
-using FlipnoteDotNet.Constants;
+using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Utils.Temporal;
 using System;
 using System.Linq;

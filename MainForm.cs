@@ -1,4 +1,4 @@
-﻿using FlipnoteDotNet.Constants;
+﻿using static FlipnoteDotNet.Constants;
 using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
 using FlipnoteDotNet.Extensions;

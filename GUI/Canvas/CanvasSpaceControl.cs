@@ -1,7 +1,4 @@
-﻿using FlipnoteDotNet.Constants;
-using FlipnoteDotNet.Data;
-using FlipnoteDotNet.Data.Drawing;
-using FlipnoteDotNet.Extensions;
+﻿using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
 using FlipnoteDotNet.GUI.Canvas.Misc;
 using FlipnoteDotNet.GUI.MouseGestures;
@@ -12,7 +9,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Canvas
@@ -186,13 +182,13 @@ namespace FlipnoteDotNet.GUI.Canvas
 
         private AsyncBitmap GridBitmap;
 
-        private void DrawGrid(Graphics g)
+        private void DrawGrid(Graphics g, Rectangle bounds)
         {
             var topLeft = ScreenToCanvas(Point.Empty);
             var bottomRight = ScreenToCanvas(new Point(Width, Height));
             var pen = new Pen(Color.Black.Alpha(64).GetBrush(), 1);
-            int w = (int)g.ClipBounds.Width;
-            int h = (int)g.ClipBounds.Height;
+            int w = bounds.Width;
+            int h = bounds.Height;
             pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
 
             for (int y = topLeft.Y; y < bottomRight.Y; y++)
