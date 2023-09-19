@@ -117,6 +117,25 @@
     <Compile Include="GUI\Controls\Expander.Designer.cs">
       <DependentUpon>Expander.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\Primitives\IToolStripCheckButton.cs" />
+    <Compile Include="GUI\Controls\Primitives\PopedCotainer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\Primitives\PopedCotainer.Designer.cs">
+      <DependentUpon>PopedCotainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\Primitives\PoperContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\Primitives\PoperContainer.Designer.cs">
+      <DependentUpon>PoperContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\Primitives\ToolStripCheckButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\Primitives\ToolStripSplitCheckButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Controls\ScrollView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -136,8 +155,18 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Designers\OuterControlDesigner.cs" />
+    <Compile Include="GUI\Forms\Controls\IPaintContextEditor.cs" />
+    <Compile Include="GUI\Forms\Controls\PaintContextEditorPopedContainer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GUI\Forms\Controls\PaintDeviceCanvas.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\Controls\PenPreviewPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\Controls\PenPreviewPicker.Designer.cs">
+      <DependentUpon>PenPreviewPicker.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Forms\Controls\VisualSourceEditorControl.cs">
       <SubType>UserControl</SubType>
@@ -267,11 +296,17 @@
     <EmbeddedResource Include="GUI\Controls\Expander.resx">
       <DependentUpon>Expander.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\Primitives\PopedCotainer.resx">
+      <DependentUpon>PopedCotainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\ScrollView.resx">
       <DependentUpon>ScrollView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\SequenceTracksEditor.resx">
       <DependentUpon>SequenceTracksEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Forms\Controls\PenPreviewPicker.resx">
+      <DependentUpon>PenPreviewPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Forms\Controls\VisualSourceEditorControl.resx">
       <DependentUpon>VisualSourceEditorControl.cs</DependentUpon>

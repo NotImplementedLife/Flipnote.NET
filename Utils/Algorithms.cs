@@ -5,6 +5,11 @@ namespace FlipnoteDotNet.Utils
 {
     internal static class Algorithms
     {
+        public static void Swap<T>(ref T a, ref T b)
+        {
+            (b, a) = (a, b);
+        }
+
         public static void Bresenham(Point p1, Point p2, Action<Point> callback)
             => Bresenham(p1.X, p1.Y, p2.X, p2.Y, (x, y) => callback(new Point(x, y)));
 

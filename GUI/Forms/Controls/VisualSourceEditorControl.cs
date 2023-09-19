@@ -1,7 +1,10 @@
 ﻿using FlipnoteDotNet.Data.Drawing;
+using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.GUI.Controls.Primitives;
 using FlipnoteDotNet.Utils.Paint;
+using PPMLib.Data;
 using System;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,18 +16,44 @@ namespace FlipnoteDotNet.GUI.Forms.Controls
         {
             InitializeComponent();
             PaintContext.PenValue = 1;
+            SetCanvasColors();
 
-            if ((LicenseManager.UsageMode == LicenseUsageMode.Designtime))
+            if (Constants.IsDesignerMode) 
                 return;
 
-            foreach (var (ToolType, ToolName, ToolIcon) in Constants.Reflection.PaintTools)
+            foreach (var (ToolType, ToolName, ToolIcon, PntCtxEditorType) in Constants.Reflection.PaintTools)
             {
-                var button = new ToolStripButton();
+                IToolStripCheckButton button = null;
+                if (PntCtxEditorType == null)
+                {
+                    button = new ToolStripCheckButton
+                    {
+                        CheckOnClick = true,                                                
+                    };                    
+                }
+                else
+                {
+                    button = new ToolStripSplitCheckButton
+                    {
+                        CheckOnClick = true
+                    };
+
+                    var pntCtxEditor = Activator.CreateInstance(PntCtxEditorType) as IPaintContextEditor;
+                    var btn = button as ToolStripSplitCheckButton;
+                    var container = new PoperContainer(new PaintContextEditorPopedContainer(pntCtxEditor, PaintContext));
+                    container.Closed += (o, ev) =>
+                    {
+                        SetCanvasColors();
+                    };
+
+                    btn.DropDown = container;
+                    
+                }
+
                 button.Image = ToolIcon;
-                button.ToolTipText = ToolName;
-                button.CheckOnClick = true;
+                button.ToolTipText = ToolName;                
                 button.Tag = ToolType;
-                ToolStrip.Items.Add(button);
+                ToolStrip.Items.Add(button as ToolStripItem);
 
                 button.Click += (sender, args) =>
                 {
@@ -32,7 +61,7 @@ namespace FlipnoteDotNet.GUI.Forms.Controls
                     ActiveToolButton = null;
                     Canvas.AttachOperation(null);
 
-                    var btn = sender as ToolStripButton;
+                    var btn = sender as IToolStripCheckButton;                                        
                     if (btn.Checked)
                     {
                         ActiveToolButton = btn;
@@ -55,9 +84,14 @@ namespace FlipnoteDotNet.GUI.Forms.Controls
             Canvas.EnableMouseGestures();
         }
 
-        private ToolStripButton ActiveToolButton;
+        private IToolStripCheckButton ActiveToolButton;
 
         PaintContext PaintContext = new PaintContext();
+
+        private void SetCanvasColors()
+        {
+            Canvas.SetColors(PaintContext.Pen1.ToColor(FlipnotePaperColor.White), PaintContext.Pen2.ToColor(FlipnotePaperColor.White));
+        }
 
         private void UpdateVisuals()
         {

@@ -34,7 +34,7 @@
             // 
             // Canvas
             // 
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(-118, -43);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(-471, -183);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(26, 0);
             this.Canvas.Name = "Canvas";

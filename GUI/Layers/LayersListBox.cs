@@ -24,8 +24,12 @@ namespace FlipnoteDotNet.GUI.Layers
             LayersBinding = new BindingList<ILayer>();
             DataSource = LayersBinding;
             DrawMode = DrawMode.OwnerDrawFixed;
-            ItemHeight = 50;            
+            ItemHeight = 50;
         }
+
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         BindingList<ILayer> LayersBinding;
 
         public void LoadLayers(IEnumerable<ILayer> layers)
@@ -110,5 +114,6 @@ namespace FlipnoteDotNet.GUI.Layers
         {
             SelectedIndex = LayersBinding.IndexOf(layer);
         }
+        public ILayer SelectedLayer => SelectedIndex < 0 ? null : LayersBinding[SelectedIndex];       
     }
 }

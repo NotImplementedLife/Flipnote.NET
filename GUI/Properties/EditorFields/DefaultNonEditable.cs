@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Properties.EditorFields
 {
     internal class DefaultNonEditable : TextBox, IPropertyEditorControl
     {        
-
         public DefaultNonEditable()
         {
             ReadOnly = true;
@@ -26,6 +21,8 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
         public bool IsTimeDependent { get; set; }
         public PropertyInfo Property { get; set; }
 
+#pragma warning disable 0067 // event is never used
         public event EventHandler ObjectPropertyValueChanged;
+#pragma warning restore 0067
     }
 }

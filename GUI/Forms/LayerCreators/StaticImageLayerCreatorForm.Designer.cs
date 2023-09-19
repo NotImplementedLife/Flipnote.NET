@@ -44,6 +44,7 @@
             // 
             // AddLayerButton
             // 
+            this.AddLayerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AddLayerButton.Location = new System.Drawing.Point(376, 277);
             this.AddLayerButton.Name = "AddLayerButton";
             this.AddLayerButton.Size = new System.Drawing.Size(75, 23);

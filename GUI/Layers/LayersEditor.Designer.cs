@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LayersEditor));
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.AddLayerButton = new System.Windows.Forms.ToolStripButton();
             this.RemoveLayerButton = new System.Windows.Forms.ToolStripButton();
-            this.AddLayerContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.LayersListBox = new FlipnoteDotNet.GUI.Layers.LayersListBox();
             this.LayerMoveUpButton = new System.Windows.Forms.ToolStripButton();
             this.LayerMoveDownButton = new System.Windows.Forms.ToolStripButton();
+            this.AddLayerContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.LayersListBox = new FlipnoteDotNet.GUI.Layers.LayersListBox();
             this.ToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,6 +73,29 @@
             this.RemoveLayerButton.Name = "RemoveLayerButton";
             this.RemoveLayerButton.Size = new System.Drawing.Size(23, 22);
             this.RemoveLayerButton.Text = "Remove selected layer";
+            this.RemoveLayerButton.Click += new System.EventHandler(this.RemoveLayerButton_Click);
+            // 
+            // LayerMoveUpButton
+            // 
+            this.LayerMoveUpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.LayerMoveUpButton.Enabled = false;
+            this.LayerMoveUpButton.Image = global::FlipnoteDotNet.Properties.Resources.ic_layer_move_up;
+            this.LayerMoveUpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LayerMoveUpButton.Name = "LayerMoveUpButton";
+            this.LayerMoveUpButton.Size = new System.Drawing.Size(23, 22);
+            this.LayerMoveUpButton.Text = "Move layer up";
+            this.LayerMoveUpButton.Click += new System.EventHandler(this.LayerMoveUpButton_Click);
+            // 
+            // LayerMoveDownButton
+            // 
+            this.LayerMoveDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.LayerMoveDownButton.Enabled = false;
+            this.LayerMoveDownButton.Image = global::FlipnoteDotNet.Properties.Resources.ic_layer_move_down;
+            this.LayerMoveDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LayerMoveDownButton.Name = "LayerMoveDownButton";
+            this.LayerMoveDownButton.Size = new System.Drawing.Size(23, 22);
+            this.LayerMoveDownButton.Text = "Move layer down";
+            this.LayerMoveDownButton.Click += new System.EventHandler(this.LayerMoveDownButton_Click);
             // 
             // AddLayerContextMenuStrip
             // 
@@ -82,7 +104,6 @@
             // 
             // LayersListBox
             // 
-            this.LayersListBox.DataSource = ((object)(resources.GetObject("LayersListBox.DataSource")));
             this.LayersListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LayersListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.LayersListBox.FormattingEnabled = true;
@@ -93,26 +114,6 @@
             this.LayersListBox.TabIndex = 1;
             this.LayersListBox.SelectedIndexChanged += new System.EventHandler(this.LayersListBox_SelectedIndexChanged);
             this.LayersListBox.DataSourceChanged += new System.EventHandler(this.LayersListBox_DataSourceChanged);
-            // 
-            // LayerMoveUpButton
-            // 
-            this.LayerMoveUpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.LayerMoveUpButton.Enabled = false;
-            this.LayerMoveUpButton.Image = global::FlipnoteDotNet.Properties.Resources.ic_layer_move_up;
-            this.LayerMoveUpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.LayerMoveUpButton.Name = "LayerMoveUpButton";
-            this.LayerMoveUpButton.Size = new System.Drawing.Size(23, 22);
-            this.LayerMoveUpButton.Text = "toolStripButton1";
-            // 
-            // LayerMoveDownButton
-            // 
-            this.LayerMoveDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.LayerMoveDownButton.Enabled = false;
-            this.LayerMoveDownButton.Image = global::FlipnoteDotNet.Properties.Resources.ic_layer_move_down;
-            this.LayerMoveDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.LayerMoveDownButton.Name = "LayerMoveDownButton";
-            this.LayerMoveDownButton.Size = new System.Drawing.Size(23, 22);
-            this.LayerMoveDownButton.Text = "toolStripButton2";
             // 
             // LayersEditor
             // 

@@ -175,19 +175,16 @@ namespace FlipnoteDotNet
 
         private void DrawCanvasAt(int frame)
         {
-            Debug.WriteLine($"LAYERS AT {frame}");
-            LayerComponentsManager.UpdateTimestamp(frame);            
+            LayerComponentsManager.UpdateTimestamp(frame);
 
             var newComps = LayerComponentsManager.GetFromSequenceManager(SequenceManager).ToList();
-            Canvas.CanvasComponents.Clear();
-            newComps.ForEach(Canvas.CanvasComponents.Add);
-            
+            Canvas.ClearComponents();            
+            newComps.ForEach(Canvas.CanvasComponents.Add);            
             Canvas.CanvasComponents.ForEach(_ =>
                 {
                     if(_ is ILayerCanvasComponent lcc)
                         lcc.Layer.UserUpdate += Layer_UserUpdate;
                 });
-
         
             Canvas.Invalidate();            
         }

@@ -7,6 +7,7 @@ namespace FlipnoteDotNet.Attributes
     {
         public string ToolName { get; set; }
         public string IconResourceName { get; set; }
+        public Type PaintContextEditor { get; set; }
         public PaintToolAttribute(string toolName, string iconResourceName)
         {
             ToolName = toolName;

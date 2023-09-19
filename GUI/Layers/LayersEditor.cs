@@ -1,6 +1,7 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Data;
 using FlipnoteDotNet.GUI.Forms;
+using FlipnoteDotNet.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,11 +38,14 @@ namespace FlipnoteDotNet.GUI.Layers
         {
             AddLayerButton.Enabled = Sequence != null;
             LayersListBox.SelectedIndexChanged -= LayersListBox_SelectedIndexChanged;
-            LayersListBox.LoadLayers(Sequence?.Layers);
-            //LayersListBox.DataSource = null;
-            //LayersListBox.DataSource = Sequence?.Layers;
+            LayersListBox.LoadLayers(Sequence?.Layers);            
             LayersListBox.SelectedIndexChanged += LayersListBox_SelectedIndexChanged;
             LayersListBox.SelectedIndex = -1;
+
+            RemoveLayerButton.Enabled
+                = LayerMoveDownButton.Enabled
+                = LayerMoveUpButton.Enabled
+                = LayersListBox.SelectedIndex >= 0;
         }
 
         public void ClearSelection()
@@ -115,8 +119,39 @@ namespace FlipnoteDotNet.GUI.Layers
         private void AddLayerButton_Click(object sender, EventArgs e)
         {
             AddLayerContextMenuStrip.Show(Cursor.Position);
+        }        
+
+        private void RemoveLayerButton_Click(object sender, EventArgs e)
+        {
+            var selLayer = LayersListBox.SelectedLayer;
+            if (selLayer == null) return;
+            Sequence.Layers.Remove(selLayer);
+            ReloadSequence();
+            LayersListChanged?.Invoke(this, new EventArgs());
         }
 
         public event EventHandler LayersListChanged;
+
+        private void LayerMoveUpButton_Click(object sender, EventArgs e)
+        {
+            if (Sequence == null) return;
+            var i = LayersListBox.SelectedIndex;
+            if (i < 1) return;
+            (Sequence.Layers[i], Sequence.Layers[i - 1]) = (Sequence.Layers[i - 1], Sequence.Layers[i]);
+            ReloadSequence();
+            LayersListBox.SelectedIndex = i - 1;
+            LayersListChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void LayerMoveDownButton_Click(object sender, EventArgs e)
+        {
+            if (Sequence == null) return;
+            var i = LayersListBox.SelectedIndex;
+            if (i < 0 || i >= Sequence.Layers.Count-1) return;
+            (Sequence.Layers[i], Sequence.Layers[i + 1]) = (Sequence.Layers[i + 1], Sequence.Layers[i]);
+            ReloadSequence();
+            LayersListBox.SelectedIndex = i + 1;
+            LayersListChanged?.Invoke(this, new EventArgs());
+        }
     }
 }

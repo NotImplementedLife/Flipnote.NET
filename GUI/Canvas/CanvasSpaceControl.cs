@@ -52,7 +52,11 @@ namespace FlipnoteDotNet.GUI.Canvas
             base.Invalidate();            
         }
 
-        public void ClearComponents() => CanvasComponents.Clear();
+        public void ClearComponents()
+        {
+            CanvasComponents.Clear();
+            ResizePoints.Clear();
+        }
         public void AddComponent(ICanvasComponent component) => CanvasComponents.Add(component);
         public void RemoveComponent(ICanvasComponent component) => CanvasComponents.Remove(component);
 
@@ -257,12 +261,10 @@ namespace FlipnoteDotNet.GUI.Canvas
 
             if (CanvasViewScaleFactor > 500)
             {
-                if (GridBitmap.DisplayBitmap != null)// && !GridBitmap.IsBusy)
+                if (GridBitmap.DisplayBitmap != null) 
                 {
-                    Debug.WriteLine("MT Draw");                    
-                    lock(GridBitmap.Locker)
-                        e.Graphics.DrawImageUnscaled(GridBitmap.DisplayBitmap, Point.Empty);
-                    Debug.WriteLine("MT DEND");
+                    lock (GridBitmap.Locker)
+                        e.Graphics.DrawImageUnscaled(GridBitmap.DisplayBitmap, Point.Empty);         
                 }
             }
 

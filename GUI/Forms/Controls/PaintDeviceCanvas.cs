@@ -134,6 +134,13 @@ namespace FlipnoteDotNet.GUI.Forms.Controls
 
         public TColorContext ColorContext = new TColorContext();
 
+        public void SetColors(Color color1, Color color2)
+        {
+            ColorContext.Color1 = color1.ToArgb();
+            ColorContext.Color2 = color2.ToArgb();
+            ForceUpdate();
+        }
+
         public void UpdateDevice()
         {
             foreach(var chunk in Chunks.Values)            

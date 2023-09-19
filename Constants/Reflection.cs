@@ -20,7 +20,7 @@ namespace FlipnoteDotNet
 
             public static Dictionary<Type, Type> LayerCanvasComponents { get; private set; }
 
-            public static List<(Type ToolType, string ToolName, Bitmap ToolIcon)> PaintTools { get; private set; }
+            public static List<(Type ToolType, string ToolName, Bitmap ToolIcon, Type PaintContextEditorType)> PaintTools { get; private set; }
 
 
             public static List<Type> LayerTypes { get; private set; }
@@ -40,7 +40,7 @@ namespace FlipnoteDotNet
                     {
                         var bmp = string.IsNullOrEmpty(r.Attribute.IconResourceName)
                             ? null : GetResourceByName<Bitmap>(r.Attribute.IconResourceName);
-                        return (r.Type, r.Attribute.ToolName, bmp);
+                        return (r.Type, r.Attribute.ToolName, bmp, r.Attribute.PaintContextEditor);
                     })
                     .ToList();
 
