@@ -226,7 +226,7 @@ namespace FlipnoteDotNet.GUI.Canvas
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;           
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 
             e.Graphics.FillRectangle(Constants.Brushes.TransparentBackgroundBrush, 0, 0, Width, Height);
 

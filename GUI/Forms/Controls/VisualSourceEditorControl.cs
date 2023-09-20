@@ -1,10 +1,9 @@
-﻿using FlipnoteDotNet.Data.Drawing;
-using FlipnoteDotNet.Extensions;
+﻿using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Controls.Primitives;
 using FlipnoteDotNet.Utils.Paint;
 using PPMLib.Data;
+using PPMLib.Rendering;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 

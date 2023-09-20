@@ -1,19 +1,6 @@
 ﻿using FlipnoteDotNet.Attributes;
-using FlipnoteDotNet.Data.Drawing;
-using FlipnoteDotNet.Extensions;
-using FlipnoteDotNet.GUI.Canvas;
-using FlipnoteDotNet.GUI.Canvas.Components;
-using FlipnoteDotNet.GUI.Properties;
 using FlipnoteDotNet.GUI.Properties.EditorFields;
-using FlipnoteDotNet.Utils.Paint;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PPMLib.Rendering;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Forms

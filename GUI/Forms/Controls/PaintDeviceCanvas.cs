@@ -1,10 +1,10 @@
-﻿using FlipnoteDotNet.Data.Drawing;
-using FlipnoteDotNet.Extensions;
+﻿using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.MouseGestures;
 using FlipnoteDotNet.Utils.Paint;
 using FlipnoteDotNet.Utils.Paint.Tools;
+using PPMLib.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

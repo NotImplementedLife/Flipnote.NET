@@ -1,9 +1,9 @@
 ﻿using FlipnoteDotNet.Attributes;
-using FlipnoteDotNet.Data.Drawing;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Forms.LayerCreators;
 using FlipnoteDotNet.Utils;
 using FlipnoteDotNet.Utils.Temporal;
+using PPMLib.Rendering;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -65,7 +65,8 @@ namespace FlipnoteDotNet.Data.Layers
         private void RenderBitmap(Graphics g, Rectangle bounds)
         {
             if (VisualSource == null) return;
-            Debug.WriteLine(VisualSource.Size.ScaleToFit(new Rectangle(0, 0, 40, 40)));
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
             g.DrawImage(VisualSource.ToBitmap(Color.Black, Color.Gray), VisualSource.Size.ScaleToFit(new Rectangle(0, 0, 40, 40)));
         }
 

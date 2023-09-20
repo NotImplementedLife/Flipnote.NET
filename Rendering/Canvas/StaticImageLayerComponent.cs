@@ -1,9 +1,11 @@
 ﻿using FlipnoteDotNet.Attributes;
 using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Data.Layers;
+using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
 using FlipnoteDotNet.Utils;
+using PPMLib.Rendering;
 using System;
 using System.Drawing;
 
@@ -28,8 +30,10 @@ namespace FlipnoteDotNet.Rendering.Canvas
 
         private void BuildBitmapComponent()
         {
-            BitmapComponent = new BitmapComponent(Layer.VisualSource
-                .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));            
+            var vs = new FlipnoteVisualSource(Layer.VisualSource, Size.Width, Size.Height, false);
+
+            BitmapComponent = new BitmapComponent(vs
+                .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));
         }
 
         public int Timestamp { get; set; }
@@ -85,8 +89,9 @@ namespace FlipnoteDotNet.Rendering.Canvas
 
         protected void OnBoundsChanged()
         {
+            Refresh();
             BoundsChanged?.Invoke(this, new EventArgs());
-            Layer.TriggerUserUpdate();
+            Layer.TriggerUserUpdate();            
         }
 
         public void Refresh()

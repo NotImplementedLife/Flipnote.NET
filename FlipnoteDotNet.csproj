@@ -67,7 +67,6 @@
     <Compile Include="Constants\Colors.cs" />
     <Compile Include="Constants\Reflection.cs" />
     <Compile Include="Constants\Values.cs" />
-    <Compile Include="Data\Drawing\FlipnoteVisualSource.cs" />
     <Compile Include="Data\ILayer.cs" />
     <Compile Include="Data\Layers\AbstractLayer.cs" />
     <Compile Include="Data\Layers\IDisplayLayer.cs" />
@@ -80,6 +79,7 @@
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\FlipnoteExtensions.cs" />
+    <Compile Include="Extensions\FlipnoteVisualSourceExtensions.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="Extensions\IntException.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />

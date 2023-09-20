@@ -89,12 +89,13 @@ namespace FlipnoteDotNet.GUI.Layers
                     
                     var y = (int)(e.Bounds.Top + (e.Bounds.Height - textSize.Height) / 2);
 
-                    using (var thumbnail = displayLayer.GetDisplayThumbnail())
-                        e.Graphics.DrawImageUnscaled(thumbnail, 30, e.Bounds.Top + 5);
-                    e.Graphics.DrawRectangle(Colors.FlipnoteThemeMainColor.GetPen(), 30, e.Bounds.Top + 5, 40, 40);                    
-
                     e.Graphics.DrawString($"{e.Index + 1}.", Font, e.ForeColor.GetBrush(), 5, y);
                     e.Graphics.DrawString(name, Font, e.ForeColor.GetBrush(), 75, y);
+
+                    e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    using (var thumbnail = displayLayer.GetDisplayThumbnail())
+                        e.Graphics.DrawImageUnscaled(thumbnail, 30, e.Bounds.Top + 5);
+                    e.Graphics.DrawRectangle(Colors.FlipnoteThemeMainColor.GetPen(), 30, e.Bounds.Top + 5, 40, 40);                                        
                 }
                 else if (displayItem is ILayer layer)
                 {
