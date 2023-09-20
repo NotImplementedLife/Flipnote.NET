@@ -44,6 +44,7 @@
             this.KeyFramesEditor = new FlipnoteDotNet.GUI.Properties.KeyFramesEditor();
             this.PropertiesExpander = new FlipnoteDotNet.GUI.Controls.Expander();
             this.PropertyEditor = new FlipnoteDotNet.GUI.Properties.PropertyEditor();
+            this.ThumbnailsRendererBgWorker = new System.ComponentModel.BackgroundWorker();
             this.FormMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
@@ -185,7 +186,7 @@
             // Canvas
             // 
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10382, -14100);
+            this.Canvas.CanvasViewLocation = new System.Drawing.Point(10522, -14345);
             this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Canvas.Location = new System.Drawing.Point(2, 2);
             this.Canvas.Name = "Canvas";
@@ -280,6 +281,10 @@
             this.PropertyEditor.KeyFramesButtonClick += new System.EventHandler(this.PropertyEditor_KeyFramesButtonClick);
             this.PropertyEditor.ObjectPropertyChanged += new System.EventHandler<System.Reflection.PropertyInfo>(this.PropertyEditor_ObjectPropertyChanged);
             // 
+            // ThumbnailsRendererBgWorker
+            // 
+            this.ThumbnailsRendererBgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ThumbnailsRendererBgWorker_DoWork);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,6 +345,7 @@
         private GUI.Layers.LayersEditor LayersEditor;
         private System.Windows.Forms.Label SelectedElementLabel;
         private GUI.Properties.KeyFramesEditor KeyFramesEditor;
+        private System.ComponentModel.BackgroundWorker ThumbnailsRendererBgWorker;
     }
 }
 

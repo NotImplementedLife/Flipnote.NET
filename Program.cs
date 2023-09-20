@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlipnoteDotNet.Utils.Manipulator;
+using System;
 using System.Windows.Forms;
 
 namespace FlipnoteDotNet
@@ -15,6 +16,7 @@ namespace FlipnoteDotNet
             Application.SetCompatibleTextRenderingDefault(false);
 
             Constants.Init();
+            Manipulators.Initialize();
 
             Application.Run(new MainForm());
         }

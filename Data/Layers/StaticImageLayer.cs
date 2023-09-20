@@ -69,6 +69,6 @@ namespace FlipnoteDotNet.Data.Layers
             g.DrawImage(VisualSource.ToBitmap(Color.Black, Color.Gray), VisualSource.Size.ScaleToFit(new Rectangle(0, 0, 40, 40)));
         }
 
-        public event EventHandler DisplayChanged;
+        public event EventHandler DisplayChanged;        
     }
 }

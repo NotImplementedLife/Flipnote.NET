@@ -16,6 +16,8 @@ using System.Linq;
 using System.Windows.Forms;
 using FlipnoteDotNet.GUI.Layers;
 using FlipnoteDotNet.Utils.Temporal.ValueTransformers;
+using FlipnoteDotNet.Rendering.Frames;
+using System.Threading;
 
 namespace FlipnoteDotNet
 {
@@ -67,9 +69,9 @@ namespace FlipnoteDotNet
             SequenceTrackViewer.AdjustSurfaceSize();
             SequenceTrackViewer.Invalidate();
 
-            DrawCanvasAt(0);            
+            DrawCanvasAt(0);
 
-
+            ThumbnailsRendererBgWorker.RunWorkerAsync();
         }
 
         private void BackgroundControlPaint(object sender, PaintEventArgs e)
@@ -231,6 +233,17 @@ namespace FlipnoteDotNet
         private void LayersEditor_LayersListChanged(object sender, EventArgs e)
         {
             DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
+        }
+
+        private void ThumbnailsRendererBgWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            while(true)
+            {
+                var frames = FlipnoteFramesRenderer.CreateFrames(SequenceManager);
+                Thread.Sleep(100);
+                //Debug.WriteLine("-----------------------------");
+
+            }
         }
     }
 }

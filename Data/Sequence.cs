@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Linq;
+using System.Threading;
 
 namespace FlipnoteDotNet.Data
 {
@@ -59,12 +61,14 @@ namespace FlipnoteDotNet.Data
             EndFrame = endFrame;
         }
        
-        public List<ILayer> Layers { get; private set; } = new List<ILayer>();     
+        public ConcurrentList<ILayer> Layers { get; private set; } = new ConcurrentList<ILayer>();        
 
         public ILayer AddLayer(ILayer layer)
         {
             Layers.Add(layer);
-            return layer;           
-        }    
+            return layer;
+        }        
+
+        
     }
 }

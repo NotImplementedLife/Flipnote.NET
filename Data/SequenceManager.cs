@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using FlipnoteDotNet.Utils;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FlipnoteDotNet.Data
 {
     internal class SequenceManager
     {
-        private List<SequenceTrack> Tracks { get; } = new List<SequenceTrack>();
+        private ConcurrentList<SequenceTrack> Tracks { get; } = new ConcurrentList<SequenceTrack>();
+
+        public List<SequenceTrack> GetTracks() => Tracks.ToSimpleList();
 
         public SequenceManager(int tracksCount=0)
         {
@@ -19,7 +22,7 @@ namespace FlipnoteDotNet.Data
             track.ElementAdded += Track_ElementAdded;
             track.ElementRemoved += Track_ElementRemoved;
             Tracks.Add(track);
-        }
+        }        
 
         public SequenceTrack GetTrack(int index) => Tracks[index];
         public int TracksCount => Tracks.Count;

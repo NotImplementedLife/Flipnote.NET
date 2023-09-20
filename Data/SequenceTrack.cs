@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.Extensions;
+using FlipnoteDotNet.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ namespace FlipnoteDotNet.Data
 {
     public class SequenceTrack
     {
-        private List<Sequence> Sequences = new List<Sequence>();
+        private ConcurrentList<Sequence> Sequences = new ConcurrentList<Sequence>();
+        
 
         public void AddSequence(Sequence sequence)
         {
