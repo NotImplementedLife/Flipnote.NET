@@ -30,7 +30,7 @@ namespace FlipnoteDotNet.Rendering.Canvas
 
         private void BuildBitmapComponent()
         {
-            var vs = new FlipnoteVisualSource(Layer.VisualSource, Size.Width, Size.Height, false);
+            var vs = new FlipnoteVisualSource(Layer.VisualSource, Size.Width, Size.Height, Layer.Dithering, Layer.RescaleMethod);
 
             BitmapComponent = new BitmapComponent(vs
                 .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));

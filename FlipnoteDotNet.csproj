@@ -198,7 +198,13 @@
     </Compile>
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
+    <Compile Include="GUI\Properties\EditorFields\BoolEditorField.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Properties\EditorFields\DefaultNonEditable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Properties\EditorFields\EnumEditorField.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Properties\EditorFields\FloatEditor.cs">

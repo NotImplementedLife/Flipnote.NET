@@ -4,6 +4,7 @@ using FlipnoteDotNet.GUI.Forms.LayerCreators;
 using FlipnoteDotNet.Utils;
 using FlipnoteDotNet.Utils.Temporal;
 using PPMLib.Rendering;
+using PPMLib.Utils;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -38,6 +39,12 @@ namespace FlipnoteDotNet.Data.Layers
 
         [Editable]
         public TimeDependentValue<float> ScaleY { get; }
+
+        [Editable]
+        public RescaleMethod RescaleMethod { get; set; } = RescaleMethod.NearestNeighbor;
+
+        [Editable]
+        public bool Dithering { get; set; } = false;
 
         private AsyncBitmap _DisplayThumbnail;
 

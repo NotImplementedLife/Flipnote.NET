@@ -286,7 +286,7 @@ namespace FlipnoteDotNet.GUI.Properties
             var propertyEditorControlType = prop.GetCustomAttribute<PropertyEditorControlAttribute>()?.Type;
             
             Control CreateEditorControlFromType(Type type)
-            {
+            {                
                 if (type.GetInterfaces().Contains(typeof(IObjectHolderDialog)))
                     return new FormBasedEditor(type);
                 return Activator.CreateInstance(type) as Control;
@@ -295,6 +295,11 @@ namespace FlipnoteDotNet.GUI.Properties
             if (propertyEditorControlType != null)
             {                                
                 editor = CreateEditorControlFromType(propertyEditorControlType);
+            }
+            else if(targetType.IsEnum)
+            {
+                var edType = typeof(EnumEditorField<>).MakeGenericType(targetType);
+                editor = CreateEditorControlFromType(edType);
             }
             else if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
             {
