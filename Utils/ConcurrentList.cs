@@ -17,10 +17,14 @@ namespace FlipnoteDotNet.Utils
             set => RWLock.WriteLockExecute(() => Items[index] = value);
         }
 
+        public T GetNoLock(int index) => Items[index];
+        public void SetNoLock(int index, T item) => Items[index] = item;
+
         public int Count => RWLock.ReadLockExecute(() => Items.Count);
         public bool IsReadOnly => false;
 
         public void Add(T item) => RWLock.WriteLockExecute(() => Items.Add(item));
+        public void AddNoLock(T item) => Items.Add(item);
 
         public void Clear() => RWLock.WriteLockExecute(() => Items.Clear());
 
@@ -33,6 +37,12 @@ namespace FlipnoteDotNet.Utils
             for (int i = 0; i < len; i++)
                 array[arrayIndex + i] = Items[i];
         });
+
+
+        public void LockRead() => RWLock.LockRead();
+        public void UnlockRead() => RWLock.UnlockRead();
+        public void LockWrite() => RWLock.LockWrite();
+        public void UnlockWrite() => RWLock.UnlockWrite();
 
         public IEnumerator<T> GetEnumerator() => RWLock.ReadLockExecute(() => Items.ToList().GetEnumerator());
 

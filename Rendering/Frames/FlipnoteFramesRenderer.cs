@@ -32,7 +32,7 @@ namespace FlipnoteDotNet.Rendering.Frames
             public int Timestamp { get; set; }
         }
 
-        public static List<FlipnoteFrame> CreateFrames(SequenceManager manager)
+        public static IEnumerable<FlipnoteFrame> CreateFrames(SequenceManager manager)
         {
             int framesCount = 999;
             var framesData = new RenderFrameData[framesCount];
@@ -48,22 +48,17 @@ namespace FlipnoteDotNet.Rendering.Frames
                     int i1 = Math.Min(framesCount - 1, sequence.EndFrame);
                     for (int i = i0; i < i1; i++) 
                     {
-                        foreach (var layer in sequence.Layers) framesData[i].Layers.Add(layer);
+                        foreach (var layer in sequence.Layers.Reverse()) framesData[i].Layers.Add(layer);
                         framesData[i].Timestamp = i;
                         framesData[i].PaperColor = sequence.PaperColor;
                         framesData[i].Pen1 = sequence.Pen1;
                         framesData[i].Pen2 = sequence.Pen2;
-                    }
-                    Thread.Sleep(20);
+                    }                    
                 }                
-            }                      
+            }                                  
 
-            var frames = new List<FlipnoteFrame>();
-            for (int i = 0; i < framesCount; i++) 
-            {
-                frames.Add(RenderFrame(framesData[i]));
-            }
-            return frames;
+            for (int i = 0; i < framesCount; i++)             
+                yield return RenderFrame(framesData[i]);                            
         }
     }
 }

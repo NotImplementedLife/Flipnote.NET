@@ -1,9 +1,26 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace FlipnoteDotNet.Extensions
 {
     internal static class RectangleExtensions
     {
+        public static Rectangle GetIntersection(this Rectangle r1, Rectangle r2)
+        {
+            var i = r1;
+            i.Intersect(r2);
+            return i;
+        }
+
+        public static IEnumerable<(int X, int Y)> EnumeratePoints(this Rectangle r)
+        {
+            for(int y=r.Top;y<r.Bottom;y++)
+            {
+                for (int x = r.Left; x < r.Right; x++)
+                    yield return (x, y);
+            }
+        }
+
         public static Rectangle GetPaddedContent(this Rectangle r, int padding)
         {
             return new Rectangle(r.Left + padding, r.Top + padding, r.Width - 2 * padding, r.Height - 2 * padding);

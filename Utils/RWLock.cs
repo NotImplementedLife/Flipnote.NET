@@ -11,6 +11,11 @@ namespace FlipnoteDotNet.Utils
     {
         ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
 
+        public void LockRead() => Lock.EnterReadLock();
+        public void UnlockRead() => Lock.ExitReadLock();
+        public void LockWrite() => Lock.EnterWriteLock();
+        public void UnlockWrite() => Lock.ExitWriteLock();
+
         public T ReadLockExecute<T>(Func<T> f)
         {
             Lock.EnterReadLock();

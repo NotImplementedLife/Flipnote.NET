@@ -13,6 +13,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;
 using static FlipnoteDotNet.Constants;
+using FlipnoteDotNet.Utils;
 
 namespace FlipnoteDotNet.GUI.Tracks
 {
@@ -52,6 +53,8 @@ namespace FlipnoteDotNet.GUI.Tracks
 
             ScrollContainer.MouseMove += ScrollContainer_MouseMove;
         }
+
+        public ConcurrentList<Bitmap> ThumbnailsSource { get; set; } = new ConcurrentList<Bitmap>();
 
         private IEnumerable<(Sequence Element, Rectangle Bounds, int TrackId)> GetVisibleElements()
         {
@@ -505,9 +508,20 @@ namespace FlipnoteDotNet.GUI.Tracks
             for (int i = ScrollX / ThumbnailReservedWidth; i < thumbnailsCount && tx < Width; i++)
             {
                 var thumbnailRect = new Rectangle(tx + ThumbnailMargin, rect.Top + BottomBarPadding, ThumbnailSize.Width, ThumbnailSize.Height);
+                
+                int frameId = ScreenToTrackSignPosition(tx + ThumbnailSize.Width);
+
+                if (frameId < ThumbnailsSource.Count)
+                {
+                    ThumbnailsSource.LockRead();
+                    var bmp = ThumbnailsSource.GetNoLock(frameId).Clone() as Bitmap;
+                    ThumbnailsSource.UnlockRead();
+                    g.DrawImage(bmp, thumbnailRect);
+                }
+
                 g.DrawRectangle(Colors.FlipnoteThemeMainColor.GetPen(), thumbnailRect);
                 
-                var text = $"{ScreenToTrackSignPosition(tx + ThumbnailSize.Width) + 1}";
+                var text = $"{frameId+1}";
                 var textSize = g.MeasureString(text, BottomBarFont);
 
                 var txtX = tx + ThumbnailMargin + (ThumbnailSize.Width - textSize.Width) / 2;

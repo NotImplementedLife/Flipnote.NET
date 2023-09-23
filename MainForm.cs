@@ -19,6 +19,7 @@ using FlipnoteDotNet.Utils.Temporal.ValueTransformers;
 using FlipnoteDotNet.Rendering.Frames;
 using System.Threading;
 using PPMLib.Rendering;
+using FlipnoteDotNet.Utils;
 
 namespace FlipnoteDotNet
 {
@@ -44,6 +45,12 @@ namespace FlipnoteDotNet
             SequenceTracksEditor.ToolStrip.Paint += BackgroundControlPaint;
 
             PropertyEditor.KeyFramesEditor = KeyFramesEditor;
+
+            ThumbnailsSource.LockWrite();
+            for (int i = 0; i < 1000; i++)
+                ThumbnailsSource.AddNoLock(new Bitmap(256, 192));
+            ThumbnailsSource.UnlockWrite();
+            SequenceTracksEditor.Viewer.ThumbnailsSource = ThumbnailsSource;
         }
 
 
@@ -237,14 +244,25 @@ namespace FlipnoteDotNet
         }
 
         private void ThumbnailsRendererBgWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
+        {            
             while(true)
             {
-                var frames = FlipnoteFramesRenderer.CreateFrames(SequenceManager);
-                Thread.Sleep(100);
-                //Debug.WriteLine("-----------------------------");
-
+                int i = 0;
+                foreach(var frame in FlipnoteFramesRenderer.CreateFrames(SequenceManager))
+                {
+                    ThumbnailsSource.LockWrite();
+                    ThumbnailsSource.GetNoLock(i)?.Dispose();
+                    ThumbnailsSource.SetNoLock(i, frame.ToBitmap());                    
+                    ThumbnailsSource.UnlockWrite();
+                    if (i % 50 == 0)
+                        SequenceTracksEditor.Viewer.InvalidateSurface();
+                    i++;
+                    Thread.Sleep(50);
+                }
+                Thread.Sleep(2000);                
             }
         }
+
+        private ConcurrentList<Bitmap> ThumbnailsSource = new ConcurrentList<Bitmap>();
     }
 }
