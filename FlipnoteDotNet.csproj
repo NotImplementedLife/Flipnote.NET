@@ -60,6 +60,7 @@
     <Compile Include="Attributes\EditorWildcardAttribute.cs" />
     <Compile Include="Attributes\ExclusiveAttribute.cs" />
     <Compile Include="Attributes\LayerAttribute.cs" />
+    <Compile Include="Attributes\MenuItemAttribute.cs" />
     <Compile Include="Attributes\PaintToolAttribute.cs" />
     <Compile Include="Attributes\ParameterWildcard.cs" />
     <Compile Include="Attributes\PropertyEditorControlAttribute.cs" />
@@ -196,6 +197,16 @@
     <Compile Include="GUI\Layers\LayersListBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Menu\Items\MainForm_01_File_01_New.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Menu\Items\MainForm_01_File_02_Exit.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Menu\MenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Menu\MenuItemsLoader.cs" />
     <Compile Include="GUI\MouseGestures\Delegates.cs" />
     <Compile Include="GUI\MouseGestures\MouseGesturesHandler.cs" />
     <Compile Include="GUI\Properties\EditorFields\BoolEditorField.cs">
@@ -260,6 +271,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI\Tracks\TrackSignMoveDragData.cs" />
+    <Compile Include="MainForm.Controller.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,6 +281,8 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Project\FlipnoteProject.cs" />
+    <Compile Include="Project\FlipnoteProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Canvas\StaticImageLayerComponent.cs" />
     <Compile Include="Rendering\Frames\FlipnoteFramesRenderer.cs" />
@@ -277,8 +293,11 @@
     <Compile Include="Rendering\LayerRenderingOptions.cs" />
     <Compile Include="Rendering\LayerComponentsManager.cs" />
     <Compile Include="Utils\Algorithms.cs" />
+    <Compile Include="Utils\Collections.cs" />
     <Compile Include="Utils\ConcurrentList.cs" />
     <Compile Include="Utils\GDIJpegLayerExporter.cs" />
+    <Compile Include="Utils\GUI\PaintEvents.cs" />
+    <Compile Include="Utils\GUI\UserPrompt.cs" />
     <Compile Include="Utils\IInitialize.cs" />
     <Compile Include="Utils\Manipulator\ManipulatesAttribute.cs" />
     <Compile Include="Utils\Manipulator\Manipulators.cs" />

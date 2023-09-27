@@ -6,6 +6,7 @@ using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Canvas.Drawing;
 using FlipnoteDotNet.Utils;
 using PPMLib.Rendering;
+using PPMLib.Utils;
 using System;
 using System.Drawing;
 
@@ -26,13 +27,41 @@ namespace FlipnoteDotNet.Rendering.Canvas
         }
 
         void ILayerCanvasComponent.Initialize(ILayer layer, LayerRenderingOptions options, int timestamp)
-            => Initialize(layer as StaticImageLayer, options, timestamp);        
+            => Initialize(layer as StaticImageLayer, options, timestamp);
+
+        private class TVisualSourceCache
+        {
+            private Size Size;            
+            private bool Dithering;
+            private RescaleMethod RescaleMethod;
+
+            public FlipnoteVisualSource VisualSource = null;
+
+            public bool IsDirty(Size size, bool dithering, RescaleMethod rescaleMethod)
+            {
+                return Size != size || Dithering != dithering || RescaleMethod != rescaleMethod;
+            }
+
+            public void LoadVisualSource(FlipnoteVisualSource source, bool dithering, RescaleMethod rescaleMethod)
+            {
+                VisualSource = source;
+                Size = source.Size;
+                Dithering = dithering;
+                RescaleMethod = rescaleMethod;
+            }
+        }
+
+        TVisualSourceCache VisualSourceCache = new TVisualSourceCache();
 
         private void BuildBitmapComponent()
         {
-            var vs = new FlipnoteVisualSource(Layer.VisualSource, Size.Width, Size.Height, Layer.Dithering, Layer.RescaleMethod);
-
-            BitmapComponent = new BitmapComponent(vs
+            if (VisualSourceCache.IsDirty(Size, Layer.Dithering, Layer.RescaleMethod))
+            {
+                var visualSource = new FlipnoteVisualSource(Layer.VisualSource, Size.Width, Size.Height, Layer.Dithering, Layer.RescaleMethod);
+                VisualSourceCache.LoadVisualSource(visualSource, Layer.Dithering, Layer.RescaleMethod);
+            }
+            
+            BitmapComponent = new BitmapComponent(VisualSourceCache.VisualSource
                 .ToBitmap(LayerRenderingOptions.GetLayer1Color(Timestamp), LayerRenderingOptions.GetLayer2Color(Timestamp)));
         }
 

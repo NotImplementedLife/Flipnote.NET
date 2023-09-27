@@ -6,13 +6,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using Brushes = System.Drawing.Brushes;
 using static FlipnoteDotNet.Constants;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System;
-using System.ComponentModel.Design;
 
 namespace FlipnoteDotNet.GUI.Layers
 {

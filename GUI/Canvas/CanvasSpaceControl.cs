@@ -94,7 +94,7 @@ namespace FlipnoteDotNet.GUI.Canvas
         {
             CanvasComponents.SelectSingle(canvasComponent);
             ResizePoints.Clear();
-            if (canvasComponent.IsResizeable)
+            if (canvasComponent?.IsResizeable ?? false) 
             {
                 foreach (ResizeDirection direction in Enum.GetValues(typeof(ResizeDirection)))
                 {

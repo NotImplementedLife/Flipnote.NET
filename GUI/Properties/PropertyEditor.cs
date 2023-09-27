@@ -293,18 +293,18 @@ namespace FlipnoteDotNet.GUI.Properties
             }
 
             if (propertyEditorControlType != null)
-            {                                
+            {
                 editor = CreateEditorControlFromType(propertyEditorControlType);
             }
-            else if(targetType.IsEnum)
-            {
-                var edType = typeof(EnumEditorField<>).MakeGenericType(targetType);
-                editor = CreateEditorControlFromType(edType);
-            }
-            else if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType))
+            else if (Reflection.DefaultEditors.TryGetValue(targetType, out Type editorType)) 
             {
                 editor = CreateEditorControlFromType(editorType);
             }
+            else if (targetType.IsEnum)
+            {
+                var edType = typeof(EnumEditorField<>).MakeGenericType(targetType);
+                editor = CreateEditorControlFromType(edType);
+            }            
 
 
             if (editor == null)

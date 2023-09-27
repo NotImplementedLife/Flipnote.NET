@@ -1,9 +1,6 @@
-﻿using static FlipnoteDotNet.Constants;
-using FlipnoteDotNet.Data;
-using FlipnoteDotNet.Data.Layers;
+﻿using FlipnoteDotNet.Data;
 using FlipnoteDotNet.Extensions;
 using FlipnoteDotNet.GUI;
-using FlipnoteDotNet.GUI.Canvas.Components;
 using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.GUI.Properties;
 using FlipnoteDotNet.GUI.Tracks;
@@ -15,11 +12,11 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using FlipnoteDotNet.GUI.Layers;
-using FlipnoteDotNet.Utils.Temporal.ValueTransformers;
 using FlipnoteDotNet.Rendering.Frames;
 using System.Threading;
-using PPMLib.Rendering;
 using FlipnoteDotNet.Utils;
+using FlipnoteDotNet.GUI.Menu;
+using FlipnoteDotNet.Utils.GUI;
 
 namespace FlipnoteDotNet
 {
@@ -27,80 +24,46 @@ namespace FlipnoteDotNet
     {
         public MainForm()
         {
-            InitializeComponent();                       
+            InitializeComponent();
 
-            LeftContainer.Panel1.EnableDoubleBuffer();
-            LeftContainer.Panel2.EnableDoubleBuffer();
-            RightContainer.Panel1.EnableDoubleBuffer();
-            RightContainer.Panel2.EnableDoubleBuffer();
+            MenuItemsLoader.LoadMenuItems(FormMenu);
 
-            RightContainer.Panel1.Paint += BottomLine_Paint;
-            RightContainer.Panel2.Paint += TopLine_Paint;
+            Collections.Of(LeftContainer.Panel1, LeftContainer.Panel2, RightContainer.Panel1, RightContainer.Panel2)
+                .ForEach(_ => _.EnableDoubleBuffer());            
+
+            RightContainer.Panel1.Paint += PaintEvents.BottomLine_Paint;
+            RightContainer.Panel2.Paint += PaintEvents.TopLine_Paint;
 
             RightContainer.DisableSelectable();
 
             ToolStrip.Renderer = new ToolStripEmptyRenderer();
 
             SequenceTracksEditor.Viewer.Zoom = int.MaxValue;
-            SequenceTracksEditor.ToolStrip.Paint += BackgroundControlPaint;
+            SequenceTracksEditor.ToolStrip.Paint += PaintEvents.BackgroundControlPaint;
 
             PropertyEditor.KeyFramesEditor = KeyFramesEditor;
 
             ThumbnailsSource.LockWrite();
-            for (int i = 0; i < 1000; i++)
-                ThumbnailsSource.AddNoLock(new Bitmap(256, 192));
+            Collections.Generate(1000, () => new Bitmap(256, 192)).ForEach(ThumbnailsSource.AddNoLock);
             ThumbnailsSource.UnlockWrite();
             SequenceTracksEditor.Viewer.ThumbnailsSource = ThumbnailsSource;
+
+            Collections.Of<Control>(FormMenu, ToolStrip, MainContainer, LeftContainer.Panel2,
+                             LeftContainer, RightContainer.Panel1, RightContainer.Panel2)
+                .ForEach(_ => _.Paint += PaintEvents.BackgroundControlPaint);
+
+            InitializeProjectService();
         }
-
-
-        SequenceManager SequenceManager = new SequenceManager(5);
+        
         SequenceTracksViewer SequenceTrackViewer => SequenceTracksEditor.Viewer;        
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Canvas.ClearComponents();
             Canvas.CanvasViewLocation = Point.Empty;
-
-            SequenceTrackViewer.SequenceManager = SequenceManager;
-
-            var sampleSequence = new Sequence(0, 10) { Name = "Animation sequence", Color = Color.DarkOrange };
-            var sampleLayer = new StaticImageLayer(new FlipnoteVisualSource(64, 48));
-            sampleSequence.AddLayer(sampleLayer);
-            sampleLayer.X.PutTransformer(new ConstantValueTransformer<int>((256 - 64) / 2), 0);
-            sampleLayer.Y.PutTransformer(new ConstantValueTransformer<int>((192 - 48) / 2), 0);
-            sampleLayer.UpdateAllTimeDependentValues();
-
-            SequenceTrackViewer.SequenceManager.GetTrack(0).AddSequence(sampleSequence);    
-            
-            SequenceTrackViewer.SelectSequence(sampleSequence);
-
-            SequenceTrackViewer.AdjustSurfaceSize();
-            SequenceTrackViewer.Invalidate();
-
-            DrawCanvasAt(0);
-
+            CreateNewProject();
             ThumbnailsRendererBgWorker.RunWorkerAsync();
-        }
-
-        private void BackgroundControlPaint(object sender, PaintEventArgs e)
-        {
-            var control = sender as Control;
-            var pos = GetLocationRelativeToForm(control);
-
-            var dx = pos.X % 16;
-            var dy = pos.Y % 16;
-
-            e.Graphics.FillRectangle(Constants.Brushes.GetWindowBackgroundBrush(dx, dy), new Rectangle(Point.Empty, control.Size));
-        }
-
-        private Point GetLocationRelativeToForm(Control c)
-        {
-            if (c == this) return Point.Empty;
-            if (c.Parent == this) return c.Location;
-            var result = c.Location;
-            result.Offset(GetLocationRelativeToForm(c.Parent));
-            return result;
-        }
+        }       
 
         private void PropertiesExpander_Resize(object sender, EventArgs e)
         {
@@ -122,7 +85,7 @@ namespace FlipnoteDotNet
         }
 
         private void PropertyEditor_ObjectPropertyChanged(object sender, System.Reflection.PropertyInfo e)
-        {
+        {            
             Debug.WriteLine("Property changed");
             UpdateSelectedElementLabel();
             if (PropertyEditor.Target is Sequence) 
@@ -160,25 +123,21 @@ namespace FlipnoteDotNet
         {
             SelectedElementLabel.Text = PropertyEditor.Target != null
                 ? PropertyEditor.Target.GetType().Name : "";
-        }
+        }        
 
-        private ILayer SelectedLayerElement = null;
-
-        private void LayersEditor_SelectionChanged(object sender, GUI.Layers.LayersEditor.SelectionChangedEventArgs e)
+        private void LayersEditor_SelectionChanged(object sender, LayersEditor.SelectionChangedEventArgs e)
         {
             if (e.Layer != null)
                 e.Layer.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
-            PropertyEditor.Target = SelectedLayerElement = e.Layer;
+            PropertyEditor.Target = e.Layer;
         }
 
-        LayerComponentsManager LayerComponentsManager = new LayerComponentsManager();
+        private readonly LayerComponentsManager LayerComponentsManager = new LayerComponentsManager();
 
         private void SequenceTracksEditor_CurrentFrameChanged(object sender, EventArgs e)
-        {            
-            DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);            
-
-            var editedElement = PropertyEditor.Target as ITemporalContext;
-            if (editedElement == null)
+        {
+            DrawCanvasAt(SequenceTracksEditor.Viewer.TrackSignPosition);
+            if (!(PropertyEditor.Target is ITemporalContext editedElement)) 
                 return;
             editedElement.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
         }
@@ -187,14 +146,20 @@ namespace FlipnoteDotNet
         {
             LayerComponentsManager.UpdateTimestamp(frame);
 
-            var newComps = LayerComponentsManager.GetFromSequenceManager(SequenceManager).ToList();
-            Canvas.ClearComponents();            
-            newComps.ForEach(Canvas.CanvasComponents.Add);            
-            Canvas.CanvasComponents.ForEach(_ =>
+            Canvas.ClearComponents();
+            
+            if (Project != null)
+            {
+                LayerComponentsManager
+                    .GetFromSequenceManager(Project.SequenceManager)
+                    .ForEach(Canvas.CanvasComponents.Add);
+
+                Canvas.CanvasComponents.ForEach(_ =>
                 {
-                    if(_ is ILayerCanvasComponent lcc)
+                    if (_ is ILayerCanvasComponent lcc)
                         lcc.Layer.UserUpdate += Layer_UserUpdate;
                 });
+            }
         
             Canvas.Invalidate();            
         }
@@ -208,34 +173,18 @@ namespace FlipnoteDotNet
         private void PropertyEditor_KeyFramesButtonClick(object sender, EventArgs e)
         {
             KeyframesExpander.IsExpanded = true;
-        }
-
-        private void BottomLine_Paint(object sender, PaintEventArgs e)
-        {
-            var control = sender as Control;
-            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, control.Height - 2, control.Width, control.Height - 2);
-        }
-
-        private void TopLine_Paint(object sender, PaintEventArgs e)
-        {
-            var control = sender as Control;
-            e.Graphics.DrawLine(Colors.FlipnoteThemeMainColor.GetPen(), 0, 2, control.Width, 2);
-        }
+        }      
 
         private void Canvas_SelectionChanged(object sender, EventArgs e)
         {            
-            if (Canvas.CanvasComponents.SelectedComponentsCount != 1)
-            {
-
-            }
-            else
+            if (Canvas.CanvasComponents.SelectedComponentsCount == 1)
             {
                 var selection = Canvas.CanvasComponents.SelectedComponents.First() as ILayerCanvasComponent;
                 if (selection == null)
                     return;
                 selection.Layer.CurrentTimestamp = SequenceTracksEditor.Viewer.TrackSignPosition;
                 PropertyEditor.Target = selection.Layer;
-            }
+            }                      
         }
 
         private void LayersEditor_LayersListChanged(object sender, EventArgs e)
@@ -247,12 +196,13 @@ namespace FlipnoteDotNet
         {            
             while(true)
             {
+                if (Project == null) continue;
                 int i = 0;
-                foreach(var frame in FlipnoteFramesRenderer.CreateFrames(SequenceManager))
+                foreach (var frame in FlipnoteFramesRenderer.CreateFrames(Project.SequenceManager)) 
                 {
                     ThumbnailsSource.LockWrite();
                     ThumbnailsSource.GetNoLock(i)?.Dispose();
-                    ThumbnailsSource.SetNoLock(i, frame.ToBitmap());                    
+                    ThumbnailsSource.SetNoLock(i, frame.ToBitmap());
                     ThumbnailsSource.UnlockWrite();
                     if (i % 50 == 0)
                         SequenceTracksEditor.Viewer.InvalidateSurface();
@@ -263,6 +213,6 @@ namespace FlipnoteDotNet
             }
         }
 
-        private ConcurrentList<Bitmap> ThumbnailsSource = new ConcurrentList<Bitmap>();
+        private readonly ConcurrentList<Bitmap> ThumbnailsSource = new ConcurrentList<Bitmap>();
     }
 }
