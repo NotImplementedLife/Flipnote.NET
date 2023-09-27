@@ -30,7 +30,7 @@ namespace FlipnoteDotNet.Extensions
                 action(item);
                 yield return item;
             }
-        }
+        }        
 
         public static Bitmap ToBitmap32bppPArgb(this uint[] data, int width, int height)
         {

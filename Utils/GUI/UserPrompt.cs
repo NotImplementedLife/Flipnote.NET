@@ -9,5 +9,8 @@ namespace FlipnoteDotNet.Utils.GUI
             return MessageBox.Show(message, caption, MessageBoxButtons.YesNo) == DialogResult.Yes;
         }
 
+        public static void Error(string message)
+            => MessageBox.Show(message, "Error");
+
     }
 }

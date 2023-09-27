@@ -16,7 +16,7 @@ namespace FlipnoteDotNet
             Application.SetCompatibleTextRenderingDefault(false);
 
             Constants.Init();
-            Manipulators.Initialize();
+            Manipulators.Initialize();            
 
             Application.Run(new MainForm());
         }

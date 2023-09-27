@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConfig.cs" />
     <Compile Include="Attributes\AttributeManager.cs" />
     <Compile Include="Attributes\CanvasComponentAttribute.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
@@ -118,7 +119,11 @@
     <Compile Include="GUI\Controls\Expander.Designer.cs">
       <DependentUpon>Expander.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\Primitives\CaptionProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\Controls\Primitives\IToolStripCheckButton.cs" />
+    <Compile Include="GUI\Controls\Primitives\NativeMethods.cs" />
     <Compile Include="GUI\Controls\Primitives\PopedCotainer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -131,12 +136,14 @@
     <Compile Include="GUI\Controls\Primitives\PoperContainer.Designer.cs">
       <DependentUpon>PoperContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\Primitives\SafeNativeMethods.cs" />
     <Compile Include="GUI\Controls\Primitives\ToolStripCheckButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Controls\Primitives\ToolStripSplitCheckButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Controls\Primitives\UnsafeNativeMethods.cs" />
     <Compile Include="GUI\Controls\ScrollView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -182,6 +189,12 @@
     <Compile Include="GUI\Forms\LayerCreators\StaticImageLayerCreatorForm.Designer.cs">
       <DependentUpon>StaticImageLayerCreatorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Forms\ProgressTrackForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Forms\ProgressTrackForm.Designer.cs">
+      <DependentUpon>ProgressTrackForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Forms\VisualSourceEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -201,6 +214,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Menu\Items\MainForm_01_File_02_Exit.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Menu\Items\MainForm_01_File_02_Export_01_JPEG.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Menu\MenuItem.cs">
@@ -295,10 +311,13 @@
     <Compile Include="Utils\Algorithms.cs" />
     <Compile Include="Utils\Collections.cs" />
     <Compile Include="Utils\ConcurrentList.cs" />
+    <Compile Include="Utils\Export\JPEGFramesExporter.cs" />
     <Compile Include="Utils\GDIJpegLayerExporter.cs" />
     <Compile Include="Utils\GUI\PaintEvents.cs" />
     <Compile Include="Utils\GUI\UserPrompt.cs" />
     <Compile Include="Utils\IInitialize.cs" />
+    <Compile Include="Utils\IniFile.cs" />
+    <Compile Include="Utils\IProgressTracker.cs" />
     <Compile Include="Utils\Manipulator\ManipulatesAttribute.cs" />
     <Compile Include="Utils\Manipulator\Manipulators.cs" />
     <Compile Include="Utils\Manipulator\ManipulatorsManager.cs" />
@@ -347,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Forms\LayerCreators\StaticImageLayerCreatorForm.resx">
       <DependentUpon>StaticImageLayerCreatorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Forms\ProgressTrackForm.resx">
+      <DependentUpon>ProgressTrackForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Forms\VisualSourceEditorForm.resx">
       <DependentUpon>VisualSourceEditorForm.cs</DependentUpon>
