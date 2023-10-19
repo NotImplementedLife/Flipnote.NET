@@ -15,9 +15,7 @@ namespace FlipnoteDotNet.VisualComponentsEditor
         private Size pSize;
         private Point pLocation;
         private Point[] pPolygonBounds=new Point[4];
-        private float pRotation = 0;
-        private float pAnchorX = 0.5f;
-        private float pAnchorY = 0.5f;
+        private float pRotation = 0;        
         private bool pDirtyTransform = true;
         private Matrix pTransform = new Matrix();
         private Rectangle pBounds;
@@ -47,9 +45,7 @@ namespace FlipnoteDotNet.VisualComponentsEditor
             }
         }
                
-        public float Rotation { get => pRotation; set { pRotation = value; pDirtyTransform = true; } }
-        public float AnchorX { get => pAnchorX; set { pAnchorX = value; pDirtyTransform = true; } }
-        public float AnchorY { get => pAnchorY; set { pAnchorY = value; pDirtyTransform = true; } }
+        public float Rotation { get => pRotation; set { pRotation = value; pDirtyTransform = true; } }        
         public Matrix Transform { get => pTransform; }
 
         public Rectangle Bounds => pBounds;
@@ -105,16 +101,16 @@ namespace FlipnoteDotNet.VisualComponentsEditor
         public void UpdateTransform()
         {            
             pTransform = new Matrix();
-            pTransform.RotateAt(pRotation, new PointF(pLocation.X + pAnchorX * pSize.Width, pLocation.Y + pAnchorY * pSize.Height));
+            pTransform.RotateAt(pRotation, new PointF(pLocation.X + pSize.Width / 2, pLocation.Y + pSize.Height / 2));
             UpdateBounds();
 
             if (pDirtyTransform)
             {
                 pDirtyTransform = false;
-                
-                OnTransformChanged();                
+
+                OnTransformChanged();             
             }
-        }
+        }        
 
         public IEnumerable<Point> GetPolygonBounds() => pPolygonBounds;
 

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlPoint.cs" />
     <Compile Include="FlipnoteVisualSourceComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VisualComponent.cs" />

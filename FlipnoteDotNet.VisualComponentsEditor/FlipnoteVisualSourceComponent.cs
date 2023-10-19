@@ -27,20 +27,21 @@ namespace FlipnoteDotNet.VisualComponentsEditor
 
         public override Bitmap BuildBitmap()
         {
-            var tx = AnchorX * Size.Width;
-            var ty = AnchorY * Size.Height;
-            using (var bmp = new FlipnoteVisualSource(pFlipnoteVisualSource, Size.Width, Size.Height, pDithering, pRescaleMethod)
+            var tx = Size.Width / 2;
+            var ty = Size.Height / 2;
+            using (var source = new FlipnoteVisualSource(pFlipnoteVisualSource, Size.Width, Size.Height, pDithering, pRescaleMethod)
                 .ToBitmap(pColor1, pColor2))
             {
                 var result = new Bitmap(Bounds.Width, Bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                 using(var g=Graphics.FromImage(result))
                 {
                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;                    
-                    g.TranslateTransform(tx+ (Bounds.Width - Size.Width) / 2, ty+(Bounds.Height - Size.Height) / 2);
+                    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+
+                    g.TranslateTransform(tx+(Bounds.Width - Size.Width) / 2, ty + (Bounds.Height - Size.Height) / 2);                    
                     g.RotateTransform(Rotation);
                     g.TranslateTransform(-tx, -ty);
-                    g.DrawImage(bmp, 0, 0, Size.Width, Size.Height);
+                    g.DrawImage(source, 0, 0, Size.Width, Size.Height);
                 }
                 return result;
             }                

@@ -2,6 +2,7 @@
 using FlipnoteDotNet.Commons.GUI.MouseGestures;
 using PPMLib.Rendering;
 using PPMLib.Winforms;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,10 +17,12 @@ namespace FlipnoteDotNet.VisualComponentsEditor
         private Point pViewOffset=Point.Empty;
         private int pZoom = 100;
         private MouseGesturesHandler MouseGestures = new MouseGesturesHandler();
-        private VisualComponentsManager ComponentsManager = new VisualComponentsManager();        
+        private VisualComponentsManager ComponentsManager = new VisualComponentsManager();
+        private List<ControlPoint> ControlPoints = new List<ControlPoint>();
+        private ControlPoint HoveredControlPoint = null;
 
         private static readonly Pen SelectionHighlightPen = new Pen(FlipnoteColors.ThemePrimary, 2);
-        private static readonly Pen ComponentOutlinePen = new Pen(Color.FromArgb(64, Color.Black), 2);
+        private static readonly Pen ComponentOutlinePen = new Pen(Color.FromArgb(64, Color.Black), 2);        
 
 
         public VisualComponentsScene()
@@ -32,6 +35,22 @@ namespace FlipnoteDotNet.VisualComponentsEditor
             InitComponentsManager();           
             
         }
+
+        #region ControlPoints
+
+        void LoadControlPoints(VisualComponent c)
+        {
+            ControlPoints.Clear();
+            ControlPoints.Add(new ResizePoint(c, 0, 0));
+            ControlPoints.Add(new ResizePoint(c, 0, 1));
+            ControlPoints.Add(new ResizePoint(c, 1, 0));
+            ControlPoints.Add(new ResizePoint(c, 1, 1));
+            ControlPoints.Add(new RotatePoint(c));
+        }
+
+
+        #endregion ControlPoints
+
 
         #region ComponentsManager
 
@@ -82,10 +101,15 @@ namespace FlipnoteDotNet.VisualComponentsEditor
 
         private void ComponentsManager_SelectionChanged(object sender, System.EventArgs e)
         {
+            ControlPoints.Clear();
             switch(ComponentsManager.SelectionCount)
             {
                 case 0: State.SetNormalMode(); break;
-                case 1: State.SetSingleSelectMode(ComponentsManager.GetSelectedComponents().First()); break;
+                case 1:
+                    var selectedComponent = ComponentsManager.GetSelectedComponents().First();
+                    State.SetSingleSelectMode(selectedComponent);
+                    LoadControlPoints(selectedComponent);
+                    break;
                 default : State.SetMultiSelectMode(); break;
             }
             Invalidate();
@@ -123,7 +147,7 @@ namespace FlipnoteDotNet.VisualComponentsEditor
 
             public const int ModeNormal = 0;
             public const int ModeSingleSelect = 1;
-            public const int ModeMultiSelect = 2;        
+            public const int ModeMultiSelect = 2;
         }
 
         private _State State = new _State();
@@ -161,6 +185,13 @@ namespace FlipnoteDotNet.VisualComponentsEditor
         private void MouseGestures_DragStart(object sender, DragGestureArgs e)
         {
             //Debug.WriteLine($"Drag Start Mode={State.Mode}");
+            if(HoveredControlPoint!=null)
+            {
+                Debug.WriteLine("HCP!!!!!!!!!!!!!!!");
+                e.UserData = new ControlPointMoveGesture(HoveredControlPoint, ClientToScene(e.StartLocation));
+                return;
+            }
+
             if (State.Mode == _State.ModeSingleSelect || State.Mode == _State.ModeMultiSelect)
             {
                 var comps = ComponentsManager.GetSelectedComponents().Select(c => (Component:c, OriginalLocation:c.Location)).ToArray();
@@ -216,6 +247,27 @@ namespace FlipnoteDotNet.VisualComponentsEditor
             {
                 e.Graphics.DrawPolygon(SelectionHighlightPen, c.GetPolygonBounds().Select(SceneToClient).ToArray());
             }
+
+            foreach (var controlPoint in ControlPoints)
+            {
+                var pos = SceneToClient(controlPoint.GetRealPosition());
+                e.Graphics.FillEllipse(Brushes.White, pos.X - 3, pos.Y - 3, 6, 6);
+                e.Graphics.DrawEllipse(SelectionHighlightPen, pos.X - 3, pos.Y - 3, 6, 6);
+            }
+        }
+
+        static int Distance(Point A, Point B)
+        {
+            var dx = A.X - B.X;
+            var dy = A.Y - B.Y;
+            return dx * dx + dy * dy;
+        }        
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            var S = ClientToScene(e.Location);
+            HoveredControlPoint = ControlPoints.Where(c => Distance(S, c.GetRealPosition()) < 25).FirstOrDefault();            
+            base.OnMouseMove(e);
         }
 
         #endregion Overrides
@@ -278,6 +330,27 @@ namespace FlipnoteDotNet.VisualComponentsEditor
                     l.Offset(e.DeltaLocation.X * 100 / scene.Zoom, e.DeltaLocation.Y * 100 / scene.Zoom);
                     Items[i].Component.Location = l;
                 }
+                scene.Invalidate();                
+            }
+
+            public void OnDrop(object sender, DropGestureArgs e) { }
+        }
+
+        class ControlPointMoveGesture : IUserDataDragDrop
+        {
+
+            ControlPoint Point;
+
+            public ControlPointMoveGesture(ControlPoint point, Point sceneDragStartLocation)
+            {
+                Point = point;
+                Point.OnMoveStarted(sceneDragStartLocation);
+            }
+
+            public void OnDrag(object sender, DragGestureArgs e)
+            {                
+                var scene = sender as VisualComponentsScene;
+                Point.OnMoved(scene.ClientToScene(e.CurrentLocation));
                 scene.Invalidate();                
             }
 
