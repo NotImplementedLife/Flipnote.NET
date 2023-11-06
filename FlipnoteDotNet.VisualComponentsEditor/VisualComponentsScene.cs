@@ -2,6 +2,7 @@
 using FlipnoteDotNet.Commons.GUI.MouseGestures;
 using PPMLib.Rendering;
 using PPMLib.Winforms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -82,11 +83,11 @@ namespace FlipnoteDotNet.VisualComponentsEditor
             }
 
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++) 
             {
                 var vs = Load(@"D:\Users\NotImpLife\Projects\PPMLib\ATest\cat.png");
-                var cmp = new FlipnoteVisualSourceComponent(ComponentsManager.BitmapProcessor, vs);
-                cmp.Size = new Size(30 + i * 10, 30 + i * 10);
+                var cmp = new FlipnoteVisualSourceComponent(ComponentsManager.BitmapProcessor, vs);                
+                cmp.Size = new Size(30 + i * 2, 30 + i * 2);
                 cmp.BitmapChanged += (vc) =>
                 {
                     Debug.WriteLine("Bitmap changed");
@@ -351,9 +352,8 @@ namespace FlipnoteDotNet.VisualComponentsEditor
             {                
                 var scene = sender as VisualComponentsScene;
                 Point.OnMoved(scene.ClientToScene(e.CurrentLocation));
-                scene.Invalidate();                
+                scene.Invalidate();
             }
-
             public void OnDrop(object sender, DropGestureArgs e) { }
         }
 

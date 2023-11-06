@@ -52,9 +52,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlipnoteDotNet\FlipnoteDotNet.csproj">
-      <Project>{e1262303-ed67-4193-ab47-b792aaab7691}</Project>
-      <Name>FlipnoteDotNet</Name>
+    <ProjectReference Include="..\FlipnoteDotNet.Commons\FlipnoteDotNet.Commons.csproj">
+      <Project>{1293E1DB-E332-42A3-8A84-00856BDC7AD1}</Project>
+      <Name>FlipnoteDotNet.Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlipnoteDotNet.Data\FlipnoteDotNet.Data.csproj">
+      <Project>{ad721b7d-d437-4129-a6ca-6c058fa6b0b6}</Project>
+      <Name>FlipnoteDotNet.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlipnoteDotNet.Model\FlipnoteDotNet.Model.csproj">
+      <Project>{16eb6d74-e471-4d55-ab00-cc5d5c6a7f7d}</Project>
+      <Name>FlipnoteDotNet.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\PPMLib\PPMLib.csproj">
       <Project>{637d805b-45bb-4b8f-86d1-97a03de6ae47}</Project>

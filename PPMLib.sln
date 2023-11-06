@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlipnoteDotNet.Commons", "F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPMLib.Winforms", "PPMLib.Winforms\PPMLib.Winforms.csproj", "{CA53B87D-A979-4AF0-A1A2-1A0FAF1B3D8C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlipnoteDotNet.Data", "FlipnoteDotNet.Data\FlipnoteDotNet.Data.csproj", "{AD721B7D-D437-4129-A6CA-6C058FA6B0B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlipnoteDotNet.Model", "FlipnoteDotNet.Model\FlipnoteDotNet.Model.csproj", "{16EB6D74-E471-4D55-AB00-CC5D5C6A7F7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{CA53B87D-A979-4AF0-A1A2-1A0FAF1B3D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA53B87D-A979-4AF0-A1A2-1A0FAF1B3D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA53B87D-A979-4AF0-A1A2-1A0FAF1B3D8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD721B7D-D437-4129-A6CA-6C058FA6B0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD721B7D-D437-4129-A6CA-6C058FA6B0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD721B7D-D437-4129-A6CA-6C058FA6B0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD721B7D-D437-4129-A6CA-6C058FA6B0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16EB6D74-E471-4D55-AB00-CC5D5C6A7F7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16EB6D74-E471-4D55-AB00-CC5D5C6A7F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16EB6D74-E471-4D55-AB00-CC5D5C6A7F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16EB6D74-E471-4D55-AB00-CC5D5C6A7F7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

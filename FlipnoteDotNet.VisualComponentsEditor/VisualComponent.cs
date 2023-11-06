@@ -1,10 +1,8 @@
 ﻿using FlipnoteDotNet.Commons.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Runtime.Remoting.Metadata;
 
 namespace FlipnoteDotNet.VisualComponentsEditor
 {
