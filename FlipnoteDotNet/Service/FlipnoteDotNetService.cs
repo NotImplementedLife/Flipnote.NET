@@ -4,7 +4,6 @@ using FlipnoteDotNet.Data.Manager;
 using FlipnoteDotNet.Model.Actions;
 using FlipnoteDotNet.Model.Entities;
 using System;
-using System.Diagnostics;
 
 namespace FlipnoteDotNet.Service
 {
@@ -18,27 +17,8 @@ namespace FlipnoteDotNet.Service
 
         public FlipnoteDotNetService()
         {
-            Manager.ActionContext = Context;
-
-            Context.SelectedSequenceChanged += Context_SelectedSequenceChanged;
-            Context.SelectedEntityChanged += Context_SelectedEntityChanged;
-            Context.SelectedLayerChanged += Context_SelectedLayerChanged;
-        }
-
-        private void Context_SelectedLayerChanged(object sender, IEntityReference<Layer> e)
-        {
-            SelectedLayerChanged?.Invoke(sender, e);
-        }
-
-        private void Context_SelectedEntityChanged(object sender, IEntityReference<Entity> e)
-        {
-            SelectedEntityChanged?.Invoke(sender, e);
-        }
-
-        private void Context_SelectedSequenceChanged(object sender, IEntityReference<Sequence> e)
-        {
-            SelectedSequenceChanged?.Invoke(sender, e);
-        }
+            Manager.ActionContext = Context;            
+        }        
 
         public void CreateNewProject()
         {
@@ -56,6 +36,11 @@ namespace FlipnoteDotNet.Service
             });            
         }
 
+        public void SetCurrentFrame(int frame)
+        {
+            Manager.DoAction(new ChangeTimestampAction(frame));
+        }
+        
         public void LoadProject(string filename)
         {
             Manager.LoadFromFile(filename);
@@ -100,18 +85,36 @@ namespace FlipnoteDotNet.Service
             Manager.DoAction(new AddLayerAction(layerType, () => LayersListChanged?.Invoke(this, EventArgs.Empty)));
         }
 
-        public event EventHandler<IEntityReference<Sequence>> SelectedSequenceChanged;
-        public event EventHandler<IEntityReference<Layer>> SelectedLayerChanged;
-        public event EventHandler<IEntityReference<Entity>> SelectedEntityChanged;
+        public event EventHandler<IEntityReference<Sequence>> SelectedSequenceChanged
+        {
+            add => Context.SelectedSequenceChanged += value;
+            remove => Context.SelectedSequenceChanged -= value;
+        }
+
+        public event EventHandler<IEntityReference<Layer>> SelectedLayerChanged
+        {
+            add => Context.SelectedLayerChanged += value;
+            remove => Context.SelectedLayerChanged -= value;
+        }
+
         public event EventHandler LayersListChanged;
-        
-
-
         public event EventHandler ProjectChanged;
+
+        public event EventHandler<IEntityReference<Entity>> SelectedEntityChanged
+        {
+            add => Context.SelectedEntityChanged += value;
+            remove => Context.SelectedEntityChanged -= value;
+        }        
         public event EventHandler ActionsListChanged
         {
             add => Manager.ActionsListChanged += value;
             remove => Manager.ActionsListChanged -= value;
+        }
+
+        public event EventHandler<int> CurrentFrameChanged
+        {
+            add => Context.TimestampChanged += value;
+            remove => Context.TimestampChanged -= value;
         }
 
         public event EventHandler TracksChanged;
@@ -124,5 +127,6 @@ namespace FlipnoteDotNet.Service
 
         public IEntityReference<FlipnoteProject> Project => Context.Project;
         public IEntityReference<Sequence> SelectedSequence => Context.SelectedSequence;
+        public IEntityReference<Entity> SelectedEntity => Context.SelectedEntity;
     }
 }

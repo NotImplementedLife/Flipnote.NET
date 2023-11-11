@@ -1,5 +1,7 @@
 ﻿using FlipnoteDotNet.Commons.GUI.Events;
 using FlipnoteDotNet.Commons.GUI.Menu;
+using FlipnoteDotNet.Data.Entities;
+using FlipnoteDotNet.Model.Entities;
 using FlipnoteDotNet.Properties;
 using FlipnoteDotNet.Service;
 using System;
@@ -18,6 +20,8 @@ namespace FlipnoteDotNet.GUI.Forms
         [Event(nameof(FlipnoteDotNetService.ProjectChanged))]
         [Event(nameof(FlipnoteDotNetService.SelectedSequenceChanged))]
         [Event(nameof(FlipnoteDotNetService.LayersListChanged))]
+        [Event(nameof(FlipnoteDotNetService.CurrentFrameChanged))]
+        [Event(nameof(FlipnoteDotNetService.SelectedEntityChanged))]
         private readonly FlipnoteDotNetService Service = new FlipnoteDotNetService();
 
         public MainForm()
@@ -52,6 +56,8 @@ namespace FlipnoteDotNet.GUI.Forms
             AddControl(rTop, RemoveLayerButton, 3 + 27, 3);
             AddControl(rTop, MoveUpLayerButton, 3 + 2*27, 3);
             AddControl(rTop, MoveDownLayerButton, 3 + 3 * 27, 3);
+
+            AddControl(rBottom, PropertyEditor, 3, 3, 3, 3);            
 
             //AddControl(right, new Button { Text = "myButton" }, 12, 10, 12);
         }

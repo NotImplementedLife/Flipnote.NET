@@ -26,7 +26,7 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
         private class SequenceRef
         {
             public int EId;
-            public Color Color = Color.DodgerBlue;
+            public Color Color;
             public string Name;
             public int StartFrame;
             public int EndFrame;
@@ -42,6 +42,7 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
 
         public void LoadSequences(IEntityReference<FlipnoteProject> project)
         {            
+            SequenceRef selectedElement = null;
             for (int i = 0; i < Tracks.Length; i++)
             {
                 Tracks[i].Clear();
@@ -50,19 +51,22 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
                     var sRef = new SequenceRef(i, s.Entity.StartFrame, s.Entity.EndFrame);
                     sRef.Name = s.Entity.Name;
                     sRef.EId = s.Id;
-                    //sRef.Color = s.Entity.Color?
-
+                    sRef.Color = s.Entity.Color;
                     Tracks[i].Add(sRef);
+                    if (sRef.EId == _SelectedElement?.EId) 
+                    {
+                        selectedElement = sRef;
+                    }
                 }
             }
-            ScrollContainer.Invalidate();            
+            SelectSequence(selectedElement, userAction: false);            
         }
 
         public void SetSelectedSequence(IEntityReference<Sequence> sequence)
         {            
             var sId = sequence?.Id ?? -1;            
             if (sId < 0)
-            {
+            {                
                 SelectSequence(null, userAction: false);
                 return;
             }
@@ -232,19 +236,20 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
                     if(bounds.Contains(e.StartLocation))
                     {
                         e.UserData = new SequenceMoveDragData(elem);
-                        SelectElement(elem);
+                        SelectSequence(elem, userAction: true);                        
                         return;
                     }
                 }
             }
         }
 
-        private void SelectElement(SequenceRef e)
+        /*private void SelectElement(SequenceRef e)
         {
             if (SelectedElement == e) return;
             _SelectedElement = e;
-            UserSelectedSequenceChanged?.Invoke(this, _SelectedElement?.EId ?? -1);
-        }        
+            InvalidateSurface();
+            UserSelectedSequenceChanged?.Invoke(this, _SelectedElement?.EId ?? -1Se);
+        }*/       
 
         private void MouseGesturesHandler_Drag(object sender, DragGestureArgs e)
         {            
@@ -329,7 +334,8 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
         private void MouseGesturesHandler_Drop(object sender, DropGestureArgs e)
         {
             if (e.UserData is TrackSignMoveDragData moveData) 
-            {                
+            {
+                UserCurrentFrameChanged?.Invoke(this, EventArgs.Empty);
                 return;
             }
             if (e.UserData is SequenceCreateDragData createData) 
@@ -353,14 +359,18 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
                 InvalidateSurface();
                 return;
             }
-
             if(e.UserData is SequenceMoveDragData seqMoveData)
             {
                 var sRef = seqMoveData.Element;
                 UserSequenceMoved?.Invoke(this, sRef.EId, sRef.TrackId, sRef.StartFrame, sRef.EndFrame);                
                 return;
             }
-
+            if(e.UserData is SequenceResizeDragData seqResizeData)
+            {
+                var sRef = seqResizeData.Element;
+                UserSequenceMoved?.Invoke(this, sRef.EId, sRef.TrackId, sRef.StartFrame, sRef.EndFrame);
+                return;
+            }
         }
 
         public delegate void OnSequenceAdded(object sender, int trackId, int startX, int endX);
@@ -368,8 +378,9 @@ namespace FlipnoteDotNet.Commons.GUI.Controls
 
         public delegate void OnSequenceMoved(object sender, int sId, int trackId, int startX, int endX);
         public event OnSequenceMoved UserSequenceMoved;
+        public event EventHandler UserCurrentFrameChanged;
 
-        public event EventHandler CurrentFrameChanged;
+        public event EventHandler CurrentFrameChanged;        
 
         private void MouseGesturesHandler_Zoom(object sender, ZoomGestureArgs e)
         {

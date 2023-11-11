@@ -2,8 +2,6 @@
 using FlipnoteDotNet.Model.Entities;
 using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FlipnoteDotNet.GUI.Forms
 {
@@ -18,8 +16,17 @@ namespace FlipnoteDotNet.GUI.Forms
 
         private void Service_ProjectChanged(object sender, EventArgs e)
         {
-            Invoke(() => SequenceTracksViewer.LoadSequences(Service.Project));
+            Invoke(() =>
+            {
+                PropertyEditor.SetEntity(null);
+                SequenceTracksViewer.LoadSequences(Service.Project);
+            });
         }
+
+        private void Service_SelectedEntityChanged(object sender, IEntityReference<Entity> entity)
+        {
+            Invoke(() => PropertyEditor.SetEntity(entity));
+        }        
 
         private void Service_SelectedSequenceChanged(object sender, IEntityReference<Sequence> sequence)
         {
@@ -27,7 +34,7 @@ namespace FlipnoteDotNet.GUI.Forms
             {
                 SequenceTracksViewer.SetSelectedSequence(sequence);
                 AddLayerButton.IsEnabled = sequence != null;
-                LayersListBox.LoadLayers(sequence);
+                LayersListBox.LoadLayers(sequence);                
             });
         }
 
@@ -38,7 +45,18 @@ namespace FlipnoteDotNet.GUI.Forms
         }
         private void Service_TracksChanged(object sender, EventArgs e)
         {
-            Invoke(() => SequenceTracksViewer.LoadSequences(Service.Project));
+            Invoke(() =>
+            {
+                SequenceTracksViewer.LoadSequences(Service.Project);
+                PropertyEditor.SetEntity(Service.SelectedEntity);
+
+            });
+        }
+
+        private void Service_CurrentFrameChanged(object sender, int frame)
+        {
+            Debug.WriteLine($"Service_CurrentFrameChanged {frame}");
+            PropertyEditor.SetEntity(Service.SelectedEntity);
         }
 
         #endregion Service
@@ -47,7 +65,7 @@ namespace FlipnoteDotNet.GUI.Forms
         private void RedoButton_Click(object sender, EventArgs e) => RunNonBlockingUI(Service.Redo);
 
         private void AddLayerButton_Click(object sender, EventArgs e)
-            => RunNonBlockingUI(() => Service.AddLayerToSelectedSequence(typeof(TestLayer)));
+            => RunNonBlockingUI(() => Service.AddLayerToSelectedSequence(typeof(SimpleSpriteLayer)));
 
 
         #region SequenceTracksViewer
@@ -57,7 +75,7 @@ namespace FlipnoteDotNet.GUI.Forms
         }
 
         private void SequenceTracksViewer_UserSequenceMoved(object sender, int sId, int trackId, int start, int end)
-        {            
+        {
             RunNonBlockingUI(() => Service.MoveSequence(sId, trackId, start, end));
         }
 
@@ -68,9 +86,14 @@ namespace FlipnoteDotNet.GUI.Forms
 
         private void SequenceTracksViewer_SequenceCreateModeEnded(object sender, EventArgs e)
         {
-            AddNewSequenceButton.IsChecked = false;
-            //SequenceTracksViewer.Seq
+            AddNewSequenceButton.IsChecked = false;            
         }
+
+        private void SequenceTracksViewer_UserCurrentFrameChanged(object sender, EventArgs e)
+        {
+            RunNonBlockingUI(() => Service.SetCurrentFrame(SequenceTracksViewer.TrackSignPosition));            
+        }
+
         #endregion SequenceTracksViewer
 
         private void AddNewSequenceButton_Click(object sender, EventArgs e)

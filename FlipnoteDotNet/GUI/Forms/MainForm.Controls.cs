@@ -28,6 +28,7 @@ namespace FlipnoteDotNet.GUI.Forms
 		[Event(nameof(Commons.GUI.Controls.SequenceTracksViewer.UserSequenceAdded))]		
 		[Event(nameof(Commons.GUI.Controls.SequenceTracksViewer.UserSequenceMoved))]		
 		[Event(nameof(Commons.GUI.Controls.SequenceTracksViewer.UserSelectedSequenceChanged))]
+		[Event(nameof(Commons.GUI.Controls.SequenceTracksViewer.UserCurrentFrameChanged))]
 		private readonly SequenceTracksViewer SequenceTracksViewer = new SequenceTracksViewer();
 
 		[Event(nameof(Click))]
@@ -80,6 +81,8 @@ namespace FlipnoteDotNet.GUI.Forms
             Size = new Size(24, 24),
             IsEnabled = false
         };
+
+        private readonly EntityPropertyEditor PropertyEditor = new EntityPropertyEditor();
 
     }
 }

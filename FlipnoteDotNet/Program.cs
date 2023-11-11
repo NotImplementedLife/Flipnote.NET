@@ -1,5 +1,6 @@
 ﻿using FlipnoteDotNet.Commons;
 using FlipnoteDotNet.Data;
+using FlipnoteDotNet.GUI;
 using FlipnoteDotNet.GUI.Forms;
 using System;
 using System.Windows.Forms;
@@ -14,7 +15,10 @@ namespace FlipnoteDotNet
         [STAThread]
         static void Main()
         {
-            InitializerService.Register(typeof(PPMLib.Initializer), typeof(BinarySerializer));
+            InitializerService.Register
+            (
+                typeof(PPMLib.Initializer), typeof(BinarySerializer), typeof(PropertyEditorControls)
+            );
             InitializerService.Run();
 
             Application.EnableVisualStyles();

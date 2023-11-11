@@ -51,7 +51,7 @@ namespace FlipnoteDotNet.GUI.Controls
                     LayersBinding.Add(new LayerRef(layer.Id, layer.Entity.Name));
                 }
                 DataSource = LayersBinding;
-                LayersBinding.ResetBindings();                
+                LayersBinding.ResetBindings();
             }
             IsBindingListUpdating = false;            
         }

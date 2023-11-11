@@ -1,10 +1,12 @@
 ﻿using FlipnoteDotNet.Commons.Reflection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace FlipnoteDotNet.Data.Entities
 {
@@ -143,8 +145,10 @@ namespace FlipnoteDotNet.Data.Entities
                     else
                     {
                         Properties[propName] = new ValueProperty
-                        {
-                            Value = GetDefaultTypeValue(propType),
+                        {                            
+                            Value = 
+                                property?.GetCustomAttribute<DefaultValueAttribute>()?.Value 
+                                ?? GetDefaultTypeValue(propType),
                             IsTemporal = property.GetCustomAttribute<TemporalAttribute>() != null
                         };
                     }

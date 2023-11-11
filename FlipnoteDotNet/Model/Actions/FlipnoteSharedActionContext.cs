@@ -7,7 +7,16 @@ namespace FlipnoteDotNet.Model.Actions
 {
     public class FlipnoteSharedActionContext : ISharedActionContext
     {
-        public int Timestamp { get; set; } = 0;
+        private int pTimestamp;
+        public int Timestamp
+        {
+            get => pTimestamp;
+            set
+            {
+                pTimestamp = value;
+                TimestampChanged?.Invoke(this, pTimestamp);
+            }
+        }
 
         public IEntityReference<FlipnoteProject> Project { get; set; }
 
@@ -45,7 +54,7 @@ namespace FlipnoteDotNet.Model.Actions
         }
 
 
-
+        public event EventHandler<int> TimestampChanged;
         public event EventHandler<IEntityReference<Entity>> SelectedEntityChanged;
         public event EventHandler<IEntityReference<Sequence>> SelectedSequenceChanged;
         public event EventHandler<IEntityReference<Layer>> SelectedLayerChanged;

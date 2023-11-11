@@ -5,6 +5,10 @@ namespace FlipnoteDotNet.Commons
     public static class Extensions
     {
         public static int Clamp(this int x, int a, int b) => x <= a ? a : x >= b ? b : x;
+
+        /// <summary>
+        /// Tests if a<=x<b is true
+        /// </summary>       
         public static bool IsInRange(this int x, int a, int b) => a <= x && x < b;
 
 

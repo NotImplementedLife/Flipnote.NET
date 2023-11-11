@@ -6,6 +6,11 @@ namespace FlipnoteDotNet.Commons.GUI
 {
     public static class Extensions
     {
+        public static Rectangle GetPaddedContent(this Rectangle r, int padding)
+        {
+            return new Rectangle(r.Left + padding, r.Top + padding, r.Width - 2 * padding, r.Height - 2 * padding);
+        }
+
         // https://stackoverflow.com/questions/33853434/how-to-draw-a-rounded-rectangle-in-c-sharp
         public static GraphicsPath RoundedRect(Rectangle bounds, int radius)
         {
