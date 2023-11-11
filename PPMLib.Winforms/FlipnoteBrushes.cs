@@ -2,7 +2,7 @@
 
 namespace PPMLib.Winforms
 {
-    internal class FlipnoteBrushes
+    public static class FlipnoteBrushes
     {
         public static readonly Brush ThemePrimary = new SolidBrush(FlipnoteColors.ThemePrimary);
         public static readonly Brush ThemeSecondary = new SolidBrush(FlipnoteColors.ThemeSecondary);
