@@ -29,31 +29,40 @@ namespace FlipnoteDotNet.GUI.Controls
             LayersBinding = new BindingList<LayerRef>();
             DataSource = LayersBinding;
             DrawMode = DrawMode.OwnerDrawFixed;
+            SelectionMode = SelectionMode.One;
             ItemHeight = 50;
+            SelectedIndex = -1;            
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private BindingList<LayerRef> LayersBinding;
+        private readonly BindingList<LayerRef> LayersBinding;
 
         public void LoadLayers(IEntityReference<Sequence> sequence)
-        {
+        {            
             IsBindingListUpdating = true;
+
+            int selectedId = SelectedIndex >= 0 ? LayersBinding[SelectedIndex].EID : -1;
+            int selIndex = -1;
+
             ClearSelected();
             SelectedIndex = -1;
             LayersBinding.Clear();
-            if (sequence != null) 
+            if (sequence != null)
             {
                 DataSource = null;
-                foreach (var layer in sequence.Entity.Layers) 
-                {                    
-                    LayersBinding.Add(new LayerRef(layer.Id, layer.Entity.Name));
+                foreach (var layer in sequence.Entity.Layers)
+                {
+                    if (selectedId == layer.Id) selIndex = LayersBinding.Count;
+                    LayersBinding.Add(new LayerRef(layer.Id, layer.Entity.Name));                    
                 }
                 DataSource = LayersBinding;
                 LayersBinding.ResetBindings();
             }
-            IsBindingListUpdating = false;            
+            //SelectionMode = SelectionMode.One;
+            IsBindingListUpdating = false;
+            SelectedIndex = selIndex;
         }
 
 
@@ -103,10 +112,31 @@ namespace FlipnoteDotNet.GUI.Controls
             e.DrawFocusRectangle();
         }
 
-        private void SelectLayer(LayerRef layer)
+        protected override void OnClick(EventArgs e)
         {
-            SelectedIndex = LayersBinding.IndexOf(layer);
+            int index = IndexFromPoint(PointToClient(Cursor.Position));
+            if (index != ListBox.NoMatches) 
+            {
+                UserLayerClick?.Invoke(this, LayersBinding[index].EID);
+            }
+            base.OnClick(e);
+        }
+
+        public void SelectLayer(int layerId)
+        {
+            for(int i=0;i<LayersBinding.Count;i++)
+            {
+                if (LayersBinding[i].EID==layerId)
+                {
+                    SelectedIndex = i;
+                    return;
+                }
+            }
+            SelectedIndex = ListBox.NoMatches;
         }
         private LayerRef SelectedLayer => SelectedIndex < 0 ? null : LayersBinding[SelectedIndex];
+
+        public delegate void OnUserLayerClick(object sender, int layerEId);
+        public event OnUserLayerClick UserLayerClick;
     }
 }

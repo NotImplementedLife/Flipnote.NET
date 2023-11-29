@@ -105,8 +105,21 @@
     <Compile Include="GUI\Forms\MainForm.Events.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GUI\Forms\VisualSourceEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\IObjectHolderDialog.cs" />
     <Compile Include="GUI\IPropertyEditorControl.cs" />
     <Compile Include="GUI\PropertyEditorControls.cs" />
+    <Compile Include="GUI\PropertyEditorFields\FloatEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\PropertyEditorFields\FormBasedEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\PropertyEditorFields\FormBasedEditor.Designer.cs">
+      <DependentUpon>FormBasedEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\PropertyEditorFields\IntEditor.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -125,6 +138,8 @@
     <Compile Include="GUI\PseudoControls\PseudoImageButton.cs" />
     <Compile Include="GUI\PseudoControls\PseudoControl.cs" />
     <Compile Include="Model\Actions\MoveSequenceAction.cs" />
+    <Compile Include="Model\Actions\SelectedEntityPropertyChangedAction.cs" />
+    <Compile Include="Model\Actions\SelectLayerAction.cs" />
     <Compile Include="Model\Entities\SimpleSpriteLayer.cs" />
     <Compile Include="ProjectConstants.cs" />
     <Compile Include="Data\Entities\Entity.cs" />
@@ -170,6 +185,9 @@
     <Compile Include="Service\FlipnoteDotNetService.cs" />
     <EmbeddedResource Include="Commons\GUI\Controls\ScrollView.resx">
       <DependentUpon>ScrollView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\PropertyEditorFields\FormBasedEditor.resx">
+      <DependentUpon>FormBasedEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

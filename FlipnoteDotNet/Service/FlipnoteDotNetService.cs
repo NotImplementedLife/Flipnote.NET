@@ -4,6 +4,7 @@ using FlipnoteDotNet.Data.Manager;
 using FlipnoteDotNet.Model.Actions;
 using FlipnoteDotNet.Model.Entities;
 using System;
+using System.Reflection;
 
 namespace FlipnoteDotNet.Service
 {
@@ -80,9 +81,20 @@ namespace FlipnoteDotNet.Service
             Manager.DoAction(new SelectSequenceAction(sequenceId));
         }
 
+        public void SelectLayer(int layerId)
+        {
+            Manager.DoAction(new SelectLayerAction(layerId));
+        }
+
         public void AddLayerToSelectedSequence(Type layerType)
         {
             Manager.DoAction(new AddLayerAction(layerType, () => LayersListChanged?.Invoke(this, EventArgs.Empty)));
+        }        
+
+        public void ChangeSelectedEntityProperty(PropertyInfo property, object value)
+        {
+            Manager.DoAction(new SelectedEntityPropertyChangedAction(property, value,
+                () => SelectedEntityPropertyChanged?.Invoke(this, EventArgs.Empty)));
         }
 
         public event EventHandler<IEntityReference<Sequence>> SelectedSequenceChanged
@@ -96,6 +108,8 @@ namespace FlipnoteDotNet.Service
             add => Context.SelectedLayerChanged += value;
             remove => Context.SelectedLayerChanged -= value;
         }
+
+        public event EventHandler SelectedEntityPropertyChanged;
 
         public event EventHandler LayersListChanged;
         public event EventHandler ProjectChanged;

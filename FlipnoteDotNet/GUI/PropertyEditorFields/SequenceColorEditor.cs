@@ -76,5 +76,14 @@ namespace FlipnoteDotNet.GUI.Properties.EditorFields
             base.OnClick(e);
             m_iwsService?.CloseDropDown();                    
         }
+        protected override bool ItemEquals(object a, object b)
+        {
+            if (a == null) return b == null;
+            if ((a is Color ca) && (b is Color cb))
+            {
+                return ca.R == cb.R && ca.G == cb.G && ca.B == cb.B && ca.A == cb.A;
+            }
+            return false;
+        }
     }
 }

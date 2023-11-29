@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static FlipnoteDotNet.GUI.Controls.EntityPropertyEditor;
 
 namespace FlipnoteDotNet.GUI.Forms
 {
@@ -50,8 +51,9 @@ namespace FlipnoteDotNet.GUI.Forms
 		{
 			Size = new Size(24, 24),
 			IsEnabled = false
-		};        
+		};
 
+        [Event(nameof(GUI.Controls.LayersListBox.UserLayerClick))]
         private readonly LayersListBox LayersListBox = new LayersListBox();
 
         [Event(nameof(Click))]
@@ -82,6 +84,7 @@ namespace FlipnoteDotNet.GUI.Forms
             IsEnabled = false
         };
 
+        [Event(nameof(EntityPropertyEditor.PropertyValueChanged))]
         private readonly EntityPropertyEditor PropertyEditor = new EntityPropertyEditor();
 
     }

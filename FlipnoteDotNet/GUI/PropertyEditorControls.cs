@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.Commons.Reflection;
+using FlipnoteDotNet.GUI.Properties.EditorFields;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,11 +19,20 @@ namespace FlipnoteDotNet.GUI
                 .ToDictionary(t => t.GetCustomAttribute<PropertyEditorControlAttribute>().TargetType, t => t);
             foreach (var kv in FieldTypes)
             {
-                if (!kv.Value.GetInterfaces().Contains(typeof(IPropertyEditorControl)))
-                    throw new InvalidOperationException($"Field type {kv.Value} does not implement IPropertyEditorControl interface");
-
                 if (!kv.Value.IsSubclassOf(typeof(Control)))
                     throw new InvalidOperationException($"Field type {kv.Value} is not a Control");
+
+                if(kv.Value.IsSubclassOf(typeof(Form)))
+                {
+                    if (!kv.Value.GetInterfaces().Contains(typeof(IObjectHolderDialog)))
+                        throw new InvalidOperationException($"Field type {kv.Value} does not implement IObjectHolderDialog interface");
+                }
+                else
+                {
+                    if (!kv.Value.GetInterfaces().Contains(typeof(IPropertyEditorControl)))
+                        throw new InvalidOperationException($"Field type {kv.Value} does not implement IPropertyEditorControl interface");
+                }
+                
             }                
         }
 
@@ -30,6 +40,10 @@ namespace FlipnoteDotNet.GUI
         {
             if (!FieldTypes.TryGetValue(targetType, out Type fieldType))
                 return null;
+
+            if (fieldType.GetInterfaces().Contains(typeof(IObjectHolderDialog)))
+                return new FormBasedEditor(fieldType);
+
             return Activator.CreateInstance(fieldType) as Control;
         }
     }

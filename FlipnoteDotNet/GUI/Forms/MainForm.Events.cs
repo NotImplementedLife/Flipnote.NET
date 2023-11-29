@@ -1,7 +1,9 @@
 ﻿using FlipnoteDotNet.Data.Entities;
+using FlipnoteDotNet.GUI.Controls;
 using FlipnoteDotNet.Model.Entities;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace FlipnoteDotNet.GUI.Forms
 {
@@ -21,12 +23,24 @@ namespace FlipnoteDotNet.GUI.Forms
                 PropertyEditor.SetEntity(null);
                 SequenceTracksViewer.LoadSequences(Service.Project);
             });
-        }
+        }        
 
         private void Service_SelectedEntityChanged(object sender, IEntityReference<Entity> entity)
         {
-            Invoke(() => PropertyEditor.SetEntity(entity));
-        }        
+            Invoke(() =>
+            {
+                PropertyEditor.SetEntity(entity);
+            });
+        }
+
+        private void Service_SelectedEntityPropertyChanged(object sender, EventArgs e)
+        {
+            Invoke(() =>
+            {
+                SequenceTracksViewer.LoadSequences(Service.Project);
+                PropertyEditor.SetEntity(Service.SelectedEntity);
+            });
+        }
 
         private void Service_SelectedSequenceChanged(object sender, IEntityReference<Sequence> sequence)
         {
@@ -35,6 +49,18 @@ namespace FlipnoteDotNet.GUI.Forms
                 SequenceTracksViewer.SetSelectedSequence(sequence);
                 AddLayerButton.IsEnabled = sequence != null;
                 LayersListBox.LoadLayers(sequence);                
+            });
+        }
+
+        private void Service_SelectedLayerChanged(object sender, IEntityReference<Layer> layer)
+        {            
+            Invoke(() =>
+            {
+                RemoveLayerButton.IsEnabled
+                    = MoveUpLayerButton.IsEnabled
+                    = MoveDownLayerButton.IsEnabled
+                    = layer != null;
+                LayersListBox.SelectLayer(layer?.Id ?? -1);
             });
         }
 
@@ -56,10 +82,27 @@ namespace FlipnoteDotNet.GUI.Forms
         private void Service_CurrentFrameChanged(object sender, int frame)
         {
             Debug.WriteLine($"Service_CurrentFrameChanged {frame}");
-            PropertyEditor.SetEntity(Service.SelectedEntity);
+            Invoke(() =>
+            {
+                SequenceTracksViewer.TrackSignPosition = frame;
+                PropertyEditor.SetEntity(Service.SelectedEntity);
+            });
         }
 
         #endregion Service
+
+        private void PropertyEditor_PropertyValueChanged(object sender, PropertyInfo prop, object newValue)
+        {
+            Debug.WriteLine($"PropertyEditor_PropertyValueChanged {prop} {newValue}");
+            Service.ChangeSelectedEntityProperty(prop, newValue);
+            //SequenceTracksViewer.LoadSequences(Service.Project);   
+        }
+
+        private void LayersListBox_UserLayerClick(object sender, int layerEId)
+        {
+            Debug.WriteLine("Layer changed!!!!");
+            RunNonBlockingUI(() => Service.SelectLayer(layerEId));
+        }        
 
         private void UndoButton_Click(object sender, EventArgs e) => RunNonBlockingUI(Service.Undo);
         private void RedoButton_Click(object sender, EventArgs e) => RunNonBlockingUI(Service.Redo);

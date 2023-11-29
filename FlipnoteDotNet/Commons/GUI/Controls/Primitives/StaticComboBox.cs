@@ -39,8 +39,10 @@ namespace FlipnoteDotNet.Commons.GUI.Controls.Primitives
 
         public T SelectedValueItem
         {
-            get => Values[SelectedIndex < 0 ? 0 : SelectedIndex].Instance;            
-            set => SelectedIndex = (Values.Where(_ => Equals(_.Instance, value)).FirstOrDefault() ?? Values[0]).Index;
+            get => Values[SelectedIndex < 0 ? 0 : SelectedIndex].Instance;
+            set => SelectedIndex = (Values.Where(_ => ItemEquals(_.Instance, value)).FirstOrDefault() ?? Values[0]).Index;
         }
+
+        protected virtual bool ItemEquals(object a, object b) => Equals(a, b);        
     }
 }

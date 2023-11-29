@@ -22,6 +22,8 @@ namespace FlipnoteDotNet.GUI.Forms
         [Event(nameof(FlipnoteDotNetService.LayersListChanged))]
         [Event(nameof(FlipnoteDotNetService.CurrentFrameChanged))]
         [Event(nameof(FlipnoteDotNetService.SelectedEntityChanged))]
+        [Event(nameof(FlipnoteDotNetService.SelectedLayerChanged))]
+        [Event(nameof(FlipnoteDotNetService.SelectedEntityPropertyChanged))]
         private readonly FlipnoteDotNetService Service = new FlipnoteDotNetService();
 
         public MainForm()
