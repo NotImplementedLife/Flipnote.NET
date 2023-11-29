@@ -62,7 +62,7 @@
         {
             Database.MoveInTime(Id, duration);
             var eRef = Database.FindById(Id, Timestamp);
-            Entity = eRef.Entity as E;            
+            Entity = eRef.Entity as E;
         }
 
         public void SetInTime(int timestamp) => MoveInTime(timestamp - Timestamp);

@@ -37,8 +37,11 @@ namespace FlipnoteDotNet.GUI.Forms
         {
             Invoke(() =>
             {
+                Debug.WriteLine("Service_SelectedEntityPropertyChanged");
+                Debug.WriteLine(Service.Project.Entity);
                 SequenceTracksViewer.LoadSequences(Service.Project);
                 PropertyEditor.SetEntity(Service.SelectedEntity);
+                LayersListBox.LoadLayers(Service.SelectedSequence);
             });
         }
 

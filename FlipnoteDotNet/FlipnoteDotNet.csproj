@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="GUI\PseudoControls\PseudoImageButton.cs" />
     <Compile Include="GUI\PseudoControls\PseudoControl.cs" />
+    <Compile Include="Model\Actions\Extensions.cs" />
     <Compile Include="Model\Actions\MoveSequenceAction.cs" />
     <Compile Include="Model\Actions\SelectedEntityPropertyChangedAction.cs" />
     <Compile Include="Model\Actions\SelectLayerAction.cs" />

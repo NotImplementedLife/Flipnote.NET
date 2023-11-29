@@ -1,4 +1,5 @@
-﻿using FlipnoteDotNet.Commons.Reflection;
+﻿using FlipnoteDotNet.Commons;
+using FlipnoteDotNet.Commons.Reflection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -100,6 +101,7 @@ namespace FlipnoteDotNet.Data.Entities
         public void Commit<E>(IEntityReference<E> eRef) where E:Entity
         {
             var eData = GetEntityDataById(eRef.Id);
+            Debug.WriteLine($"Commiting {eRef.Entity}");
             eData.CommitEntity(eRef.Entity, eRef.Timestamp);
         }
 
@@ -183,7 +185,7 @@ namespace FlipnoteDotNet.Data.Entities
                 }
 
                 var eRefType = typeof(EntityReference<>).MakeGenericType(entityType);
-                var eRef = Activator.CreateInstance(eRefType, db, Id, /*timestamp:*/ -1, entity) as IEntityReference<Entity>;
+                var eRef = Activator.CreateInstance(eRefType, db, Id, timestamp, entity) as IEntityReference<Entity>;
                 return eRef; 
             }
 
@@ -201,6 +203,8 @@ namespace FlipnoteDotNet.Data.Entities
 
                     if (prop is ValueProperty valueProperty)
                     {
+                        Debug.WriteLine(valueProperty.Timestamps.JoinToString(", "));
+                        //Debug.WriteLine($"{timestamp} : {valueProperty}");
                         valueProperty.SetValue(eProp.GetValue(entity), timestamp);
                     }
                     else if (prop is EntityListProperty entityListProperty)
@@ -357,13 +361,21 @@ namespace FlipnoteDotNet.Data.Entities
                 timestamp -= HeadTimestamp;
                 if (!IsTemporal) return Value;
 
+                Debug.Write($"Temporal GET({timestamp}) = ");
+
                 var keys = Timestamps.Keys;
-                if(keys.Count == 0 || timestamp<keys.First()) return Value;
+                if (keys.Count == 0 || timestamp < keys.First())
+                {
+                    Debug.WriteLine(Value);
+                    return Value;
+                }
                 foreach (var key in keys) 
                 {
-                    if (timestamp < key) continue;
+                    if (timestamp > key) continue;
+                    Debug.WriteLine(Timestamps[key]); 
                     return Timestamps[key];
                 }
+                Debug.WriteLine(Timestamps[keys.Last()]);
                 return Timestamps[keys.Last()];
             }
 
@@ -375,6 +387,9 @@ namespace FlipnoteDotNet.Data.Entities
                     Value = value;
                     return;
                 }
+
+                Debug.WriteLine($"Temporal SET({timestamp}) = {value}");
+
                 Timestamps[timestamp] = value;
             }
         

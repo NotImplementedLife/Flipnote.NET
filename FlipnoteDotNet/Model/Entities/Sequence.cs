@@ -15,7 +15,7 @@ namespace FlipnoteDotNet.Model.Entities
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
 
-        [FieldEditorAttribute(typeof(SequenceColorEditor))]
+        [FieldEditor(typeof(SequenceColorEditor))]
         [DefaultValue(typeof(Color), "DodgerBlue")]
         public Color Color { get; set; }
 

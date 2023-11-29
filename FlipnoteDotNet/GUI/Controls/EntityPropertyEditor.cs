@@ -79,14 +79,14 @@ namespace FlipnoteDotNet.GUI.Controls
             }
             LabelsWidth += 10;
             Editors.Sort((e1, e2) => e1.PropertyName.CompareTo(e2.PropertyName));
-
-            AttachFieldChangedEvents();
+            
             RefreshControls();
         }
 
         private void Field_ObjectPropertyValueChanged(object o, EventArgs e)
-        {
-            if (!(o is IPropertyEditorControl pec)) return;            
+        {            
+            if (!(o is IPropertyEditorControl pec)) return; 
+            pec.Property.SetValue(pTargetEntity.Entity, pec.ObjectPropertyValue);
             PropertyValueChanged?.Invoke(this, pec.Property, pec.ObjectPropertyValue);            
         }
 
@@ -128,14 +128,15 @@ namespace FlipnoteDotNet.GUI.Controls
 
         public IEntityReference<Entity> TargetEntity => pTargetEntity;
 
-        public void SetEntity(IEntityReference<Entity> eRef)
+        public void SetEntity(IEntityReference<Entity> eRef, bool commit = true)
         {
-            pTargetEntity?.Commit();
+            Debug.WriteLine("SetEntity");
+            //if (commit) pTargetEntity?.Commit();
             pTargetEntity = eRef;            
             CreateEditors(pTargetEntity?.Entity?.GetType());
 
             DetachFieldChangedEvents();
-            foreach(var editor in Editors)
+            foreach (var editor in Editors)
             {
                 var value = editor.Property.GetValue(eRef.Entity);
                 (editor.Control as IPropertyEditorControl).ObjectPropertyValue = value;
