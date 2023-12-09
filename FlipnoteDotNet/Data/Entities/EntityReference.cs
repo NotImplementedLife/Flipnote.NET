@@ -1,4 +1,6 @@
-﻿namespace FlipnoteDotNet.Data.Entities
+﻿using System.Diagnostics;
+
+namespace FlipnoteDotNet.Data.Entities
 {
     public interface IEntityReference<out E> where E : Entity 
     {
@@ -28,7 +30,7 @@
         /// Move all the properties' timestamps at a certain value in time
         /// </summary>
         /// <param name="timestamp"></param>
-        void SetInTime(int timestamp);
+        //void SetInTime(int timestamp);
 
         string ToStringFull();
     }
@@ -62,12 +64,13 @@
 
         public void MoveInTime(int duration)
         {
+            Debug.WriteLine($"MOVE IN TIME BY {duration}");
             Database.MoveInTime(Id, duration);
             var eRef = Database.FindById(Id, Timestamp);
             Entity = eRef.Entity as E;
         }
 
-        public void SetInTime(int timestamp) => MoveInTime(timestamp - Timestamp);
+        //public void SetInTime(int timestamp) => MoveInTime(timestamp - Timestamp);
 
         public override string ToString()
         {

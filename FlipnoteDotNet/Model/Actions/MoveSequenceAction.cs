@@ -49,9 +49,13 @@ namespace FlipnoteDotNet.Model.Actions
                     newTrack.Commit();
 
                     seq.Entity.StartFrame = StartFrame;
-                    seq.Entity.EndFrame = EndFrame;
+                    seq.Entity.EndFrame = EndFrame;                    
                     seq.Commit();
-                    seq.SetInTime(StartFrame);                    
+                    seq.MoveInTime(StartFrame-OldStartFrame);
+                    //seq.SetInTime(StartFrame);                    
+
+                    foreach (var layer in seq.Entity.Layers)
+                        layer.MoveInTime(StartFrame - OldStartFrame);
 
                     Callback?.Invoke();
                     return;
@@ -75,10 +79,15 @@ namespace FlipnoteDotNet.Model.Actions
             newTrack.Entity.Sequences.Remove(seq);
             newTrack.Commit();
 
+            var startFrame = seq.Entity.StartFrame;
+
             seq.Entity.StartFrame = OldStartFrame;
             seq.Entity.EndFrame = OldEndFrame;
             seq.Commit();
-            seq.SetInTime(OldStartFrame);            
+            seq.MoveInTime(OldStartFrame - startFrame);
+
+            foreach (var layer in seq.Entity.Layers)
+                layer.MoveInTime(OldStartFrame - startFrame);
 
             Callback?.Invoke();
         }
