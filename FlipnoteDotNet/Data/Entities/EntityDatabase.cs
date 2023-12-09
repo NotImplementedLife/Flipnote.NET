@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 
 namespace FlipnoteDotNet.Data.Entities
 {
@@ -129,6 +130,23 @@ namespace FlipnoteDotNet.Data.Entities
             public Type EntityType;
             public Dictionary<string, IEntityProperty> Properties = new Dictionary<string, IEntityProperty>();
 
+            public string ToStringFull()
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine($"@Entity Id={Id} of type {EntityType} {{");
+
+                foreach(var prop in Properties)
+                {
+                    var str = $"{prop.Key} = {prop.Value}".Split('\n').Select(_ => "  " + _).JoinToString(Environment.NewLine);
+                    sb.AppendLine(str);
+                }
+
+
+                sb.AppendLine($"}}");
+                return sb.ToString();
+            }
+
             public EntityData(int id, Type type)
             {
                 Id = id;
@@ -202,8 +220,7 @@ namespace FlipnoteDotNet.Data.Entities
                     var prop = propEntry.Value;
 
                     if (prop is ValueProperty valueProperty)
-                    {
-                        Debug.WriteLine(valueProperty.Timestamps.JoinToString(", "));
+                    {                        
                         //Debug.WriteLine($"{timestamp} : {valueProperty}");
                         valueProperty.SetValue(eProp.GetValue(entity), timestamp);
                     }
@@ -359,29 +376,20 @@ namespace FlipnoteDotNet.Data.Entities
             public object GetValue(int timestamp = -1)
             {
                 timestamp -= HeadTimestamp;
-                if (!IsTemporal) return Value;
-
-                Debug.Write($"Temporal GET({timestamp}) = ");
-
-                var keys = Timestamps.Keys;
-                if (keys.Count == 0 || timestamp < keys.First())
+                if (!IsTemporal) return Value;                
+                
+                var result = Value;
+                foreach (var key in Timestamps.Keys) 
                 {
-                    Debug.WriteLine(Value);
-                    return Value;
+                    if (timestamp < key) break;
+                    result = Timestamps[key];                    
                 }
-                foreach (var key in keys) 
-                {
-                    if (timestamp > key) continue;
-                    Debug.WriteLine(Timestamps[key]); 
-                    return Timestamps[key];
-                }
-                Debug.WriteLine(Timestamps[keys.Last()]);
-                return Timestamps[keys.Last()];
+                Debug.WriteLine($"Temporal GET({timestamp}) = {result}");
+                return result;
             }
 
             public void SetValue(object value, int timestamp = -1)
-            {
-                timestamp -= HeadTimestamp;
+            {                
                 if (!IsTemporal || timestamp < 0) 
                 {
                     Value = value;
@@ -390,6 +398,9 @@ namespace FlipnoteDotNet.Data.Entities
 
                 Debug.WriteLine($"Temporal SET({timestamp}) = {value}");
 
+                if (Equals(GetValue(timestamp), value)) 
+                    return;
+                timestamp -= HeadTimestamp;
                 Timestamps[timestamp] = value;
             }
         
@@ -400,7 +411,12 @@ namespace FlipnoteDotNet.Data.Entities
 
             public override string ToString()
             {
-                return $"Value property default={Value}, ht={HeadTimestamp}, tsCount={Timestamps.Count}";
+                if (!IsTemporal) return Value?.ToString() ?? "(null)";
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"  DefaultValue = {Value?.ToString() ?? "(null)"};");
+                sb.AppendLine($"  HeadTimestamp = {HeadTimestamp};");
+                sb.AppendLine($"  Timestamps = {{ {Timestamps.Select(kv => $"{kv.Key}:{kv.Value}").JoinToString(", ")} }};");
+                return $"{{{Environment.NewLine}{sb}{Environment.NewLine}}}";
             }
 
         }
@@ -461,6 +477,11 @@ namespace FlipnoteDotNet.Data.Entities
             foreach (var kv in entitiesData)
                 db.Entities[kv.Key] = kv.Value;
             return db;
+        }
+
+        internal string GetEntityAsFullString(int id)
+        {
+            return GetEntityDataById(id)?.ToStringFull() ?? throw new ArgumentException($"Entity with id {id} not found");
         }
     }
 }

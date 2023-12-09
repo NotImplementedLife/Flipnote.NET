@@ -29,6 +29,8 @@
         /// </summary>
         /// <param name="timestamp"></param>
         void SetInTime(int timestamp);
+
+        string ToStringFull();
     }
 
     internal class EntityReference<E> : IEntityReference<E> where E : Entity
@@ -70,6 +72,11 @@
         public override string ToString()
         {
             return $"eRef {Id}:{Timestamp}({Entity?.ToString() ?? "null"})";
+        }
+
+        public string ToStringFull()
+        {
+            return Database.GetEntityAsFullString(Id);
         }
     }
 }

@@ -142,5 +142,6 @@ namespace FlipnoteDotNet.Service
         public IEntityReference<FlipnoteProject> Project => Context.Project;
         public IEntityReference<Sequence> SelectedSequence => Context.SelectedSequence;
         public IEntityReference<Entity> SelectedEntity => Context.SelectedEntity;
+        public int Timestamp => Context.Timestamp;
     }
 }
