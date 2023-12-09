@@ -52,10 +52,15 @@ namespace FlipnoteDotNet.Model.Actions
                     seq.Entity.EndFrame = EndFrame;                    
                     seq.Commit();
                     seq.MoveInTime(StartFrame-OldStartFrame);
-                    //seq.SetInTime(StartFrame);                    
 
                     foreach (var layer in seq.Entity.Layers)
+                    {
                         layer.MoveInTime(StartFrame - OldStartFrame);
+                        if (ctx.SelectedEntity?.Id == layer.Id)
+                            ctx.SelectedEntity = layer;
+                        if (ctx.SelectedLayer?.Id == layer.Id)
+                            ctx.SelectedLayer = layer;
+                    }
 
                     Callback?.Invoke();
                     return;
@@ -87,7 +92,14 @@ namespace FlipnoteDotNet.Model.Actions
             seq.MoveInTime(OldStartFrame - startFrame);
 
             foreach (var layer in seq.Entity.Layers)
+            {
                 layer.MoveInTime(OldStartFrame - startFrame);
+                if (ctx.SelectedEntity?.Id == layer.Id)
+                    ctx.SelectedEntity = layer;
+                if (ctx.SelectedLayer?.Id == layer.Id)
+                    ctx.SelectedLayer = layer;
+            }
+            
 
             Callback?.Invoke();
         }
