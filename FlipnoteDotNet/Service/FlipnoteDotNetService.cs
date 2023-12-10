@@ -28,8 +28,8 @@ namespace FlipnoteDotNet.Service
             Manager.WithDatabase(db =>
             {
                 db.Clear();
-                var proj = db.Create<FlipnoteProject>();
-                Utils.Repeat(5, () => proj.Entity.Tracks.Add(db.Create<Track>()));
+                var proj = db.Create<FlipnoteProject>();                
+                Commons.Utils.Repeat(5, () => proj.Entity.Tracks.Add(db.Create<Track>()));
                 proj.Entity.Name = "My Flipnote project";
                 proj.Commit();
                 Context.Project = proj;

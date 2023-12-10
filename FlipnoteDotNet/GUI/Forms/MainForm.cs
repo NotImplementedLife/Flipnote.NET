@@ -34,35 +34,7 @@ namespace FlipnoteDotNet.GUI.Forms
             MenuLoader.Load(TopMenu, this);
             CreateLayout();
             EventLoader.AttachAll(this);                        
-        }        
-
-        private void CreateLayout()
-        {
-            var (menuBar, topToolbar, content) = SplitAreaV(WholeAreaId, "30px", $"{TopMenu.Height}px", "1*");
-
-            var (left, right) = SplitAreaH(content, "2*", "1*");
-            var (lTop, lBottom) = SplitAreaV(left, "55*", "45*");
-            var (rTop, rBottom) = SplitAreaV(right, "40*", "60*");
-
-            AddControl(menuBar, TopMenu, 1, 1, 1, 1);
-            AddControl(lTop, VisualComponentsScene, 3, 3, 3, 3);
-            AddControl(lBottom, SequenceTracksViewer, 3, 30, 3, 3);
-            AddControl(lBottom, AddNewSequenceButton, 3, 3);
-
-            AddControl(topToolbar, UndoButton, 3, 2);
-            AddControl(topToolbar, RedoButton, 3 + 24 * 1, 2);
-
-            AddControl(rTop, LayersListBox, 3, 30, 3, 3);
-
-            AddControl(rTop, AddLayerButton, 3, 3);
-            AddControl(rTop, RemoveLayerButton, 3 + 27, 3);
-            AddControl(rTop, MoveUpLayerButton, 3 + 2*27, 3);
-            AddControl(rTop, MoveDownLayerButton, 3 + 3 * 27, 3);
-
-            AddControl(rBottom, PropertyEditor, 3, 3, 3, 3);            
-
-            //AddControl(right, new Button { Text = "myButton" }, 12, 10, 12);
-        }
+        }                
 
         /// <summary>
         /// Runs an action on a separate thread, user actions are disabled but UI still responds to events

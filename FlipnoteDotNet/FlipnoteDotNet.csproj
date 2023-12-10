@@ -137,6 +137,8 @@
     </Compile>
     <Compile Include="GUI\PseudoControls\PseudoImageButton.cs" />
     <Compile Include="GUI\PseudoControls\PseudoControl.cs" />
+    <Compile Include="GUI\VisualSource\PaintController.cs" />
+    <Compile Include="GUI\VisualSource\PaintSurface.cs" />
     <Compile Include="Model\Actions\Extensions.cs" />
     <Compile Include="Model\Actions\MoveSequenceAction.cs" />
     <Compile Include="Model\Actions\SelectedEntityPropertyChangedAction.cs" />
@@ -151,7 +153,7 @@
     <Compile Include="Data\Manager\DatabaseAction.cs" />
     <Compile Include="Data\Manager\DatabaseManager.cs" />
     <Compile Include="Data\Manager\ISharedActionContext.cs" />
-    <Compile Include="Data\Manager\PreserveStack.cs" />
+    <Compile Include="Commons\PreserveStack.cs" />
     <Compile Include="Data\Serialization\BinarySerializer.cs" />
     <Compile Include="Data\Serialization\BinarySerializerProviderAttribute.cs" />
     <Compile Include="Data\Serialization\InternalSerializations.cs" />

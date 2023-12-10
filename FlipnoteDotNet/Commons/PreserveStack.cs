@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace FlipnoteDotNet.Data.Manager
+namespace FlipnoteDotNet.Commons
 {
     public class PreserveStack<T>
     {

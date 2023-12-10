@@ -23,7 +23,15 @@ namespace FlipnoteDotNet.GUI.Forms
 			AutoSize = false
 		};
 
-		private readonly VisualComponentsScene VisualComponentsScene = new VisualComponentsScene();
+        private readonly SplitContainer Workspace = new SplitContainer
+        {
+            Orientation = Orientation.Vertical
+        };
+
+        private readonly VisualComponentsScene VisualComponentsScene = new VisualComponentsScene
+        {
+            Dock=DockStyle.Fill
+        };
 
 		[Event(nameof(Commons.GUI.Controls.SequenceTracksViewer.SequenceCreateModeEnded))]
 		[Event(nameof(Commons.GUI.Controls.SequenceTracksViewer.UserSequenceAdded))]		
@@ -86,6 +94,39 @@ namespace FlipnoteDotNet.GUI.Forms
 
         [Event(nameof(EntityPropertyEditor.PropertyValueChanged))]
         private readonly EntityPropertyEditor PropertyEditor = new EntityPropertyEditor();
+
+        private void CreateLayout()
+        {
+            Workspace.SuspendLayout();            
+            Workspace.Panel1.Controls.Add(VisualComponentsScene);
+            Workspace.ResumeLayout();
+
+
+            var (menuBar, topToolbar, content) = SplitAreaV(WholeAreaId, "30px", $"{TopMenu.Height}px", "1*");
+
+            var (left, right) = SplitAreaH(content, "2*", "1*");
+            var (lTop, lBottom) = SplitAreaV(left, "55*", "45*");
+            var (rTop, rBottom) = SplitAreaV(right, "40*", "60*");
+
+            AddControl(menuBar, TopMenu, 1, 1, 1, 1);
+            AddControl(lTop, Workspace, 3, 3, 3, 3);
+            AddControl(lBottom, SequenceTracksViewer, 3, 30, 3, 3);
+            AddControl(lBottom, AddNewSequenceButton, 3, 3);
+
+            AddControl(topToolbar, UndoButton, 3, 2);
+            AddControl(topToolbar, RedoButton, 3 + 24 * 1, 2);
+
+            AddControl(rTop, LayersListBox, 3, 30, 3, 3);
+
+            AddControl(rTop, AddLayerButton, 3, 3);
+            AddControl(rTop, RemoveLayerButton, 3 + 27, 3);
+            AddControl(rTop, MoveUpLayerButton, 3 + 2 * 27, 3);
+            AddControl(rTop, MoveDownLayerButton, 3 + 3 * 27, 3);
+
+            AddControl(rBottom, PropertyEditor, 3, 3, 3, 3);
+
+            //AddControl(right, new Button { Text = "myButton" }, 12, 10, 12);
+        }
 
     }
 }
