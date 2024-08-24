@@ -1,9 +1,0 @@
-﻿<#@ template language="C#" #>using System.Reflection;
-
-[assembly: AssemblyVersion("1.0.<#= this.BuildNumber #>.<#= this.Revision #>")]
-[assembly: AssemblyFileVersion("1.0.<#= this.BuildNumber #>.<#= this.Revision #>")]
-<#+
-	static DateTime now=DateTime.UtcNow;
-    int BuildNumber = (int)(now - new DateTime(2020,11,14)).TotalDays;
-    int Revision = (int)((long)((long)now.Hour*3600+now.Minute*60+now.Second)*65534/86400);
-#>

@@ -1,0 +1,53 @@
+int color_distance(int r, int g, int b, int color2)
+{
+    int dr = r - ((color2 >> 16) & 0xFF);
+    int dg = g - ((color2 >> 8) & 0xFF);
+    int db = b - ((color2 >> 0) & 0xFF);        
+    return db * db + dg * dg + dr * dr;
+}
+
+int find_closest_color(int r, int g, int b, global const int* palette, int paletteLength)
+{
+    int result = palette[0], d = color_distance(r, g, b, palette[0]);
+    for (int i = 1; i < paletteLength; i++)
+    {
+        int d1 = color_distance(r, g, b, palette[i]);
+        if (d1 < d)
+        {
+            result = palette[i]; d = d1;
+        }
+    }
+    return result;
+}
+
+
+kernel void CLKernel_OrderedDithering(
+    global int* pixels, 
+    int width,
+    global const unsigned char* m, int order,
+    int spreadR, int spreadG, int spreadB,
+    global const int* palette, int paletteLength,
+    int alphaThreshold,
+    int modN,
+    int n2over2
+) {  
+    int y = get_global_id(0);
+    int x = get_global_id(1);
+    int i = y*width+x;    
+    
+    int pixel = pixels[i];
+    int a = (pixel >> 24) & 0xFF;
+    if (a < alphaThreshold)
+    {
+        pixels[i] = 0;
+        return;
+    }
+    int mapValue = m[((y & modN) << order) | (x & modN)] - n2over2;
+    int r = ((pixel >> 16) & 0xFF) + ((spreadR * mapValue) >> (2 * order));
+    int g = ((pixel >> 8) & 0xFF) + ((spreadG * mapValue) >> (2 * order));
+    int b = ((pixel >> 0) & 0xFF) + ((spreadB * mapValue) >> (2 * order));
+
+    int color = find_closest_color(r, g, b, palette, paletteLength);
+    pixels[i] = color | 0xFF000000;
+
+}

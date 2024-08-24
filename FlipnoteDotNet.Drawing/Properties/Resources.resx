@@ -118,28 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ic_copy_frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_copy_frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_new_frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_new_frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_redo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_redo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_tr_anchor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_tr_anchor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_tr_rot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_tr_rot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_tr_scale" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_tr_scale.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_tr_translate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_tr_translate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_undo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_undo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CLKernel_OrderedDithering" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLKernel_OrderedDithering.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

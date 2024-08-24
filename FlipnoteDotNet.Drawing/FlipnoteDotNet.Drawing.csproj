@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
@@ -10,14 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlipnoteDotNet.Canvas\FlipnoteDotNet.Canvas.csproj" />
-    <ProjectReference Include="..\FlipnoteDotNet.Core\FlipnoteDotNet.Core.csproj" />
-    <ProjectReference Include="..\FlipnoteDotNet.Drawing\FlipnoteDotNet.Drawing.csproj" />
-    <ProjectReference Include="..\FlipnoteDotNet.PropertyEditor\FlipnoteDotNet.PropertyEditor.csproj" />
+    <None Remove="Resources\CLKernel_OrderedDithering.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App\Canvas\Assets\" />
+    <PackageReference Include="Cloo.clSharp" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\CLKernel_OrderedDithering.txt" />
   </ItemGroup>
 
   <ItemGroup>
