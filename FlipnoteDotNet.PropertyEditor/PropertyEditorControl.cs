@@ -34,7 +34,7 @@ namespace FlipnoteDotNet.PropertyEditor
         private void VirtualScroller_VScrollChanged(object sender, int e)
         {
             ScrollY = e;
-            UpdateSummonedControls();
+            UpdateSummonedControls();            
             Invalidate();
         }
 
@@ -46,7 +46,7 @@ namespace FlipnoteDotNet.PropertyEditor
             {
                 if (fObject == value) return;
                 AttachObject(value);
-                RefreshEditors();
+                RefreshEditors();                
                 Invalidate();                
             }
         }        
@@ -55,6 +55,7 @@ namespace FlipnoteDotNet.PropertyEditor
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            var bounds = e.Graphics.ClipBounds;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
             Debug.WriteLine($"Painting {e.ClipRectangle}");
             using (var b = new SolidBrush(Color.FromArgb((int)(0xFF000000 | rng.Next()))))
@@ -78,7 +79,7 @@ namespace FlipnoteDotNet.PropertyEditor
 
                 Debug.WriteLine($"Paint Updated {Editors[i].Name}");
 
-                e.Graphics.SetClip(ClientRectangle);
+                e.Graphics.SetClip(bounds);
 
                 TextRenderer.DrawText(e.Graphics, PropertiesCollection[i].Name, Font,
                     new Rectangle(0, editorY, PropWidth, EditorsHeight[i]),
@@ -87,13 +88,13 @@ namespace FlipnoteDotNet.PropertyEditor
                 e.Graphics.SetClip(new Rectangle(PropWidth + 1, editorY + 1, EditorWidth - 1, EditorsHeight[i] - 1));
                 Editors[i].OnPaint(e.Graphics, Font);
             }
-            e.Graphics.SetClip(ClientRectangle);
+            e.Graphics.SetClip(bounds);
             if (i > 0)
             {
                 int eY = sy + EditorsY[i - 1] + EditorsHeight[i - 1];
                 e.Graphics.DrawLine(Pens.Black, 0, eY, Width, eY);
-            }            
-            base.OnPaint(e); 
+            }
+            base.OnPaint(e);
         }        
 
         protected override void OnResize(EventArgs e)
@@ -204,17 +205,25 @@ namespace FlipnoteDotNet.PropertyEditor
         }
 
         private void Editor_ControlSummoned(object sender, EventArgs e)
-        {
+        {            
             var ed = sender as IEditor;
             PlaceSummonedControl(ed.SummonedControl);
-            Controls.Add(ed.SummonedControl);    
+            Controls.Add(ed.SummonedControl);
+            ed.SummonedControl.Focus();
         }
 
-        private void PropertyEditorControl_ByUserValueChanged(object sender, EventArgs e)
+        private void PropertyEditorControl_ByUserValueChanged(object sender, ByUserValueChangedEventArgs e)
         {
             var editor = sender as IEditor;
-            EditorProperty[editor].Setter?.Invoke(fObject, new[] { editor.Value });
+            var edProp = EditorProperty[editor];
+            edProp.Setter?.Invoke(fObject, new[] { editor.Value });
+            if (!e.IsPreview) 
+            {
+                ByUserValueChangedNotPreview?.Invoke(this, new ByUserValueChangedEventArgs(e, edProp));
+            }
         }
+
+        public event EventHandler<ByUserValueChangedEventArgs> ByUserValueChangedNotPreview;
 
         private void OnEditorInvalidate(IEditor ed)
         {
@@ -237,6 +246,7 @@ namespace FlipnoteDotNet.PropertyEditor
         private IEditor FocusedEditor = null;
         private void SetFocus(IEditor editor)
         {
+            if (FocusedEditor == editor) return;
             FocusedEditor?.OnFocusLost();
             FocusedEditor = editor;
             FocusedEditor?.OnFocus();
@@ -379,16 +389,16 @@ namespace FlipnoteDotNet.PropertyEditor
         }
 
         private void PlaceSummonedControl(Control control)
-        {
+        {            
             var stats = control.Tag as IEditor.SummonedControlStats;
-            if (stats == null) return;
+            if (stats == null) return;            
             (int ey, int eh) = EditorsLayout[stats.Editor];
             int x = stats.InnerBounds.X + PropWidth;
             int y = stats.InnerBounds.Y + ey;
             int w = stats.InnerBounds.Width;
-            w = w == 0 ? EditorWidth : w;
+            w = w <= 0 ? EditorWidth + w : w;
             int h = stats.InnerBounds.Height;
-            h = h == 0 ? eh : h;
+            h = h <= 0 ? eh + h : h;
             stats.Editor.SummonedControl?.SetBounds(x, y - ScrollY, w, h);
         }
 

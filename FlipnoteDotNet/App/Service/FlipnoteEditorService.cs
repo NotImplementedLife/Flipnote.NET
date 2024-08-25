@@ -3,6 +3,7 @@ using FlipnoteDotNet.App.Canvas.Components;
 using FlipnoteDotNet.App.Data;
 using FlipnoteDotNet.App.Service.FlipnoteEditorActions;
 using FlipnoteDotNet.Canvas;
+using static FlipnoteDotNet.PropertyEditor.PropertiesCollection;
 
 namespace FlipnoteDotNet.App.Service
 {
@@ -55,5 +56,13 @@ namespace FlipnoteDotNet.App.Service
                 component, oldTransform, newTransform));
         }
 
+        public void ChangeProperty(object target, object oldValue, object newValue, PropertyData propertyData)
+        {
+            IUndoableAction action;
+
+            action = new ReflectionPropertySet(target, oldValue, newValue, propertyData.Setter);
+
+            UndoStack.Do(action);
+        }
     }
 }

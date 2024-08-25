@@ -33,9 +33,10 @@
         {
             if (SummonedControl != null)
             {
+                var oldValue = fValue;
                 Value = SummonedControl.Text;
                 DisposeControl();
-                TriggerUserValueChanged();
+                TriggerUserValueChanged(oldValue, fValue, preview: false);
             }            
         }        
     }

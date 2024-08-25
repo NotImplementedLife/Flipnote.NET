@@ -21,7 +21,7 @@ namespace FlipnoteDotNet.PropertyEditor.Editors
             {
                 MsDown = false;
                 fValue = !fValue;
-                TriggerUserValueChanged();                
+                TriggerUserValueChanged(!fValue, fValue, preview: false);
                 Invalidate();
             }
         }

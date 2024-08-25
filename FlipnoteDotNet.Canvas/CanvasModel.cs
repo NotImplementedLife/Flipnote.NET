@@ -74,12 +74,12 @@ namespace FlipnoteDotNet.Canvas
         private void Processor_FrameUpdated(object sender, EventArgs e)
         {
             Bitmap capture;
-            lock(BufferLock)            
-                capture = new Bitmap(FrontBuffer);
+            lock (BufferLock)
+                capture = new Bitmap(FrontBuffer);               
             var ev = new CanvasFrameUpdatedEventArgs(capture);
             FrameUpdated?.Invoke(this, ev);
             if (ev.DisposeBitmap)
-                capture.Dispose();            
+                capture.Dispose();          
         }
 
         public void DrawOnGraphics(Graphics g, int x, int y, int width, int height)

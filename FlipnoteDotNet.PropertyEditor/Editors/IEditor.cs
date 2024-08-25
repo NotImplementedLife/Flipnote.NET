@@ -14,7 +14,7 @@
         void OnKeyUp(KeyEventArgs e);
 
         object Value { get; set; }
-        event EventHandler ByUserValueChanged;
+        event EventHandler<ByUserValueChangedEventArgs> ByUserValueChanged;
         Action<IEditor> OnInvalidate { get; set; }
         void Invalidate();
 

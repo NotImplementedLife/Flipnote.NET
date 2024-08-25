@@ -63,7 +63,7 @@ namespace FlipnoteDotNet.Canvas
         {
             //Invoke(() =>
             {
-                var old = fCanvasBuffer;                
+                var old = fCanvasBuffer;
                 fCanvasBuffer = e.Bitmap;
                 old?.Dispose();
                 e.DisposeBitmap = false;

@@ -3,6 +3,7 @@ using FlipnoteDotNet.Core.Utils;
 using FlipnoteDotNet.Properties;
 using FlipnoteDotNet.PropertyEditor.Editors;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.VisualStyles;
 
@@ -10,10 +11,11 @@ namespace FlipnoteDotNet.App.Editors
 {
     internal class CanvasTransformEditor : Editor<CanvasTransform>
     {
-        public override int RequestedTextRows => 5;        
+        public override int RequestedTextRows => 5;
+        private readonly StringFormat StringFormat = StringFormat.GenericTypographic;
 
         public CanvasTransformEditor(): base(invalidateAfterValueChanged: true) 
-        {
+        {            
             TabPaint = new[]
             {
                 TabPaint_Anchor, TabPaint_Translate, TabPaint_Default, TabPaint_Rot
@@ -21,7 +23,7 @@ namespace FlipnoteDotNet.App.Editors
 
             TabMouseDown = new[]
             {
-                TabMouseDown_Anchor, TabMouse_Default, TabMouse_Default, TabMouseDown_Rot,
+                TabMouseDown_Anchor, TabMouseDown_Translate, TabMouse_Default, TabMouseDown_Rot,
             };
 
             TabMouseMove = new[]
@@ -90,6 +92,7 @@ namespace FlipnoteDotNet.App.Editors
         private void SelectTab(int tabIndex)
         {
             if (SelectedTab == tabIndex) return;
+            DisposeControl();
             SelectedTab = tabIndex;
             Invalidate();
         }
@@ -151,7 +154,7 @@ namespace FlipnoteDotNet.App.Editors
             g.DrawString(text, font, Brushes.Black, x0, g.ClipBounds.Y + (RequestedTextRows - 2) * bh / RequestedTextRows);
         }
 
-        private bool RotTab_UpdateRot(int x, int y, bool checkBounds)
+        private bool RotTab_UpdateRot(int x, int y, bool checkBounds, bool capture=false)
         {
             var bw = Width;
             var bh = Height;
@@ -162,12 +165,14 @@ namespace FlipnoteDotNet.App.Editors
             int r = l / 2;
             int cx = x0 + r, cy = y0 + r;
             int dx = x - cx, dy = y - cy, dd = dx * dx + dy * dy;
-
+            if(capture)
+            {
+                UserCaptureTransform();
+            }
             if (l > 0 && (!checkBounds || dd < r * r)) 
             {
-                var angle = (float)(Math.Atan2(dy, dx) * 180 / Math.PI);
-                Value = fValue with { Rotation = angle };
-                TriggerUserValueChanged();
+                var angle = (float)(Math.Atan2(dy, dx) * 180 / Math.PI);                
+                UserSetTransform(fValue with { Rotation = angle }, preview: true);                
                 return true;
             }
             return false;
@@ -179,8 +184,10 @@ namespace FlipnoteDotNet.App.Editors
         {
             if (RotTab_MsDown = (buttons == MouseButtons.Left))
             {
-                if (!RotTab_UpdateRot(x, y, checkBounds: true))
+                if (!RotTab_UpdateRot(x, y, checkBounds: true, capture: true)) 
+                {
                     RotTab_MsDown = false;
+                }
             }
         }
 
@@ -195,6 +202,10 @@ namespace FlipnoteDotNet.App.Editors
 
         private void TabMouseUp_Rot(MouseButtons buttons, int x, int y)
         {
+            if(RotTab_MsDown)
+            {
+                UserSetTransform(fValue, preview: false);
+            }
             RotTab_MsDown = false;
         }
 
@@ -233,13 +244,12 @@ namespace FlipnoteDotNet.App.Editors
             if (l > 0 && (!checkBounds || new Rectangle(x0, y0, l, l).Contains(x, y))) 
             {
                 float ax = (1f * (x - x0) / l).Clamp(0, 1);
-                float ay = (1f * (y - y0) / l).Clamp(0, 1);
-                Value = fValue with { AnchorX = ax, AnchorY = ay };
-                TriggerUserValueChanged();
+                float ay = (1f * (y - y0) / l).Clamp(0, 1);                                
+                UserSetTransform(fValue with { AnchorX = ax, AnchorY = ay }, preview: false);
                 return true;
             }
             return false;
-        }
+        }        
 
         private bool AnchorTab_MsDown = false;        
 
@@ -269,17 +279,95 @@ namespace FlipnoteDotNet.App.Editors
 
         #endregion
 
-        private void TabPaint_Default(Graphics g, Font font)
-        {
-            g.DrawString("Ok", font, Brushes.Black, g.ClipBounds);
-        }
+        #region Tab_Translate
+
+        private Rectangle TranslateXControlRect;
+        private Rectangle TranslateYControlRect;
 
         private void TabPaint_Translate(Graphics g, Font font)
         {
-            var text = $"X:{fValue.X}\nY:{fValue.Y}";
-            g.DrawString(text, font, Brushes.Black, g.ClipBounds);
+            int h = (int)(g.ClipBounds.Height / RequestedTextRows);
+            int s = (int)g.MeasureString("X:_", font, (int)g.ClipBounds.Width, StringFormat).Width;
+
+            g.DrawString("X:", font, Brushes.Black, g.ClipBounds.X, g.ClipBounds.Y, StringFormat);
+            g.DrawString("Y:", font, Brushes.Black, g.ClipBounds.X, g.ClipBounds.Y + h, StringFormat);
+
+            var rect = new Rectangle((int)g.ClipBounds.X + s, (int)g.ClipBounds.Y, (int)g.ClipBounds.Width - s, h);            
+            TextBoxRenderer.DrawTextBox(g, rect, fValue.X.ToString(), font, TextBoxState.Normal);
+            TranslateXControlRect = new Rectangle(TabW + s, 0, rect.Width, rect.Height);
+            rect.Offset(0, h);
+            TextBoxRenderer.DrawTextBox(g, rect, fValue.Y.ToString(), font, TextBoxState.Normal);
+            TranslateYControlRect = new Rectangle(TabW + s, h, rect.Width, rect.Height);
         }
 
-        private void TabMouse_Default(MouseButtons buttons, int x, int y) { }       
+        private NumericUpDown CreateNumericInput(int x, int y, int w, int h)
+        {
+            var c = new NumericUpDown
+            {
+                Minimum = short.MinValue,
+                Maximum = short.MaxValue,
+                Tag = new IEditor.SummonedControlStats(this, new Rectangle(x, y, w, h))
+            };
+
+            return c;
+        }
+
+        private void TabMouseDown_Translate(MouseButtons buttons, int x, int y)
+        {                        
+            if (TranslateXControlRect.Contains(x, y))
+            {
+                int bx = TranslateXControlRect.X, by = TranslateXControlRect.Y;
+                int w = TranslateXControlRect.Width, h = TranslateXControlRect.Height;
+                int dw = Width - (w + bx);
+                var control = CreateNumericInput(bx, by, -bx, h);
+                control.Value = fValue.X;
+                control.ValueChanged += (o, e) =>
+                {
+                    UserCaptureTransform();
+                    UserSetTransform(fValue with { X = (int)control.Value }, preview: false);                    
+                };
+                SummonControl(control);
+            }
+            else if (TranslateYControlRect.Contains(x, y)) 
+            {
+                int bx = TranslateYControlRect.X, by = TranslateYControlRect.Y;
+                int w = TranslateYControlRect.Width, h = TranslateYControlRect.Height;
+                int dw = Width - (w + bx);
+                var control = CreateNumericInput(bx, by, -bx, h);
+                control.Value = fValue.Y;
+                control.ValueChanged += (o, e) =>
+                {
+                    UserCaptureTransform();
+                    UserSetTransform(fValue with { Y = (int)control.Value }, preview: false);                    
+                };
+                SummonControl(control);
+            }
+        }
+
+        #endregion
+
+        public override void OnFocusLost()
+        {
+            DisposeControl();
+        }
+
+        private void TabPaint_Default(Graphics g, Font font)
+        {
+            g.DrawString("Ok", font, Brushes.Black, g.ClipBounds);
+        }        
+
+        private void TabMouse_Default(MouseButtons buttons, int x, int y) { }
+
+        private CanvasTransform oldTransform;
+        private void UserCaptureTransform()
+        {
+            oldTransform = fValue;
+        }
+
+        private void UserSetTransform(CanvasTransform newTransform, bool preview)
+        {            
+            Value = newTransform;
+            TriggerUserValueChanged(oldTransform, newTransform, preview);
+        }
     }
 }

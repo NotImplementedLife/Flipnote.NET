@@ -25,7 +25,7 @@
         }
         public Action<IEditor> OnInvalidate { get; set; }
 
-        public event EventHandler ByUserValueChanged;
+        public event EventHandler<ByUserValueChangedEventArgs> ByUserValueChanged;
 
         public void Invalidate() => OnInvalidate?.Invoke(this);
 
@@ -35,9 +35,10 @@
         public virtual void OnMouseUp(MouseButtons buttons, int x, int y) { }
         public virtual void OnPaint(Graphics g, Font font) { }
 
-        protected void TriggerUserValueChanged()
+        protected void TriggerUserValueChanged(object oldValue, object newValue, bool preview = false)
         {
-            ByUserValueChanged?.Invoke(this, EventArgs.Empty);
+            var e = new ByUserValueChangedEventArgs(preview, oldValue, newValue);
+            ByUserValueChanged?.Invoke(this, e);
         }
 
         public virtual void OnFocus() { }

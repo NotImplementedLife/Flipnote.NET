@@ -2,6 +2,7 @@
 using FlipnoteDotNet.App.Data;
 using FlipnoteDotNet.App.Service;
 using FlipnoteDotNet.Canvas;
+using FlipnoteDotNet.PropertyEditor;
 using FlipnoteDotNet.Utils.GUI;
 using System.Diagnostics;
 
@@ -18,6 +19,14 @@ namespace FlipnoteDotNet.App.Controls
             CanvasControl.DragDrop += CanvasControl_DragDrop;
             CanvasControl.ComponentTransformChanged += CanvasControl_ComponentTransformChanged;
             CanvasControl.SelectionChanged += CanvasControl_SelectionChanged;
+
+            PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;
+        }
+
+        private void PropertyEditor_ByUserValueChangedNotPreview(object sender, ByUserValueChangedEventArgs e)
+        {
+            //Debug.WriteLine($"FinalValueChanged: {e.Name} => {e.Getter.Invoke(PropertyEditor.Object, null)}");
+            FlipnoteEditorService.ChangeProperty(PropertyEditor.Object, e.OldValue, e.NewValue, e.PropertyData.Value);
         }
 
         private void CanvasControl_SelectionChanged(object sender, EventArgs e)
