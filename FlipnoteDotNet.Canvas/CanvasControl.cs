@@ -165,6 +165,8 @@ namespace FlipnoteDotNet.Canvas
             Invalidate();
         }
 
+        public void ClearSelection() => SelectionManager.ClearSelection();
+
         public CanvasComponent SelectedComponent => SelectionManager.GetSelectedComponents().FirstOrDefault();
 
         public event EventHandler SelectionChanged;

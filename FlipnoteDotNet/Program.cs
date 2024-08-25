@@ -1,7 +1,9 @@
 using FlipnoteDotNet.App;
+using FlipnoteDotNet.App.Canvas.Components;
 using FlipnoteDotNet.App.Editors;
 using FlipnoteDotNet.App.Forms;
 using FlipnoteDotNet.Canvas;
+using FlipnoteDotNet.Canvas.Components;
 using FlipnoteDotNet.Core;
 using FlipnoteDotNet.PropertyEditor;
 using System.Runtime.CompilerServices;
@@ -30,7 +32,13 @@ namespace FlipnoteDotNet
             InitializeStaticClass(typeof(FlipnoteDotNet.Utils.MainThreadInvoker));
             InitializeStaticClass(typeof(FlipnoteDotNet.PropertyEditor.PropertyEditors));
             MethodPreparer.WarmUp(typeof(CanvasModel), "Render");
-            MethodPreparer.WarmUp(typeof(CanvasModel), "Update");            
+            MethodPreparer.WarmUp(typeof(CanvasModel), "Update");                        
+
+            var ignoreAttr = new PropertyEditorAttribute(ignore: true);
+            PropertiesCollection.RegisterAttribute<CanvasComponent>(nameof(CanvasComponent.DirectTransformValues), ignoreAttr);
+            PropertiesCollection.RegisterAttribute<CanvasComponent>(nameof(CanvasComponent.IgnoreGraphicsTransform), ignoreAttr);
+            PropertiesCollection.RegisterAttribute<CanvasComponent>(nameof(CanvasComponent.InverseTransformValues), ignoreAttr);
+            PropertiesCollection.RegisterAttribute<FlipnoteSprite>(nameof(FlipnoteSprite.Source), ignoreAttr);
 
             PropertyEditor.PropertyEditors.RegisterDefaultEditor<CanvasTransform, CanvasTransformEditor>();
         }

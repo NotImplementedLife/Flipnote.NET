@@ -233,7 +233,7 @@ namespace FlipnoteDotNet.App.Editors
             var text = $"X={fValue.AnchorX:F4}\nY={fValue.AnchorY:F4}";
             g.DrawString(text, font, Brushes.Black, x0, g.ClipBounds.Y + (RequestedTextRows - 2) * bh / RequestedTextRows);
         }
-        private bool AnchorTab_UpdateAnchors(int x, int y, bool checkBounds)
+        private bool AnchorTab_UpdateAnchors(int x, int y, bool checkBounds, bool capture = false)
         {
             var bw = Width;
             var bh = Height;
@@ -241,11 +241,15 @@ namespace FlipnoteDotNet.App.Editors
             var l = L * 6 / 8;
             var x0 = TabW + L / 8;
             var y0 = L / 8;
+            if(capture)
+            {
+                UserCaptureTransform();
+            }
             if (l > 0 && (!checkBounds || new Rectangle(x0, y0, l, l).Contains(x, y))) 
             {
                 float ax = (1f * (x - x0) / l).Clamp(0, 1);
-                float ay = (1f * (y - y0) / l).Clamp(0, 1);                                
-                UserSetTransform(fValue with { AnchorX = ax, AnchorY = ay }, preview: false);
+                float ay = (1f * (y - y0) / l).Clamp(0, 1);
+                UserSetTransform(fValue with { AnchorX = ax, AnchorY = ay }, preview: true);
                 return true;
             }
             return false;
@@ -257,7 +261,7 @@ namespace FlipnoteDotNet.App.Editors
         {
             if(AnchorTab_MsDown = (buttons == MouseButtons.Left))
             {
-                if (!AnchorTab_UpdateAnchors(x, y, checkBounds: true))
+                if (!AnchorTab_UpdateAnchors(x, y, checkBounds: true, capture: true)) 
                     AnchorTab_MsDown = false;
             }
         }
@@ -273,7 +277,11 @@ namespace FlipnoteDotNet.App.Editors
 
         private void TabMouseUp_Anchor(MouseButtons buttons, int x, int y)
         {
-            AnchorTab_MsDown = false;
+            if (AnchorTab_MsDown)
+            {
+                UserSetTransform(fValue, preview: false);
+                AnchorTab_MsDown = false;
+            }
         }
 
 

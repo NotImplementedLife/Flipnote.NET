@@ -2,7 +2,9 @@
 {
     public abstract class Editor<T> : IEditor
     {
+        public Control Parent { get; set; }
         public string Name { get; set; }
+        public object Target { get; set; }
 
         public abstract int RequestedTextRows { get; }
 

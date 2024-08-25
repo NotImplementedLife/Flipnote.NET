@@ -21,6 +21,8 @@ namespace FlipnoteDotNet.App.Controls
             CanvasControl.SelectionChanged += CanvasControl_SelectionChanged;
 
             PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;
+
+            CanvasControl.ClearSelection();
         }
 
         private void PropertyEditor_ByUserValueChangedNotPreview(object sender, ByUserValueChangedEventArgs e)
@@ -31,7 +33,14 @@ namespace FlipnoteDotNet.App.Controls
 
         private void CanvasControl_SelectionChanged(object sender, EventArgs e)
         {
-            PropertyEditor.Object = CanvasControl.SelectedComponent;
+            if (CanvasControl.SelectedComponent != null) 
+            {
+                PropertyEditor.Object = CanvasControl.SelectedComponent;
+            }
+            else
+            {
+                PropertyEditor.Object = FlipnoteEditorService.GetCurrentFrameProxy();
+            }
         }
 
         private void CanvasControl_ComponentTransformChanged(object sender, FlipnoteDotNet.Canvas.Components.CanvasComponent component, CanvasTransform oldTransform, CanvasTransform newTransform)

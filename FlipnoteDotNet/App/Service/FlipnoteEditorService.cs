@@ -64,5 +64,7 @@ namespace FlipnoteDotNet.App.Service
 
             UndoStack.Do(action);
         }
+
+        public FrameProxy GetCurrentFrameProxy() => new FrameProxy(FramesManager, FramesManager.GetCurrentFrame());
     }
 }

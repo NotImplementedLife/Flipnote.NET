@@ -57,9 +57,9 @@ namespace FlipnoteDotNet.PropertyEditor
         {
             var bounds = e.Graphics.ClipBounds;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
-            Debug.WriteLine($"Painting {e.ClipRectangle}");
-            using (var b = new SolidBrush(Color.FromArgb((int)(0xFF000000 | rng.Next()))))
-                e.Graphics.FillRectangle(b, e.ClipRectangle);
+            //Debug.WriteLine($"Painting {e.ClipRectangle}");
+            //using (var b = new SolidBrush(Color.FromArgb((int)(0xFF000000 | rng.Next()))))
+            //    e.Graphics.FillRectangle(b, e.ClipRectangle);
 
             if (PropertiesCollection == null) return;      
             
@@ -77,7 +77,7 @@ namespace FlipnoteDotNet.PropertyEditor
                     continue;
                 }
 
-                Debug.WriteLine($"Paint Updated {Editors[i].Name}");
+                //Debug.WriteLine($"Paint Updated {Editors[i].Name}");
 
                 e.Graphics.SetClip(bounds);
 
@@ -151,6 +151,8 @@ namespace FlipnoteDotNet.PropertyEditor
                     Editors[i].ByUserValueChanged -= PropertyEditorControl_ByUserValueChanged;
                     Editors[i].ControlSummoned -= Editor_ControlSummoned;
                     Editors[i].ControlDismissed -= Editor_ControlDismissed;
+                    Editors[i].Target = null;
+                    Editors[i].Parent = null;
                 }
                 EditorsLayout.Clear();
                 EditorProperty.Clear();
@@ -176,9 +178,11 @@ namespace FlipnoteDotNet.PropertyEditor
             for(int i=0;i<length;i++)
             {
                 var propData = PropertiesCollection[i];
-                var editor = PropertyEditors.CreateEditor(PropertiesCollection[i].PropertyType);
+                var editor = PropertyEditors.CreateEditor(propData.PropertyType, propData.PrefferedEditor);
 
+                editor.Target = fObject;
                 editor.Name = propData.Name;
+                editor.Parent = this;
                 editor.Value = propData.Getter?.Invoke(fObject, null);
                 editor.ByUserValueChanged += PropertyEditorControl_ByUserValueChanged;
                 editor.ControlSummoned += Editor_ControlSummoned;

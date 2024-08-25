@@ -24,5 +24,8 @@ namespace FlipnoteDotNet.Core.Utils
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(this float x, float a, float b) => x <= a ? a : x >= b ? b : x;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Clamp(this int x, int a, int b) => x <= a ? a : x >= b ? b : x;
     }
 }

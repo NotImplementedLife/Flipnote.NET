@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.PropertyEditor.Editors;
+using System.Runtime.CompilerServices;
 
 namespace FlipnoteDotNet.PropertyEditor
 {

@@ -2,6 +2,8 @@
 {
     public interface IEditor
     {
+        Control Parent { get; set; }
+        object Target { get; set; }
         string Name { get; set; }
         int RequestedTextRows { get; }
         void OnPaint(Graphics g, Font font);

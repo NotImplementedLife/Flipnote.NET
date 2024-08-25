@@ -1,8 +1,9 @@
 ﻿using FlipnoteDotNet.Drawing;
+using System.ComponentModel;
 
 namespace FlipnoteDotNet.App.Data
 {
-    public class FrameConfig
+    public class FrameConfig //: INotifyPropertyChanged
     {
         public readonly Palette Palette;
 
@@ -23,6 +24,7 @@ namespace FlipnoteDotNet.App.Data
                 fPaperColorIndex = value;
                 PaperColor = fActualPalette.Colors[fPaperColorIndex];
                 PaperColorChanged?.Invoke(this, EventArgs.Empty);
+                //OnPropertyChanged(nameof(PaperColorIndex));
             }
         }
 
@@ -44,6 +46,7 @@ namespace FlipnoteDotNet.App.Data
                     PaperColorChanged?.Invoke(this, EventArgs.Empty);
                 }
                 ColorIndicesChanged?.Invoke(this, EventArgs.Empty);
+                //OnPropertyChanged(nameof(ColorIndices));
             }
         }
 
@@ -62,6 +65,11 @@ namespace FlipnoteDotNet.App.Data
         public event EventHandler ColorIndicesChanged;
 
         public event EventHandler PaperColorChanged;
-        
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        /*public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }*/
     }
 }
