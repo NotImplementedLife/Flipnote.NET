@@ -1,18 +1,21 @@
 ﻿using FlipnoteDotNet.Core.Utils;
 using FlipnoteDotNet.Drawing;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FlipnoteDotNet.App.Controls
 {
-    public class PaletteColorChooser : Control
+    internal class SubpalettePicker : Control
     {
-        public PaletteColorChooser()
-        {            
+        public SubpalettePicker()
+        {
             DoubleBuffered = true;
         }
 
-        private Palette fPalette = Palettes.FlipnotePalette;
-        private int fSelectedIndex = 0;
+        private Palette fPalette = Palettes.FlipnotePalette;        
         public Palette Palette
         {
             get => fPalette;
@@ -21,28 +24,16 @@ namespace FlipnoteDotNet.App.Controls
                 fPalette = value;
                 Invalidate();
             }
-        }
-
-        public int SelectedIndex
-        {
-            get => fSelectedIndex;
-            set
-            {
-                if (fSelectedIndex == value) return;
-                fSelectedIndex = value;                
-                Invalidate();
-            }
-        }
-
+        }        
         protected override void OnPaint(PaintEventArgs e)
         {
             ComputeColorButtonsSize(out var w, out var h);
             int x = 0, y = 0;
-            for(int i=0;i<Palette.Colors.Length;i++)
+            for (int i = 0; i < Palette.Colors.Length; i++)
             {
-                DrawColor(e.Graphics, Palette.Colors[i], x, y, w, h, i == fSelectedIndex);
-                x+= w;
-                if (x + w > Width) 
+                DrawColor(e.Graphics, Palette.Colors[i], x, y, w, h, false);
+                x += w;
+                if (x + w > Width)
                 {
                     x = 0;
                     y += h;
@@ -54,7 +45,7 @@ namespace FlipnoteDotNet.App.Controls
         {
             x += 2; y += 2;
             w -= 4; h -= 4;
-            using (var brush = new SolidBrush(color))            
+            using (var brush = new SolidBrush(color))
                 g.FillRectangle(brush, x, y, w, h);
             if (!selected)
             {
@@ -82,16 +73,16 @@ namespace FlipnoteDotNet.App.Controls
             if (x >= colorsPerRow) return;
             int newIndex = y * colorsPerRow + x;
             if (newIndex >= Palette.Colors.Length) return;
-            if (SelectedIndex == newIndex) return;
-            SelectedIndex = newIndex;
-            ColorChanged?.Invoke(this, EventArgs.Empty);
+            //if (SelectedIndex == newIndex) return;
+            //SelectedIndex = newIndex;
+            //ColorChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void ComputeColorButtonsSize(out int width, out int height)
         {
             height = Height;
             width = Width / Palette.Colors.Length;
-            if(width<16)
+            if (width < 16)
             {
                 height = Height / 2;
                 width = 2 * Width / Palette.Colors.Length;
@@ -104,6 +95,5 @@ namespace FlipnoteDotNet.App.Controls
         }
 
         public event EventHandler ColorChanged;
-
     }
 }

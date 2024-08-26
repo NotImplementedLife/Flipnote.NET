@@ -32,8 +32,13 @@
         public override void OnFocusLost()
         {
             if (SummonedControl != null)
-            {
+            {                
                 var oldValue = fValue;
+                if (oldValue == SummonedControl.Text)
+                {
+                    DisposeControl();
+                    return;
+                }
                 Value = SummonedControl.Text;
                 DisposeControl();
                 TriggerUserValueChanged(oldValue, fValue, preview: false);

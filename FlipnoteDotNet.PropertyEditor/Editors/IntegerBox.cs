@@ -39,7 +39,13 @@ namespace FlipnoteDotNet.PropertyEditor.Editors
             if (SummonedControl != null)
             {
                 var oldValue = fValue;
-                Value = (int)(SummonedControl as NumericUpDown).Value;
+                var newValue = (int)(SummonedControl as NumericUpDown).Value;
+                if (oldValue == newValue)
+                {
+                    DisposeControl();
+                    return;
+                }
+                Value = newValue;
                 DisposeControl();
                 TriggerUserValueChanged(oldValue, fValue, preview: false);
             }

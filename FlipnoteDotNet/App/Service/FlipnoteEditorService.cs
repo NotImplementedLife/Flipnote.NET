@@ -58,10 +58,23 @@ namespace FlipnoteDotNet.App.Service
 
         public void ChangeProperty(object target, object oldValue, object newValue, PropertyData propertyData)
         {
-            IUndoableAction action;
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
 
-            action = new ReflectionPropertySet(target, oldValue, newValue, propertyData.Setter);
+            IUndoableAction action = null;
 
+            if (target is FlipnoteCanvasComponent component)
+            {
+                if (propertyData.Name == "Transform")
+                {
+                    action = new ChangeComponentTransform(FramesManager, FramesManager.GetCurrentFrame(),
+                        component, (CanvasTransform)oldValue, (CanvasTransform)newValue);
+                }
+            }
+            else
+            {
+                action = new ReflectionPropertySet(target, oldValue, newValue, propertyData.Setter);
+            }
             UndoStack.Do(action);
         }
 

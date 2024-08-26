@@ -70,7 +70,8 @@ namespace FlipnoteDotNet.App.Data
         public Frame DuplicateCurrentFrame()
         {
             var frame = new Frame(fCanvasModel, PaletteConfig);
-            frame.FrameConfig.ColorIndices = CurrentFrame.FrameConfig.ColorIndices.ToArray();
+            frame.FrameConfig.ColorIndices = CurrentFrame.FrameConfig.ColorIndices?.ToArray();
+            frame.FrameConfig.PaperColorIndex = CurrentFrame.FrameConfig.PaperColorIndex;
             var components = CurrentFrame.GetComponents();
             for (int i = 0; i < components.Length; i++)
             {

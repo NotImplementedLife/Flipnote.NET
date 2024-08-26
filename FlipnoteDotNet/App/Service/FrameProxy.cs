@@ -12,17 +12,30 @@ namespace FlipnoteDotNet.App.Service
         public FrameProxy(FramesManager framesManager, Frame frame)
         {
             FramesManager = framesManager;
-            Frame = frame;       
-            //Frame.FrameConfig.PaperColorIndex
+            Frame = frame;                  
         }
 
         [PropertyEditor(typeof(FramePaperColorIndexEditor), name:"Paper Color")]        
         public int PaperColorIndex
         {
-            get => Frame.PaperColorIndex; set => Frame.PaperColorIndex = value;
+            get => Frame.PaperColorIndex;
+            set
+            {
+                Frame.PaperColorIndex = value;
+                FramesManager.RequestThumbnailRedraw(Frame);
+                //Frame.FrameConfig.In
+            }
         }
 
-        public int Value1 { get; set; }
-        public string Value2 { get; set; }
+        [PropertyEditor(typeof(FrameSubpaletteEditor), name: "Subpalette")]
+        public int[] ColorIndices
+        {
+            get => Frame.FrameConfig.ColorIndices;
+            set
+            {
+                Frame.FrameConfig.ColorIndices = value;
+                FramesManager.RequestThumbnailRedraw(Frame);
+            }
+        }        
     }
 }

@@ -33,15 +33,18 @@ namespace FlipnoteDotNet.App.Editors
             }
         }
 
+        private int OldValue;
+
         private void FFrameConfig_ColorIndicesChanged(object sender, EventArgs e)
-        {            
-            PopedContextMenu.SelectedIndex = fFrameConfig.PaperColorIndex;
+        {
+            PopedContextMenu.Palette = fFrameConfig.ActualPalette;            
             Invalidate();
         }
 
         private void FFrameConfig_PaperColorChanged(object sender, EventArgs e)
         {
-            PopedContextMenu.Palette = fFrameConfig.ActualPalette;
+            OldValue = fFrameConfig.PaperColorIndex;
+            PopedContextMenu.SelectedIndex = fFrameConfig.PaperColorIndex;
             Invalidate();
         }
 
@@ -52,10 +55,9 @@ namespace FlipnoteDotNet.App.Editors
         }
 
         private void PopedContextMenu_ColorChanged(object sender, EventArgs e)
-        {
-            var oldValue = fValue;
+        {            
             Value = PopedContextMenu.SelectedIndex;
-            TriggerUserValueChanged(oldValue, fValue, preview: false);
+            TriggerUserValueChanged(OldValue, fValue, preview: false);
         }
 
         private int Width, Height;
@@ -70,15 +72,14 @@ namespace FlipnoteDotNet.App.Editors
             FrameConfig = (Target as FrameProxy).Frame.FrameConfig;       
             var rect = Rectangle.Truncate(g.ClipBounds);
             ButtonRenderer.DrawButton(g, rect, PushButtonState.Normal);
-            using (var b = new SolidBrush(FrameConfig.PaperColor))
+            using (var b = new SolidBrush(fFrameConfig.PaperColor))
                 g.FillRectangle(b, rect.Left + 4, rect.Top + 4, rect.Width - 8, rect.Height - 8);
         }
 
         public override void OnMouseDown(MouseButtons buttons, int x, int y)
         {
             PopedContextMenu.Size = new Size(Width, 50);
-            PopedContextMenu.SelectedIndex = fValue;
-            //Debug.WriteLine($"");
+            PopedContextMenu.SelectedIndex = fValue;            
             PoperContainer.Show(Parent, new Rectangle(Parent.Width - Width, 0, Width, Y + Height));
         }
 
