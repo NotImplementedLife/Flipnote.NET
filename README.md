@@ -18,14 +18,14 @@ These are the features that the app offers (or are on the way to be implemented)
 
 - ✔️ Import and use static image assets
 - ✔️ Auto dithering
-- ✔️ Create/Duplicate frames
+- ✔️ Create/Duplicate/Remove frames
 - ✔️ Layer transform (translate/scale/rotate)
 - ✔️ Layer/Frame properties editor
 - ✔️ Undo/Redo
 - ✔️ Single selection
 
 - ⌛ Choose palette: Flipnote (3 out of 4 colors), Flipnote3D (6 colors), VGA (16 colors)
-- ⌛ Remove/Reorder frames
+- ⌛ Reorder frames
 - ⌛ Remove assets
 - ⌛ Remove layers
 - ⌛ Save/Load projects
