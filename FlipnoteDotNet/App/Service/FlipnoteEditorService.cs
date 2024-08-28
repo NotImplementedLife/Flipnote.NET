@@ -34,7 +34,7 @@ namespace FlipnoteDotNet.App.Service
                 FramesManager,
                 FramesManager.GetCurrentFrameIndex() + 1,
                 FramesManager.CreateNewFrame()));
-        }
+        }        
 
         public void DuplicateCurrentFrame()
         {
@@ -42,6 +42,25 @@ namespace FlipnoteDotNet.App.Service
                 FramesManager,
                 FramesManager.GetCurrentFrameIndex() + 1,
                 FramesManager.DuplicateCurrentFrame()));
+        }
+
+        public void RemoveCurrentFrame()
+        {
+            UndoStack.Do(new RemoveCurrentFrame(
+                FramesManager,
+                FramesManager.GetCurrentFrameIndex(),
+                FramesManager.GetCurrentFrame()
+                ));
+        }
+
+        public void ClearCurrentFrame()
+        {
+            var frame = FramesManager.GetCurrentFrame();
+            UndoStack.Do(new ClearFrame(
+                FramesManager,
+                frame,
+                frame.Components.ToList()
+                ));
         }
 
         public void AddAssetToCurrentFrame(Asset asset)
@@ -77,6 +96,8 @@ namespace FlipnoteDotNet.App.Service
         perform:
             UndoStack.Do(action);
         }
+
+        public int FramesCount => FramesManager.Frames.Count;
 
         public FrameProxy GetCurrentFrameProxy() => new FrameProxy(FramesManager, FramesManager.GetCurrentFrame());
     }

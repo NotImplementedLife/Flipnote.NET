@@ -38,6 +38,7 @@
             RedoButton = new ToolStripButton();
             NewFrameButton = new ToolStripButton();
             CopyCurrentFrameButton = new ToolStripButton();
+            RemoveCurrentFrameButton = new ToolStripButton();
             menuStrip1.SuspendLayout();
             ToolStripContainer.ContentPanel.SuspendLayout();
             ToolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -98,10 +99,10 @@
             // 
             GeneralToolStrip.Dock = DockStyle.None;
             GeneralToolStrip.ImageScalingSize = new Size(20, 20);
-            GeneralToolStrip.Items.AddRange(new ToolStripItem[] { UndoButton, RedoButton, NewFrameButton, CopyCurrentFrameButton });
+            GeneralToolStrip.Items.AddRange(new ToolStripItem[] { UndoButton, RedoButton, NewFrameButton, CopyCurrentFrameButton, RemoveCurrentFrameButton });
             GeneralToolStrip.Location = new Point(6, 0);
             GeneralToolStrip.Name = "GeneralToolStrip";
-            GeneralToolStrip.Size = new Size(139, 27);
+            GeneralToolStrip.Size = new Size(163, 27);
             GeneralToolStrip.TabIndex = 0;
             // 
             // UndoButton
@@ -142,6 +143,16 @@
             CopyCurrentFrameButton.Text = "Duplicate Frame";
             CopyCurrentFrameButton.Click += CopyCurrentFrameButton_Click;
             // 
+            // RemoveCurrentFrameButton
+            // 
+            RemoveCurrentFrameButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            RemoveCurrentFrameButton.Image = Properties.Resources.ic_remove_frame;
+            RemoveCurrentFrameButton.ImageTransparentColor = Color.Magenta;
+            RemoveCurrentFrameButton.Name = "RemoveCurrentFrameButton";
+            RemoveCurrentFrameButton.Size = new Size(24, 24);
+            RemoveCurrentFrameButton.Text = "Remove Frame";
+            RemoveCurrentFrameButton.Click += RemoveCurrentFrameButton_Click;
+            // 
             // FlipnoteEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -177,5 +188,6 @@
         private ToolStripButton RedoButton;
         private ToolStripButton NewFrameButton;
         private ToolStripButton CopyCurrentFrameButton;
+        private ToolStripButton RemoveCurrentFrameButton;
     }
 }

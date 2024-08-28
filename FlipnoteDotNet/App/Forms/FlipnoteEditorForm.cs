@@ -22,5 +22,18 @@ namespace FlipnoteDotNet.App.Forms
         {
             AppState.FlipnoteEditorService.DuplicateCurrentFrame();
         }
+
+        private void RemoveCurrentFrameButton_Click(object sender, EventArgs e)
+        {
+            var service = AppState.FlipnoteEditorService;
+            if (service.FramesCount == 1)
+            {
+                AppState.FlipnoteEditorService.ClearCurrentFrame();
+            }
+            else
+            {
+                AppState.FlipnoteEditorService.RemoveCurrentFrame();
+            }
+        }
     }
 }

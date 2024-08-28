@@ -79,7 +79,7 @@ namespace FlipnoteDotNet.App.Controls
             }
         }
 
-        private Dictionary<Frame, Bitmap> Thumbnails = new Dictionary<Frame, Bitmap>();
+        private readonly Dictionary<Frame, Bitmap> Thumbnails = new Dictionary<Frame, Bitmap>();
 
         private void FFramesManager_FrameThumbnailChanged(object sender, Frame frame, Bitmap thumbnail)
         {

@@ -47,6 +47,23 @@ namespace FlipnoteDotNet.App.Data
                 Components.Add(component);            
         }
 
+        public void ClearComponents()
+        {
+            if(IsCanvasAttached)
+            {
+                var comps = Components.ToList();
+                CanvasModel.Clear();
+                for (int i = 0; i < comps.Count; i++)
+                    (comps[i] as FlipnoteCanvasComponent).DetachFromFrame();
+            }
+            else
+            {
+                for (int i = 0; i < Components.Count; i++)
+                    (Components[i] as FlipnoteCanvasComponent).DetachFromFrame();
+                Components.Clear();
+            }
+        }
+
         public bool RemoveComponent(FlipnoteCanvasComponent component)
         {
             if (IsCanvasAttached)

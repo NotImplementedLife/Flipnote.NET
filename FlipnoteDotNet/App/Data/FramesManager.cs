@@ -53,18 +53,25 @@ namespace FlipnoteDotNet.App.Data
         {
             if (CurrentFrame == Frames[index])
             {
+                Frames.RemoveAt(index);
                 SetCurrentFrame(index > 0 ? index - 1 : 0);
             }
-            Frames.RemoveAt(index);
-            if (index < CurrentFrameIndex)
-                CurrentFrameIndex--;
+            else
+            {
+                Frames.RemoveAt(index);
+                if (index < CurrentFrameIndex)
+                {
+                    SetCurrentFrame(CurrentFrameIndex - 1);
+                }
+            }
         }
 
         public void InsertFrame(int index, Frame frame)
         {
             Frames.Insert(index, frame);
-            if (index <= CurrentFrameIndex)
-                CurrentFrameIndex++;
+            SetCurrentFrame(index);
+            //if (index <= CurrentFrameIndex)
+            //CurrentFrameIndex++;
         }
 
         public Frame DuplicateCurrentFrame()
