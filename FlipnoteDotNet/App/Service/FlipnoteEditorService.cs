@@ -8,8 +8,8 @@ using static FlipnoteDotNet.PropertyEditor.PropertiesCollection;
 namespace FlipnoteDotNet.App.Service
 {
     public class FlipnoteEditorService
-    {        
-        private FramesManager FramesManager;
+    {
+        private readonly FramesManager FramesManager;
         private readonly UndoStack UndoStack;
 
         public FlipnoteEditorService(FramesManager framesManager, UndoStack undoStack)

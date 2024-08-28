@@ -20,9 +20,23 @@ namespace FlipnoteDotNet.App.Controls
             CanvasControl.ComponentTransformChanged += CanvasControl_ComponentTransformChanged;
             CanvasControl.SelectionChanged += CanvasControl_SelectionChanged;
 
-            PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;            
+            PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;
+
+            ComponentsListView.UserSelectionChanged += ComponentsListView_UserSelectionChanged;
 
             CanvasControl.ClearSelection();
+        }
+
+        private bool CanvasSelectionUser = false;
+        private void ComponentsListView_UserSelectionChanged(object sender, EventArgs e)
+        {
+            CanvasSelectionUser = true;
+            var comp = ComponentsListView.SelectedComponent;
+            if (comp == null)
+                CanvasControl.ClearSelection();
+            else
+                CanvasControl.SelectSingle(comp);
+            CanvasSelectionUser = false;
         }
 
         private void PropertyEditor_ByUserValueChangedNotPreview(object sender, ByUserValueChangedEventArgs e)
@@ -33,8 +47,12 @@ namespace FlipnoteDotNet.App.Controls
 
         private void CanvasControl_SelectionChanged(object sender, EventArgs e)
         {
-            if (CanvasControl.SelectedComponent != null) 
+            if (!CanvasSelectionUser)
             {
+                ComponentsListView.SetSelection(CanvasControl.SelectedComponent);
+            }
+            if (CanvasControl.SelectedComponent != null)
+            {                
                 PropertyEditor.Object = CanvasControl.SelectedComponent;
             }
             else

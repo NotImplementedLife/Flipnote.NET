@@ -35,6 +35,13 @@ namespace FlipnoteDotNet.Canvas
             SelectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        public void SelectSingle(CanvasComponent item)
+        {
+            Selections.Clear();
+            Select(item);
+            SelectionChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public event EventHandler SelectionChanged;        
 
         public CanvasComponent[] GetSelectedComponents() => Selections.Keys.ToArray();

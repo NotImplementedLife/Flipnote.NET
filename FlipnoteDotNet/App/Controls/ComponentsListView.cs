@@ -5,7 +5,8 @@ namespace FlipnoteDotNet.App.Controls
 {
     public class ComponentsListView : ListBox
     {        
-        private CanvasComponent SelectedComponent = null;
+        private CanvasComponent fSelectedComponent = null;
+        public CanvasComponent SelectedComponent => fSelectedComponent;
 
         public ComponentsListView()
         {
@@ -27,7 +28,7 @@ namespace FlipnoteDotNet.App.Controls
 
             var state = e.State & ~DrawItemState.Selected;            
 
-            if (Items[e.Index] == SelectedComponent) 
+            if (Items[e.Index] == fSelectedComponent) 
             {
                 e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, state, e.ForeColor, Color.Orange);
                 roomsBrush = Brushes.White;
@@ -68,9 +69,30 @@ namespace FlipnoteDotNet.App.Controls
 
 
         public void SetData(IList<CanvasComponent> data)
-        {
-            SelectedComponent = null;
+        {            
+            fSelectedComponent = null;
             DataSource = data;            
         }        
+
+        public void SetSelection(CanvasComponent component)
+        {
+            fSelectedComponent = component;
+            Invalidate();
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            
+            if(e.Button==MouseButtons.Left)
+            {                
+                var index = IndexFromPoint(e.Location);
+                if (index < 0 || index >= Items.Count) return;
+                fSelectedComponent = Items[index] as CanvasComponent;
+                UserSelectionChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler UserSelectionChanged;
     }
 }
