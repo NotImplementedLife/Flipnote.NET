@@ -1,6 +1,7 @@
 ﻿using FlipnoteDotNet.App.Canvas.Components;
 using FlipnoteDotNet.Canvas;
 using FlipnoteDotNet.Canvas.Components;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
@@ -11,7 +12,7 @@ namespace FlipnoteDotNet.App.Data
     {
         private readonly CanvasModel CanvasModel;
         public readonly FrameConfig FrameConfig;
-        private readonly List<CanvasComponent> Components = new List<CanvasComponent>();               
+        internal readonly IList<CanvasComponent> Components = new BindingList<CanvasComponent>();
 
         public Frame(CanvasModel canvasModel, PaletteConfig paletteConfig)
         {

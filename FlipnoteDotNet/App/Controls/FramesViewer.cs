@@ -132,8 +132,8 @@ namespace FlipnoteDotNet.App.Controls
             {
                 if (0 <= frameIndex && frameIndex < FramesManager.Frames.Count)
                 {
-
                     FramesManager.SetCurrentFrame(frameIndex);
+                    Invalidate();
                 }
             }
         }

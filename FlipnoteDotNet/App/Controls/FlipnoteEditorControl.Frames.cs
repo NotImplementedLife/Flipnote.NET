@@ -20,7 +20,7 @@ namespace FlipnoteDotNet.App.Controls
             CanvasControl.ComponentTransformChanged += CanvasControl_ComponentTransformChanged;
             CanvasControl.SelectionChanged += CanvasControl_SelectionChanged;
 
-            PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;
+            PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;            
 
             CanvasControl.ClearSelection();
         }

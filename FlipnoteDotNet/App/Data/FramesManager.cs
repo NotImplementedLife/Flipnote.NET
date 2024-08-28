@@ -88,6 +88,7 @@ namespace FlipnoteDotNet.App.Data
 
         public void SetCurrentFrame(Frame frame, int index = -2)
         {
+            if (CurrentFrame == frame) return;
             if(index==-2)
             {
                 index = Frames.IndexOf(frame);
@@ -96,6 +97,7 @@ namespace FlipnoteDotNet.App.Data
             CurrentFrame = frame;
             CurrentFrameIndex = index;
             CurrentFrame.AttachCanvas();
+            CurrentFrameChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void SetCurrentFrame(int index) => SetCurrentFrame(index < 0 ? null : fFrames[index], index);
@@ -116,6 +118,8 @@ namespace FlipnoteDotNet.App.Data
 
         public delegate void OnFrameThumbnailChanged(object sender, Frame frame, Bitmap thumbnail);
         public event OnFrameThumbnailChanged FrameThumbnailChanged;
+
+        public event EventHandler CurrentFrameChanged;
 
                 
     }

@@ -7,7 +7,7 @@ namespace FlipnoteDotNet.App.Canvas.Components
     {
         protected FrameConfig FrameConfig = null;
         protected Frame Frame = null;
-        protected Asset Asset = null;
+        protected Asset Asset = null;        
 
         protected FlipnoteCanvasComponent(string name, int width, int height, bool ignoreTransform, bool ignoreGraphicsTransform = false,
             Asset asset = null)

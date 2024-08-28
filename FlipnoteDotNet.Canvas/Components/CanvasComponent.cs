@@ -6,12 +6,18 @@ using System.Numerics;
 namespace FlipnoteDotNet.Canvas.Components
 {
     public abstract class CanvasComponent : INotifyPropertyChanged
-    {
-        public string Name { get; }
+    {        
         public readonly int Width;
         public readonly int Height;
         public readonly bool IgnoreTransform;
         public bool IgnoreGraphicsTransform { get; protected set; } = false;
+
+        private string fName = null;
+        public string Name
+        {
+            get => fName;
+            set { fName = value; OnPropertyChanged(new PropertyChangedEventArgs(nameof(Name))); }
+        }
 
         protected CanvasComponent(string name, int width, int height, bool ignoreTransform, bool ignoreGraphicsTransform = false)
         {

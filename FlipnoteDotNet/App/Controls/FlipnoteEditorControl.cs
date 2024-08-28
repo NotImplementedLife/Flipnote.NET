@@ -21,22 +21,23 @@ namespace FlipnoteDotNet.App.Controls
             UndoStack = appState.UndoStack;
             FramesManager = appState.FramesManager;
             FramesManager.CanvasModel = CanvasControl.CanvasModel;
+
+            FramesManager.CurrentFrameChanged += FramesManager_CurrentFrameChanged;
+
             FramesManager.AddNewFrame();
             FramesManager.SetCurrentFrame(0);
 
             InitializeLayout();
             InitializeAssets(appState.AssetsService);
-            InitializeFrames(appState.FlipnoteEditorService);
+            InitializeFrames(appState.FlipnoteEditorService);            
 
             FramesViewer.FramesManager = FramesManager;
-            FramesManager.RequestThumbnailRedraw(FramesManager.GetCurrentFrame());
+            FramesManager.RequestThumbnailRedraw(FramesManager.GetCurrentFrame());            
+        }
 
-            var button = new Button { Text = "Change Palette" };
-            button.Click += (o, e) => { FramesManager.GetCurrentFrame().FrameConfig.ColorIndices = new int[] { 3, 0, 1 }; };
-            Panel2.Controls.Add(button);            
-        }        
-
-        private static Action<object, PaintEventArgs> Painter(Color color)
-            => (sender, e) => e.Graphics.Clear(color);                            
+        private void FramesManager_CurrentFrameChanged(object sender, EventArgs e)
+        {
+            ComponentsListView.SetData(FramesManager.GetCurrentFrame().Components);
+        }
     }
 }

@@ -80,13 +80,15 @@ namespace FlipnoteDotNet.App.Controls
         }
 
         private void LoadItems()
-        {
+        {            
             SuspendLayout();
+            BeginUpdate();
             Items.Clear();
             for(int i=0;i<fBindingList.Count;i++)
             {
                 Items.Add(CreateListViewItem(fBindingList[i]));
             }
+            EndUpdate();
             ResumeLayout(true);
         }
 

@@ -69,12 +69,12 @@ namespace FlipnoteDotNet.App.Service
                 {
                     action = new ChangeComponentTransform(FramesManager, FramesManager.GetCurrentFrame(),
                         component, (CanvasTransform)oldValue, (CanvasTransform)newValue);
+                    goto perform;
                 }
             }
-            else
-            {
-                action = new ReflectionPropertySet(target, oldValue, newValue, propertyData.Setter);
-            }
+            
+            action = new ReflectionPropertySet(target, oldValue, newValue, propertyData.Setter);
+        perform:
             UndoStack.Do(action);
         }
 

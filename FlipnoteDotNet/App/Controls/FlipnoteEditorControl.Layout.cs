@@ -9,10 +9,14 @@ namespace FlipnoteDotNet.App.Controls
         private SplitContainer RightPanel = new SplitContainer
         {
             Orientation = Orientation.Horizontal,
-            IsSplitterFixed = false,
+            IsSplitterFixed = false,            
         };
 
-        private Panel Panel2 = new Panel();
+        private ComponentsListView ComponentsListView = new ComponentsListView
+        {
+            Dock = DockStyle.Fill
+        };
+        
         private ColumnsSplitter ColumnsSplitter = new ColumnsSplitter(new[]
         {
             DisplayLength.Proportional(1), DisplayLength.Proportional(2.5f), DisplayLength.Proportional(1)
@@ -53,10 +57,8 @@ namespace FlipnoteDotNet.App.Controls
 
         private void InitializeLayout()
         {
-            RightPanel.Panel1.Controls.Add(Panel2);
-            RightPanel.Panel2.Controls.Add(PropertyEditor);
-
-            Panel2.Paint += new PaintEventHandler(Painter(Color.Blue));
+            RightPanel.Panel1.Controls.Add(ComponentsListView);
+            RightPanel.Panel2.Controls.Add(PropertyEditor);            
 
             MidContainer.Controls.Add(CanvasControl);
             MidContainer.Controls.Add(FramesViewer);
