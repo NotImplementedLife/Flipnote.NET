@@ -78,8 +78,8 @@ namespace FlipnoteDotNet.App.Editors
 
         public override void OnMouseDown(MouseButtons buttons, int x, int y)
         {
-            PopedContextMenu.Size = new Size(Width, 50);
-            PopedContextMenu.SelectedIndex = fValue;            
+            PopedContextMenu.Size = new Size(Width, (((fFrameConfig?.ActualPalette.Colors.Length ?? 0) + 3) / 4) * 32);
+            PopedContextMenu.SelectedIndex = fValue;    
             PoperContainer.Show(Parent, new Rectangle(Parent.Width - Width, 0, Width, Y + Height));
         }
 

@@ -2,6 +2,7 @@
 using FlipnoteDotNet.App.Data;
 using FlipnoteDotNet.App.Service;
 using FlipnoteDotNet.PropertyEditor.Editors;
+using FlipnoteDotNet.Utils;
 using SuperContextMenu;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,7 @@ namespace FlipnoteDotNet.App.Editors
                     fFrameConfig = value;
                     fFrameConfig.ColorIndicesChanged += FFrameConfig_ColorIndicesChanged;
                     PopedContextMenu.Palette = fFrameConfig.Palette;
-
-                    //PopedContextMenu.Palette = fFrameConfig.ActualPalette;
-                    //fValue = PopedContextMenu.SelectedIndex = fFrameConfig.PaperColorIndex;
+                    PopedContextMenu.ColorIndices = fFrameConfig.ColorIndices?.CloneArray();                            
                     return;
                 }
                 throw new InvalidOperationException("FrameConfig already set");
@@ -40,13 +39,21 @@ namespace FlipnoteDotNet.App.Editors
 
         private void FFrameConfig_ColorIndicesChanged(object sender, EventArgs e)
         {            
+            PopedContextMenu.ColorIndices = fFrameConfig.ColorIndices?.CloneArray();
             Invalidate();
         }
 
         public FrameSubpaletteEditor() : base(invalidateAfterValueChanged: true) 
         {
             PoperContainer = new PoperContainer(PopedContextMenu);
-            //PopedContextMenu.ColorChanged += PopedContextMenu_ColorChanged;
+            PopedContextMenu.ColorIndicesChanged += PopedContextMenu_ColorIndicesChanged;            
+        }
+
+        private void PopedContextMenu_ColorIndicesChanged(object sender, int[] e)
+        {
+            var oldValue = fValue.CloneArray();
+            Value = e;
+            TriggerUserValueChanged(oldValue, fValue, preview: false);
         }
 
         int X, Y, Width, Height;
@@ -86,7 +93,7 @@ namespace FlipnoteDotNet.App.Editors
 
         public override void OnMouseDown(MouseButtons buttons, int x, int y)
         {
-            PopedContextMenu.Size = new Size(Width, 50);
+            PopedContextMenu.Size = new Size(Width, (((fFrameConfig?.Palette.Colors.Length ?? 0) + 3) / 4) * 32);
             PoperContainer.Show(Parent, new Rectangle(Parent.Width - Width, 0, Width, Y + Height));
             //PoperContainer
         }
