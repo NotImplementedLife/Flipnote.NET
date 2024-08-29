@@ -27,7 +27,16 @@ namespace FlipnoteDotNet.App.Controls
 
             CanvasControl.ClearSelection();
 
+            LayerRemoveButton.Click += LayerRemoveButton_Click;
+
             UpdateComponentsButtonsState();
+        }
+
+        private void LayerRemoveButton_Click(object sender, EventArgs e)
+        {
+            var selected = ComponentsListView.SelectedComponent as FlipnoteCanvasComponent;            
+            CanvasControl.ClearSelection();
+            FlipnoteEditorService.RemoveComponentFromFrame(selected);
         }
 
         private void ComponentsListView_SelectionChanged(object sender, EventArgs e)

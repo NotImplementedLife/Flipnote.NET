@@ -47,6 +47,16 @@ namespace FlipnoteDotNet.App.Data
                 Components.Add(component);            
         }
 
+        public void InsertComponent(int index, FlipnoteCanvasComponent component)
+        {
+            component.AttachToFrame(this);
+            if (IsCanvasAttached)
+                CanvasModel.InsertComponent(index, component);
+            else
+                Components.Insert(index, component);
+        }
+
+
         public void ClearComponents()
         {
             if(IsCanvasAttached)

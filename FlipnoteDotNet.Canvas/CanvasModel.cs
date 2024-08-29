@@ -150,6 +150,15 @@ namespace FlipnoteDotNet.Canvas
                 Components.Add(component);
             }
         }
+
+        public void InsertComponent(int index, CanvasComponent component)
+        {
+            lock (ComponentsAccessLock)
+            {
+                Processor.AttachComponent(component);
+                Components.Insert(index, component);
+            }
+        }
         
         public bool RemoveComponent(CanvasComponent component) 
         {

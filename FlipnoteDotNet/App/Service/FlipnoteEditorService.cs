@@ -65,6 +65,14 @@ namespace FlipnoteDotNet.App.Service
             UndoStack.Do(new AddComponentToFrame(FramesManager, FramesManager.GetCurrentFrame(), asset.CreateCanvasComponent()));
         }
 
+        public void RemoveComponentFromFrame(FlipnoteCanvasComponent component)
+        {
+            var frame = FramesManager.GetCurrentFrame();
+            var index = frame.Components.IndexOf(component);
+            var action = new RemoveComponentFromFrame(FramesManager, frame, component, index);
+            UndoStack.Do(action);
+        }
+
         public void ChangeComponentTransformOnCurrentFrame(FlipnoteCanvasComponent component, 
             CanvasTransform oldTransform, CanvasTransform newTransform)
         {
