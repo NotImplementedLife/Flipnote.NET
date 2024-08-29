@@ -40,6 +40,7 @@ These are the features that the app offers (or are on the way to be implemented)
 
 Due to various reasons, the following features will **not** be considered to be included in the app:
 
+- ❌ **Load/Edit original flipnote formats.**
 - ❌ **Export to original flipnote formats.**
 - ❌ **Online services integration (Flipnote Hatena clones/replacements).**
 
