@@ -21,7 +21,7 @@ namespace FlipnoteDotNet.App
         }
 
 
-        private static AppState _Instance = new AppState(PaletteConfigs.Flipnote);
+        private static AppState _Instance = new AppState(PaletteConfigs.Flipnote3D);
         public static AppState Instance => _Instance;
     }
 }

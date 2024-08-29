@@ -38,9 +38,8 @@ namespace FlipnoteDotNet.App.Controls
 
         private AssetsListView AssetsListView = new AssetsListView
         {
-            Top = 15,
-            Left = 10,
-        };   
+            Dock = DockStyle.Fill
+        };
 
         private PropertyEditorControl PropertyEditor = new PropertyEditorControl
         {
@@ -50,11 +49,23 @@ namespace FlipnoteDotNet.App.Controls
         private ToolStrip AssetsToolStrip = new ToolStrip
         {
             ImageScalingSize = new Size(20, 20),
-            GripStyle = ToolStripGripStyle.Hidden
+            GripStyle = ToolStripGripStyle.Hidden,
+            Dock = DockStyle.Top
+        };
+
+        private ToolStrip ComponentsToolStrip = new ToolStrip
+        {
+            ImageScalingSize = new Size(20, 20),
+            GripStyle = ToolStripGripStyle.Hidden,
+            Dock = DockStyle.Top
         };
 
         private ToolStripButton AssetAddButton = CreateToolStripButton(Properties.Resources.ic_new_asset, "Add new asset");
         private ToolStripButton AssetRemoveButton = CreateToolStripButton(Properties.Resources.ic_remove_asset, "Remove asset");
+
+        private ToolStripButton LayerMoveUpButton = CreateToolStripButton(Properties.Resources.ic_layer_move_up, "Move up");
+        private ToolStripButton LayerMoveDownButton = CreateToolStripButton(Properties.Resources.ic_layer_move_down, "Move down");
+        private ToolStripButton LayerRemoveButton = CreateToolStripButton(Properties.Resources.ic_layer_remove, "Remove layer");
 
         private static ToolStripButton CreateToolStripButton(Bitmap icon, string caption)
         {
@@ -72,16 +83,16 @@ namespace FlipnoteDotNet.App.Controls
 
         private void InitializeLayout()
         {
+            ComponentsToolStrip.Items.AddRange(new[] { LayerMoveUpButton, LayerMoveDownButton, LayerRemoveButton });
+
             RightPanel.Panel1.Controls.Add(ComponentsListView);
-            RightPanel.Panel2.Controls.Add(PropertyEditor);            
+            RightPanel.Panel1.Controls.Add(ComponentsToolStrip);
+            RightPanel.Panel2.Controls.Add(PropertyEditor);
 
             MidContainer.Controls.Add(CanvasControl);
             MidContainer.Controls.Add(FramesViewer);
 
-            AssetsToolStrip.Items.AddRange(new[] { AssetAddButton, AssetRemoveButton });
-            AssetsToolStrip.Dock = DockStyle.Top;
-
-            AssetsListView.Dock = DockStyle.Fill;
+            AssetsToolStrip.Items.AddRange(new[] { AssetAddButton, AssetRemoveButton });                        
 
             var assetsTab = new TabPage("Assets") { BackColor = Color.White, Width = 100, Height = 100 };
             assetsTab.Controls.Add(AssetsListView);

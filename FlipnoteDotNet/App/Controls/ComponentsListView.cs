@@ -6,7 +6,10 @@ namespace FlipnoteDotNet.App.Controls
     public class ComponentsListView : ListBox
     {        
         private CanvasComponent fSelectedComponent = null;
+        private int fSelectedComponentIndex = -1;
+
         public CanvasComponent SelectedComponent => fSelectedComponent;
+        public int SelectedComponentIndex => fSelectedComponentIndex;
 
         public ComponentsListView()
         {
@@ -80,7 +83,9 @@ namespace FlipnoteDotNet.App.Controls
         public void SetSelection(CanvasComponent component)
         {
             fSelectedComponent = component;
+            fSelectedComponentIndex = component == null ? -1 : Items.IndexOf(component);
             Invalidate();
+            SelectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -90,12 +95,26 @@ namespace FlipnoteDotNet.App.Controls
             if(e.Button==MouseButtons.Left)
             {                
                 var index = IndexFromPoint(e.Location);
-                if (index < 0 || index >= Items.Count) return;
+                if (index == fSelectedComponentIndex) return;
+                if (index < 0 || index >= Items.Count)
+                {
+                    fSelectedComponent = null;
+                    fSelectedComponentIndex = -1;
+                    Invalidate();
+                    UserSelectionChanged?.Invoke(this, EventArgs.Empty);
+                    SelectionChanged?.Invoke(this, EventArgs.Empty);
+                    return;
+                }
                 fSelectedComponent = Items[index] as CanvasComponent;
+                fSelectedComponentIndex = index;
+                Invalidate();
                 UserSelectionChanged?.Invoke(this, EventArgs.Empty);
+                SelectionChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public event EventHandler UserSelectionChanged;
+        public event EventHandler SelectionChanged;
+
     }
 }

@@ -23,8 +23,16 @@ namespace FlipnoteDotNet.App.Controls
             PropertyEditor.ByUserValueChangedNotPreview += PropertyEditor_ByUserValueChangedNotPreview;
 
             ComponentsListView.UserSelectionChanged += ComponentsListView_UserSelectionChanged;
+            ComponentsListView.SelectionChanged += ComponentsListView_SelectionChanged;
 
             CanvasControl.ClearSelection();
+
+            UpdateComponentsButtonsState();
+        }
+
+        private void ComponentsListView_SelectionChanged(object sender, EventArgs e)
+        {
+            UpdateComponentsButtonsState();
         }
 
         private bool CanvasSelectionUser = false;
@@ -36,7 +44,7 @@ namespace FlipnoteDotNet.App.Controls
                 CanvasControl.ClearSelection();
             else
                 CanvasControl.SelectSingle(comp);
-            CanvasSelectionUser = false;
+            CanvasSelectionUser = false;            
         }
 
         private void PropertyEditor_ByUserValueChangedNotPreview(object sender, ByUserValueChangedEventArgs e)
@@ -85,6 +93,14 @@ namespace FlipnoteDotNet.App.Controls
                 var asset = (e.Data.GetData(typeof(DragDropObject<Asset>)) as DragDropObject<Asset>).Value;
                 FlipnoteEditorService.AddAssetToCurrentFrame(asset);         
             }
+        }
+
+        private void UpdateComponentsButtonsState()
+        {
+            int index = ComponentsListView.SelectedComponentIndex;
+            LayerRemoveButton.Enabled = index >= 0;
+            LayerMoveUpButton.Enabled = index > 0;
+            LayerMoveDownButton.Enabled = index >= 0 && index < ComponentsListView.Items.Count - 1;
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.Drawing;
+using FlipnoteDotNet.Utils;
 using System.ComponentModel;
 
 namespace FlipnoteDotNet.App.Data
@@ -55,8 +56,15 @@ namespace FlipnoteDotNet.App.Data
             Palette = paletteConfig.Palette;
             if (paletteConfig.ColorsPerFrame != 0)
             {
-                fColorIndices = new int[paletteConfig.ColorsPerFrame];
-                for (int i = 0; i < fColorIndices.Length; i++) fColorIndices[i] = i;
+                if (paletteConfig.PresetColorIndices != null)
+                {
+                    fColorIndices = paletteConfig.PresetColorIndices.CloneArray();
+                }
+                else
+                {
+                    fColorIndices = new int[paletteConfig.ColorsPerFrame];
+                    for (int i = 0; i < fColorIndices.Length; i++) fColorIndices[i] = i;
+                }
             }
             fActualPalette = fColorIndices == null ? Palette : Palette.IndexedSubpalette(fColorIndices);
             PaperColor = fActualPalette.Colors[fPaperColorIndex];
