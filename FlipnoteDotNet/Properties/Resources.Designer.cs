@@ -73,6 +73,16 @@ namespace FlipnoteDotNet.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ic_new_asset {
+            get {
+                object obj = ResourceManager.GetObject("ic_new_asset", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ic_new_frame {
             get {
                 object obj = ResourceManager.GetObject("ic_new_frame", resourceCulture);
@@ -86,6 +96,16 @@ namespace FlipnoteDotNet.Properties {
         internal static System.Drawing.Bitmap ic_redo {
             get {
                 object obj = ResourceManager.GetObject("ic_redo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ic_remove_asset {
+            get {
+                object obj = ResourceManager.GetObject("ic_remove_asset", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

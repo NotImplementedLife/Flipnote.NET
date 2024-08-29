@@ -100,7 +100,7 @@
             GeneralToolStrip.Dock = DockStyle.None;
             GeneralToolStrip.ImageScalingSize = new Size(20, 20);
             GeneralToolStrip.Items.AddRange(new ToolStripItem[] { UndoButton, RedoButton, NewFrameButton, CopyCurrentFrameButton, RemoveCurrentFrameButton });
-            GeneralToolStrip.Location = new Point(6, 0);
+            GeneralToolStrip.Location = new Point(3, 0);
             GeneralToolStrip.Name = "GeneralToolStrip";
             GeneralToolStrip.Size = new Size(163, 27);
             GeneralToolStrip.TabIndex = 0;

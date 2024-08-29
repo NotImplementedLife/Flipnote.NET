@@ -24,6 +24,9 @@ namespace FlipnoteDotNet.App.Controls
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             base.OnDrawItem(e);
+
+            if (e.Index < 0) return;
+
             Brush roomsBrush;
 
             var state = e.State & ~DrawItemState.Selected;            

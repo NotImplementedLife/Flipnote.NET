@@ -1,6 +1,7 @@
 ﻿using FlipnoteDotNet.App.Actions;
 using FlipnoteDotNet.App.Data;
 using FlipnoteDotNet.App.Service.AssetsActions;
+using FlipnoteDotNet.App.Service.FlipnoteEditorActions;
 using System.ComponentModel;
 
 namespace FlipnoteDotNet.App.Service
@@ -33,6 +34,13 @@ namespace FlipnoteDotNet.App.Service
                 asset.Id = ++IdCounter;
             }
             UndoStack.Do(new AddAsset(BindingAssets, asset));
+        }
+
+        public void RemoveAsset(Asset asset)
+        {
+            int index = BindingAssets.IndexOf(asset);
+            if (index < 0) return;
+            UndoStack.Do(new RemoveAsset(BindingAssets, asset, index));
         }
 
         public IList<Asset> Assets => BindingAssets;

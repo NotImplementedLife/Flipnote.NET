@@ -18,18 +18,34 @@ namespace FlipnoteDotNet.App.Controls
         {
             AssetsService = assetsService;
             AssetsListView.TargetList = AssetsService.Assets;
-            AssetImportButton.Click += AssetImportButton_Click;
+            AssetsListView.SelectedIndexChanged += AssetsListView_SelectedIndexChanged;
+
+            AssetAddButton.Click += AssetAddButton_Click;
+            AssetRemoveButton.Click += AssetRemoveButton_Click;
+
+            AssetRemoveButton.Enabled = AssetsListView.SelectedItems.Count != 0;
+        }        
+
+        private void AssetsListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AssetRemoveButton.Enabled = AssetsListView.SelectedItems.Count != 0;
         }
 
-        private void AssetImportButton_Click(object sender, EventArgs e)
+        private void AssetAddButton_Click(object sender, EventArgs e)
         {
-            var assetImporterForm = new AssetImporterForm();
-            assetImporterForm.FrameConfig = FramesManager.GetCurrentFrame().FrameConfig;
-            if (assetImporterForm.ShowDialog() == DialogResult.OK)
+            using (var assetImporterForm = new AssetImporterForm())
             {
-                AssetsService.AddAsset(assetImporterForm.ResultAsset);                
+                assetImporterForm.FrameConfig = FramesManager.GetCurrentFrame().FrameConfig;
+                if (assetImporterForm.ShowDialog() == DialogResult.OK)
+                {
+                    AssetsService.AddAsset(assetImporterForm.ResultAsset);
+                }
             }
-            assetImporterForm.Dispose();
+        }
+
+        private void AssetRemoveButton_Click(object sender, EventArgs e)
+        {
+            AssetsService.RemoveAsset(AssetsListView.SelectedItems[0].Tag as Asset);
         }
     }
 }

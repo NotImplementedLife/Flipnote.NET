@@ -40,20 +40,35 @@ namespace FlipnoteDotNet.App.Controls
         {
             Top = 15,
             Left = 10,
-        };
-
-        private Button AssetImportButton = new Button
-        {
-            Text = "Import Asset",
-            Top = 10,
-            Left = 10,
-            BackColor = SystemColors.Control
-        };
+        };   
 
         private PropertyEditorControl PropertyEditor = new PropertyEditorControl
         {
             Dock = DockStyle.Fill
         };
+
+        private ToolStrip AssetsToolStrip = new ToolStrip
+        {
+            ImageScalingSize = new Size(20, 20),
+            GripStyle = ToolStripGripStyle.Hidden
+        };
+
+        private ToolStripButton AssetAddButton = CreateToolStripButton(Properties.Resources.ic_new_asset, "Add new asset");
+        private ToolStripButton AssetRemoveButton = CreateToolStripButton(Properties.Resources.ic_remove_asset, "Remove asset");
+
+        private static ToolStripButton CreateToolStripButton(Bitmap icon, string caption)
+        {
+            var button = new ToolStripButton
+            {
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
+                Image = icon,
+                ImageTransparentColor = Color.Magenta,
+                Name = caption + "Button",
+                Text = caption,
+                Size = new Size(24, 24)
+            };
+            return button;
+        }
 
         private void InitializeLayout()
         {
@@ -63,15 +78,14 @@ namespace FlipnoteDotNet.App.Controls
             MidContainer.Controls.Add(CanvasControl);
             MidContainer.Controls.Add(FramesViewer);
 
+            AssetsToolStrip.Items.AddRange(new[] { AssetAddButton, AssetRemoveButton });
+            AssetsToolStrip.Dock = DockStyle.Top;
+
+            AssetsListView.Dock = DockStyle.Fill;
+
             var assetsTab = new TabPage("Assets") { BackColor = Color.White, Width = 100, Height = 100 };
-            AssetImportButton.PerformLayout();
-            AssetsListView.Top = AssetImportButton.Top + AssetImportButton.Height + 5;
-            AssetsListView.Width = 100 - 2 * AssetsListView.Left;
-            AssetsListView.Height = 100 - AssetsListView.Top - 10;
-            AssetsListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            assetsTab.Controls.Add(AssetImportButton);
             assetsTab.Controls.Add(AssetsListView);
-            assetsTab.PerformLayout();
+            assetsTab.Controls.Add(AssetsToolStrip);                       
             LeftTabControl.TabPages.Add(assetsTab);
 
             Controls.Add(LeftTabControl);

@@ -21,12 +21,9 @@ namespace FlipnoteDotNet.App.Service
         public void SetCurrentFrame(int index)
         {
             UndoStack.Do(new SetCurrentFrame(FramesManager, FramesManager.GetCurrentFrame(), FramesManager.GetFrame(index)));
-        }
+        }        
 
-        public void AddNewFrame()
-        {
-            UndoStack.Do(new AddNewFrame(FramesManager, FramesManager.CreateNewFrame()));
-        }
+
 
         public void InsertNewFrameAfterCurrent()
         {

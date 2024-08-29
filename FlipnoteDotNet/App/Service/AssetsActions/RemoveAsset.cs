@@ -1,28 +1,29 @@
 ﻿using FlipnoteDotNet.App.Actions;
 using FlipnoteDotNet.App.Data;
-using System.Diagnostics;
 
-namespace FlipnoteDotNet.App.Service.AssetsActions
+namespace FlipnoteDotNet.App.Service.FlipnoteEditorActions
 {
-    internal class AddAsset : IUndoableAction
+    internal class RemoveAsset : IUndoableAction
     {
         private readonly IList<Asset> List;
         private readonly Asset Asset;
+        private readonly int Index;
 
-        public AddAsset(IList<Asset> list, Asset asset)
+        public RemoveAsset(IList<Asset> list, Asset asset, int index)
         {
             List = list;
             Asset = asset;
+            Index = index;
         }
 
         public void Do()
-        {            
-            List.Add(Asset);
+        {
+            List.RemoveAt(Index);
         }
 
         public void Undo()
         {
-            List.RemoveAt(List.Count - 1);
+            List.Insert(Index, Asset);
         }
     }
 }
