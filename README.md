@@ -17,6 +17,7 @@ This project is the subject of a 4 years journey with its up- and downsides. It 
 These are the features that the app offers (or are on the way to be implemented).
 
 - ✔️ Import and use static image assets
+- ✔️ Remove assets
 - ✔️ Auto dithering
 - ✔️ Create/Duplicate/Remove frames
 - ✔️ Layer transform (translate/scale/rotate)
@@ -26,7 +27,6 @@ These are the features that the app offers (or are on the way to be implemented)
 
 - ⌛ Choose palette: Flipnote (3 out of 4 colors), Flipnote3D (6 colors), VGA (16 colors)
 - ⌛ Reorder frames
-- ⌛ Remove assets
 - ⌛ Remove layers
 - ⌛ Save/Load projects
 - ⌛ Export flipnote animation
@@ -34,7 +34,8 @@ These are the features that the app offers (or are on the way to be implemented)
 - ⌛ Layer Z-order
 - ⌛ Free draw
 - ⌛ Automatic transform over multiple frames
-- ⌛ Sound?
+- ⌛ Sound (probably)
+- ⌛ ...? (Open an issue if you want to request a feature)
 
 
 Due to various reasons, the following features will **not** be considered to be included in the app:
