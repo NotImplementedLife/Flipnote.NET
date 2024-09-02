@@ -1,4 +1,6 @@
 ﻿using FlipnoteDotNet.App.Canvas.Components;
+using FlipnoteDotNet.App.Storage;
+using System.Drawing.Imaging;
 
 namespace FlipnoteDotNet.App.Data
 {
@@ -14,6 +16,17 @@ namespace FlipnoteDotNet.App.Data
         }
 
         public abstract FlipnoteCanvasComponent CreateCanvasComponent();
+
+        public abstract AssetDTO ToDTO();
+
+        protected byte[] GetThumbnailBytes()
+        {
+            using(var ms=new MemoryStream())
+            {
+                Thumbnail.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
 
         public void Dispose()
         {

@@ -2,6 +2,7 @@ using FlipnoteDotNet.App;
 using FlipnoteDotNet.App.Canvas.Components;
 using FlipnoteDotNet.App.Editors;
 using FlipnoteDotNet.App.Forms;
+using FlipnoteDotNet.App.Menus;
 using FlipnoteDotNet.Canvas;
 using FlipnoteDotNet.Canvas.Components;
 using FlipnoteDotNet.Core;
@@ -21,9 +22,20 @@ namespace FlipnoteDotNet
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.            
             ApplicationConfiguration.Initialize();
+
+            //MenuStripLoader.Load(typeof(FlipnoteEditorForm));
+            //Environment.Exit(0);
+
             WarmUp();
             //Application.Run(new TestForm());
-            Application.Run(new FlipnoteEditorForm(AppState.Instance)); 
+            var form = MenuProvider.PrepareForm(new FlipnoteEditorForm(AppState.Instance),
+                (f, m) =>
+                {
+                    f.MainMenuStrip.Items.Clear();
+                    f.MainMenuStrip.Items.AddRange(m);
+                });
+
+            Application.Run(form);
         }
 
         static void WarmUp()
@@ -43,9 +55,6 @@ namespace FlipnoteDotNet
             PropertyEditor.PropertyEditors.RegisterDefaultEditor<CanvasTransform, CanvasTransformEditor>();
         }
 
-        private static void InitializeStaticClass(Type t)
-        {
-            RuntimeHelpers.RunClassConstructor(t.TypeHandle);
-        }
+        private static void InitializeStaticClass(Type t) => RuntimeHelpers.RunClassConstructor(t.TypeHandle);
     }
 }

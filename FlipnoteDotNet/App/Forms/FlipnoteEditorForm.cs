@@ -11,6 +11,7 @@ namespace FlipnoteDotNet.App.Forms
             AppState = appState;
             FlipnoteEditorContainer.Initialize(appState);
             UndoLinker.Connect(AppState.UndoStack, UndoButton, RedoButton);
+            MainMenuStrip = menuStrip1;
         }
 
         private void NewFrameButton_Click(object sender, EventArgs e)
