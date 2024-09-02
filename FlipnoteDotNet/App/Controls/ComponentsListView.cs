@@ -7,9 +7,8 @@ namespace FlipnoteDotNet.App.Controls
     public class ComponentsListView : ListBox
     {        
         private CanvasComponent fSelectedComponent = null;        
-
         public CanvasComponent SelectedComponent => fSelectedComponent;
-        public int SelectedComponentIndex => fSelectedComponent == null ? -1 : Items.IndexOf(fSelectedComponent);
+        public int SelectedComponentIndex => fSelectedComponent == null ? -1 : Components.IndexOf(fSelectedComponent);
 
         public ComponentsListView()
         {
@@ -69,10 +68,33 @@ namespace FlipnoteDotNet.App.Controls
 
 
         public void SetData(IList<CanvasComponent> data)
-        {            
+        {                        
             fSelectedComponent = null;
-            DataSource = data;  
-        }        
+
+            if(DataSource is BindingList<CanvasComponent> bdata0)
+            {
+                bdata0.ListChanged -= Bdata_ListChanged;
+            }
+
+            DataSource = data;
+            if(data is BindingList<CanvasComponent> bdata)
+            {                
+                bdata.ListChanged += Bdata_ListChanged;
+            }
+        }
+
+        public IList<CanvasComponent> Components => DataSource as IList<CanvasComponent>;
+        public int ComponentsCount => (DataSource as IList<CanvasComponent>).Count;
+
+
+        private void Bdata_ListChanged(object sender, ListChangedEventArgs e)
+        {            
+            //Debug.WriteLine($"Changed: {e.ListChangedType}");
+            //Debug.WriteLine($"Changed: {SelectedComponentIndex} / {fSelectedComponent?.Name ?? "null"}");
+            ListChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler ListChanged;
 
         public void SetSelection(CanvasComponent component)
         {

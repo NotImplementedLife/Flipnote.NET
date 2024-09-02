@@ -54,7 +54,7 @@ namespace FlipnoteDotNet.Canvas.Components
 
                 fDirectTransformValues = fTransform.CreateDirectTransform(Width, Height);
                 DirectTransform?.Dispose();
-                DirectTransform = new Matrix(fDirectTransformValues);                
+                DirectTransform = new Matrix(fDirectTransformValues);
 
                 fInverseTransformValues = fTransform.CreateInverseTransform(Width, Height);
                 InverseTransform?.Dispose();

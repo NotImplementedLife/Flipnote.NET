@@ -56,6 +56,17 @@ namespace FlipnoteDotNet.App.Data
                 Components.Insert(index, component);
         }
 
+        public void SwapComponents(int i, int j)
+        {
+            if (IsCanvasAttached)
+            {
+                CanvasModel.SwapComponents(i, j);
+            }
+            else
+            {
+                (Components[i], Components[j]) = (Components[j], Components[i]);
+            }
+        }
 
         public void ClearComponents()
         {

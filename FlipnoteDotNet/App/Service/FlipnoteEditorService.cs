@@ -80,12 +80,18 @@ namespace FlipnoteDotNet.App.Service
                 component, oldTransform, newTransform));
         }
 
+        public void SwapComponentsOnFrame(Frame frame, int index1, int index2)
+        {
+            var action = new SwapComponentsOnFrame(FramesManager, frame, index1, index2);
+            UndoStack.Do(action);
+        }
+
         public void ChangeProperty(object target, object oldValue, object newValue, PropertyData propertyData)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
 
-            IUndoableAction action = null;
+            IUndoableAction action;
 
             if (target is FlipnoteCanvasComponent component)
             {

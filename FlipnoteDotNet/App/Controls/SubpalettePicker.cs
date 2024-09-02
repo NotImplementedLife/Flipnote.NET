@@ -192,8 +192,6 @@ namespace FlipnoteDotNet.App.Controls
                 height = Height / 4;
                 width = 4 * Width / Palette.Colors.Length;
             }
-        }
-
-        public event EventHandler ColorChanged;
+        }        
     }
 }

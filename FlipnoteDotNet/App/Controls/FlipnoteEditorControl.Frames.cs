@@ -28,8 +28,31 @@ namespace FlipnoteDotNet.App.Controls
             CanvasControl.ClearSelection();
 
             LayerRemoveButton.Click += LayerRemoveButton_Click;
+            LayerMoveDownButton.Click += LayerMoveDownButton_Click;
+            LayerMoveUpButton.Click += LayerMoveUpButton_Click;
+
+            ComponentsListView.ListChanged += ComponentsListView_ListChanged;
 
             UpdateComponentsButtonsState();
+        }
+
+        private void ComponentsListView_ListChanged(object sender, EventArgs e)
+        {
+            UpdateComponentsButtonsState();
+        }
+
+        private void LayerMoveUpButton_Click(object sender, EventArgs e)
+        {
+            var index = ComponentsListView.SelectedComponentIndex;
+            var frame = FramesManager.GetCurrentFrame();
+            FlipnoteEditorService.SwapComponentsOnFrame(frame, index, index - 1);
+        }
+
+        private void LayerMoveDownButton_Click(object sender, EventArgs e)
+        {
+            var index = ComponentsListView.SelectedComponentIndex;
+            var frame = FramesManager.GetCurrentFrame();
+            FlipnoteEditorService.SwapComponentsOnFrame(frame, index, index + 1);
         }
 
         private void LayerRemoveButton_Click(object sender, EventArgs e)
@@ -106,10 +129,10 @@ namespace FlipnoteDotNet.App.Controls
 
         private void UpdateComponentsButtonsState()
         {
-            int index = ComponentsListView.SelectedComponentIndex;
+            int index = ComponentsListView.SelectedComponentIndex;            
             LayerRemoveButton.Enabled = index >= 0;
             LayerMoveUpButton.Enabled = index > 0;
-            LayerMoveDownButton.Enabled = index >= 0 && index < ComponentsListView.Items.Count - 1;
+            LayerMoveDownButton.Enabled = index >= 0 && index < ComponentsListView.Components.Count - 1;
         }
 
     }

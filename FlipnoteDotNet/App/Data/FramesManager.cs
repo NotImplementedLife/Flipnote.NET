@@ -32,6 +32,7 @@ namespace FlipnoteDotNet.App.Data
                     throw new InvalidOperationException("CanvasModel has already been set");
                 fCanvasModel = value;
                 fThumbnailCanvasModel = new CanvasModel(fCanvasModel.Width, fCanvasModel.Height);
+                fThumbnailCanvasModel.CanDebug = false;
             }
         }
 

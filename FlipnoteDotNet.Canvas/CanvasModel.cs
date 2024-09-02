@@ -24,6 +24,8 @@ namespace FlipnoteDotNet.Canvas
 
         private CanvasProcessor Processor;
 
+        public bool CanDebug = true;
+
         public CanvasModel(int width, int height)
         {
             Width = width;
@@ -54,6 +56,7 @@ namespace FlipnoteDotNet.Canvas
                 {
                     Components[i].DirtyLock = null;
                 }
+                Debug.WriteLine("Attach??");
                 Components.ListChanged -= Components_ListChanged;
                 Components = new BindingList<CanvasComponent>(components);
                 Components.ListChanged += Components_ListChanged;
@@ -95,9 +98,16 @@ namespace FlipnoteDotNet.Canvas
 
         private void Components_ListChanged(object sender, ListChangedEventArgs e)
         {
-            Debug.WriteLine("ListChanged");            
+            if (CanDebug)
+            {
+                Debug.WriteLine($"ListChanged: {e.ListChangedType}");
+                if (e.ListChangedType == ListChangedType.ItemChanged) 
+                {
+                    int x = 2;
+                }
+            }
             DirtyLock.NotifyDirty();
-        }
+        }        
 
         private object ComponentsAccessLock = new object();
         private object BufferLock = new object();
@@ -157,6 +167,25 @@ namespace FlipnoteDotNet.Canvas
             {
                 Processor.AttachComponent(component);
                 Components.Insert(index, component);
+            }
+        }
+
+        public void SwapComponents(int i, int j)
+        {
+            if (i == j) return;
+            if (i > j) (i, j) = (j, i);
+            lock (ComponentsAccessLock)
+            {
+                var ci = Components[i];
+                var cj = Components[j];
+
+                Components.RemoveAt(j);
+                Components.RemoveAt(i);                
+
+                Components.Insert(i, cj);
+                Components.Insert(j, ci);
+
+                //(Components[i], Components[j]) = (Components[j], Components[i]);
             }
         }
         
