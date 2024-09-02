@@ -28,6 +28,14 @@ namespace FlipnoteDotNet.App.Data
             get => fCanvasModel;
             set
             {
+                if(value==null && fCanvasModel!=null)
+                {
+                    fCanvasModel = null;
+                    fThumbnailCanvasModel.Dispose();
+                    fThumbnailCanvasModel=null;
+                    return;
+                }
+
                 if (fCanvasModel != null)
                     throw new InvalidOperationException("CanvasModel has already been set");
                 fCanvasModel = value;
@@ -109,6 +117,17 @@ namespace FlipnoteDotNet.App.Data
         }
 
         public void SetCurrentFrame(int index) => SetCurrentFrame(index < 0 ? null : fFrames[index], index);
+
+
+        public void EnsureCurrentFrameSelected()
+        {
+            if (CurrentFrame == null)
+            {
+                if (Frames.Count == 0)
+                    AddFrame(CreateNewFrame());
+                SetCurrentFrame(0);
+            }
+        }
 
         public Frame CreateNewFrame()
         {

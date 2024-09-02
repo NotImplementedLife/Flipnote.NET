@@ -5,6 +5,17 @@
         private readonly Stack<IUndoableAction> Done = new Stack<IUndoableAction>();
         private readonly Stack<IUndoableAction> Undone = new Stack<IUndoableAction>();
 
+        public void Clear()
+        {
+            bool changed = Done.Count + Undone.Count > 0;
+            Done.Clear();
+            Undone.Clear();
+            if(changed)
+            {
+                StateChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
         public void Do(IUndoableAction action)
         {            
             action.Do();

@@ -34,7 +34,7 @@ namespace FlipnoteDotNet.App.Controls
             ComponentsListView.ListChanged += ComponentsListView_ListChanged;
 
             UpdateComponentsButtonsState();
-        }
+        }        
 
         private void ComponentsListView_ListChanged(object sender, EventArgs e)
         {

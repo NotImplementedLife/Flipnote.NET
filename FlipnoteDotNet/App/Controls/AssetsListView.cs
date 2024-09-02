@@ -15,6 +15,13 @@ namespace FlipnoteDotNet.App.Controls
             LargeImageList = imageList;
         }
 
+        public void ResetList()
+        {
+            SelectedIndices.Clear();
+            TargetList = new List<Asset>();
+            LargeImageList.Images.Clear();
+        }
+
         protected override ListViewItem CreateListViewItem(Asset value)
         {
             if (value == null)

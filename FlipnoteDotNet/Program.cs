@@ -28,13 +28,7 @@ namespace FlipnoteDotNet
 
             WarmUp();
             //Application.Run(new TestForm());
-            var form = MenuProvider.PrepareForm(new FlipnoteEditorForm(AppState.Instance),
-                (f, m) =>
-                {
-                    f.MainMenuStrip.Items.Clear();
-                    f.MainMenuStrip.Items.AddRange(m);
-                });
-
+            var form = MenuProvider.PrepareForm(new FlipnoteEditorForm(AppState.CreateFlipnoteInstance()));
             Application.Run(form);
         }
 

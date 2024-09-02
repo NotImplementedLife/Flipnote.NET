@@ -7,21 +7,28 @@ namespace FlipnoteDotNet.App
     public class AppState
     {
         public readonly PaletteConfig PaletteConfig;
-        public readonly UndoStack UndoStack = new UndoStack();
+        public readonly UndoStack UndoStack;
         public readonly FramesManager FramesManager;
         public readonly AssetsService AssetsService;
         public readonly FlipnoteEditorService FlipnoteEditorService;
 
-        public AppState(PaletteConfig paletteConfig)
+        private bool fChanged = false;
+        public bool Changed => fChanged;
+
+        public AppState(PaletteConfig paletteConfig, UndoStack undoStack = null)
         {
+            undoStack?.Clear();
+            UndoStack = undoStack ?? new UndoStack();
             PaletteConfig = paletteConfig;
             FramesManager = new FramesManager(paletteConfig);
             AssetsService = new AssetsService(UndoStack);
             FlipnoteEditorService = new FlipnoteEditorService(FramesManager, UndoStack);
-        }
+        }        
+
+        public static AppState CreateFlipnoteInstance(UndoStack undoStack = null) => new AppState(PaletteConfigs.Flipnote, undoStack);
+        public static AppState CreateFlipnote3DInstance(UndoStack undoStack = null) => new AppState(PaletteConfigs.Flipnote3D, undoStack);
+        public static AppState CreateVGA16Instance(UndoStack undoStack = null) => new AppState(PaletteConfigs.VGA16, undoStack);
 
 
-        private static AppState _Instance = new AppState(PaletteConfigs.Flipnote3D);
-        public static AppState Instance => _Instance;
     }
 }

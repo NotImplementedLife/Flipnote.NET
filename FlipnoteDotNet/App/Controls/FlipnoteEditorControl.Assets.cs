@@ -17,19 +17,19 @@ namespace FlipnoteDotNet.App.Controls
         private void InitializeAssets(AssetsService assetsService)
         {
             AssetsService = assetsService;
-            AssetsListView.TargetList = AssetsService.Assets;
-            AssetsListView.SelectedIndexChanged += AssetsListView_SelectedIndexChanged;
+            AssetsListView.TargetList = AssetsService.Assets;            
+            AssetsListView.ItemSelectionChanged += AssetsListView_ItemSelectionChanged;
 
             AssetAddButton.Click += AssetAddButton_Click;
             AssetRemoveButton.Click += AssetRemoveButton_Click;
 
             AssetRemoveButton.Enabled = AssetsListView.SelectedItems.Count != 0;
-        }        
+        }
 
-        private void AssetsListView_SelectedIndexChanged(object sender, EventArgs e)
+        private void AssetsListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             AssetRemoveButton.Enabled = AssetsListView.SelectedItems.Count != 0;
-        }
+        }        
 
         private void AssetAddButton_Click(object sender, EventArgs e)
         {

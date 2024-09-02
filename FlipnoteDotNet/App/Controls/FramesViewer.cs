@@ -66,6 +66,17 @@ namespace FlipnoteDotNet.App.Controls
             get => fFramesManager;
             set
             {
+                if (value == null && fFramesManager != null) 
+                {
+                    if (fFramesManager.Frames is BindingList<Frame> bindingList0)
+                    {
+                        bindingList0.ListChanged -= FramesList_ListChanged;
+                    }
+                    fFramesManager.FrameThumbnailChanged -= FFramesManager_FrameThumbnailChanged;
+                    fFramesManager = null;
+                    return;
+                }
+
                 if (fFramesManager != null)
                     throw new InvalidOperationException("FramesManager already set");
 

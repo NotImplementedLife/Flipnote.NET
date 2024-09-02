@@ -11,7 +11,7 @@ namespace FlipnoteDotNet.App.Forms
             AppState = appState;
             FlipnoteEditorContainer.Initialize(appState);
             UndoLinker.Connect(AppState.UndoStack, UndoButton, RedoButton);
-            MainMenuStrip = menuStrip1;            
+            MainMenuStrip = menuStrip1;
         }
 
         private void NewFrameButton_Click(object sender, EventArgs e)
@@ -38,6 +38,31 @@ namespace FlipnoteDotNet.App.Forms
             {
                 AppState.FlipnoteEditorService.RemoveCurrentFrame();
             }
+        }
+
+        private void ChangeState(AppState state)
+        {
+            if (!AppState.Changed) 
+            {
+                FlipnoteEditorContainer.ChangeState(state);
+                AppState = state;
+                return;
+            }            
+            switch(Prompts.SaveBeforeLoadNew())
+            {
+                case PromptResult.Save:
+                    // save logic..
+                    goto case PromptResult.Discard;
+
+                case PromptResult.Discard:
+                    // do
+                    FlipnoteEditorContainer.ChangeState(state);
+                    AppState = state;
+                    //FlipnoteEditorContainer
+                    break;
+
+                default: break;
+            }            
         }
     }
 }

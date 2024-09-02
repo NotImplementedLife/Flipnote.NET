@@ -1,5 +1,6 @@
 ﻿using FlipnoteDotNet.App.Actions;
 using FlipnoteDotNet.App.Data;
+using FlipnoteDotNet.App.Service;
 using FlipnoteDotNet.Canvas;
 
 namespace FlipnoteDotNet.App.Controls
@@ -33,6 +34,33 @@ namespace FlipnoteDotNet.App.Controls
 
             FramesViewer.FramesManager = FramesManager;
             FramesManager.RequestThumbnailRedraw(FramesManager.GetCurrentFrame());            
+        }
+
+
+        public void ChangeState(AppState appState)
+        {
+            FramesManager.CanvasModel = null;
+            FramesManager.CurrentFrameChanged -= FramesManager_CurrentFrameChanged;
+            FramesManager = null;
+            FramesViewer.FramesManager = null;
+
+            AssetsListView.ResetList();            
+            
+            AssetsService = appState.AssetsService;
+            AssetsListView.TargetList = AssetsService.Assets;    
+
+            FlipnoteEditorService = appState.FlipnoteEditorService;
+
+            FramesManager = appState.FramesManager;
+            FramesManager.CanvasModel = CanvasControl.CanvasModel;
+            FramesManager.CurrentFrameChanged += FramesManager_CurrentFrameChanged;
+
+            FramesViewer.FramesManager = FramesManager;
+
+            FramesManager.EnsureCurrentFrameSelected();
+            FramesManager.RequestThumbnailRedraw(FramesManager.GetCurrentFrame());
+
+            GC.Collect();
         }
 
         private void FramesManager_CurrentFrameChanged(object sender, EventArgs e)

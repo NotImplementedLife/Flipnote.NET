@@ -227,11 +227,13 @@ namespace FlipnoteDotNet.Canvas
 
         public void Dispose()
         {
+            Processor.Stop();
             FrontGraphics.Dispose();
             BackGraphics.Dispose();
             FrontBuffer.Dispose();
             BackBuffer.Dispose();
-            Processor.Stop();
+            FrontGraphics = BackGraphics = null;
+            FrontBuffer = BackBuffer = null;
         }
 
         private Graphics CreateGraphics(Bitmap bitmap)
