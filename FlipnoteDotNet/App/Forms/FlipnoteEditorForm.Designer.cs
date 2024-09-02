@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlipnoteEditorForm));
             FlipnoteEditorContainer = new Controls.FlipnoteEditorControl();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
@@ -102,7 +103,7 @@
             GeneralToolStrip.Items.AddRange(new ToolStripItem[] { UndoButton, RedoButton, NewFrameButton, CopyCurrentFrameButton, RemoveCurrentFrameButton });
             GeneralToolStrip.Location = new Point(3, 0);
             GeneralToolStrip.Name = "GeneralToolStrip";
-            GeneralToolStrip.Size = new Size(163, 27);
+            GeneralToolStrip.Size = new Size(132, 27);
             GeneralToolStrip.TabIndex = 0;
             // 
             // UndoButton
@@ -160,6 +161,7 @@
             ClientSize = new Size(567, 345);
             Controls.Add(ToolStripContainer);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "FlipnoteEditorForm";
             Text = "FlipnoteEditorForm";

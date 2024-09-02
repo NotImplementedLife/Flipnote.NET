@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using FlipnoteDotNet.Utils;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace FlipnoteDotNet.App.Menus
@@ -12,6 +13,7 @@ namespace FlipnoteDotNet.App.Menus
             menuName += Delim;
             var methods = from m in type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                           where m.Name.StartsWith(menuName)
+                          orderby m.GetCustomAttribute<OrderAttribute>()?.Order ?? 0
                           select m;
             var items = new List<ToolStripMenuItem>();
 
@@ -35,7 +37,7 @@ namespace FlipnoteDotNet.App.Menus
             }            
             if(path.Length==1)
             {
-                item.Click += (o, e) => method.Invoke(o, null);
+                item.Click += new EventHandler(MethodInvoker(method));
             }
             else
             {
@@ -54,7 +56,7 @@ namespace FlipnoteDotNet.App.Menus
 
             if (index == path.Length - 1) 
             {
-                it.Click += (o, e) => method.Invoke(o, null);
+                it.Click += new EventHandler(MethodInvoker(method));
             }
             else
             {
@@ -62,9 +64,25 @@ namespace FlipnoteDotNet.App.Menus
             }           
         }
 
+        private static Action<object, EventArgs> MethodInvoker(MethodInfo mi) => (o, e) =>
+        {
+            var form = GetMenuStrip(o as ToolStripMenuItem).FindForm();            
+            mi.Invoke(form, null);
+        };
+
         private static string[] SplitPath(string path)
         {
             return path.Split(Delim).Skip(1).Select(c => c.Replace('_', ' ')).ToArray();
+        }
+
+        private static MenuStrip GetMenuStrip(ToolStripItem item)
+        {
+            ToolStripItem itemCheck = item;
+            while (!(itemCheck.GetCurrentParent() is MenuStrip) && itemCheck.GetCurrentParent() is ToolStripDropDown dropDown)
+            {
+                itemCheck = dropDown.OwnerItem;
+            }
+            return itemCheck.GetCurrentParent() as MenuStrip;
         }
 
     }

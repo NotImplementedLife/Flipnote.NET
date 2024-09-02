@@ -1,9 +1,4 @@
 ﻿using FlipnoteDotNet.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlipnoteDotNet.App.Forms
 {
@@ -30,7 +25,14 @@ namespace FlipnoteDotNet.App.Forms
         [Order]
         public void MenuⰭFileⰭExit()
         {
-            //this.menuStrip1.Items
+            
+        }
+
+
+        [Order]
+        public void MenuⰭHelpⰭAbout()
+        {
+            MessageBox.Show($"Flipnote.NET {new Version(ProductVersion)}\nby NotImplementedLife\n2024", "About");
         }
     }
 }
