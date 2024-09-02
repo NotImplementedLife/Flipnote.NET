@@ -24,14 +24,14 @@ These are the features that the app offers (or are on the way to be implemented)
 - ✔️ Layer/Frame properties editor
 - ✔️ Undo/Redo
 - ✔️ Single selection
+- ✔️ Remove layers
+- ✔️ Layer Z-order
 
 - ⌛ Choose palette: Flipnote (3 out of 4 colors), Flipnote3D (6 colors), VGA (16 colors)
 - ⌛ Reorder frames
-- ⌛ Remove layers
 - ⌛ Save/Load projects
 - ⌛ Export flipnote animation
 - ⌛ Custom palette
-- ⌛ Layer Z-order
 - ⌛ Free draw
 - ⌛ Automatic transform over multiple frames
 - ⌛ Sound (probably)
