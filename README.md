@@ -26,8 +26,8 @@ These are the features that the app offers (or are on the way to be implemented)
 - ✔️ Single selection
 - ✔️ Remove layers
 - ✔️ Layer Z-order
+- ✔️ Choose palette: Flipnote (3 out of 4 colors), Flipnote3D (6 colors), VGA (16 colors)
 
-- ⌛ Choose palette: Flipnote (3 out of 4 colors), Flipnote3D (6 colors), VGA (16 colors)
 - ⌛ Reorder frames
 - ⌛ Save/Load projects
 - ⌛ Export flipnote animation
