@@ -19,8 +19,7 @@ namespace FlipnoteDotNet.App.Menus
 
             foreach(var method in methods)
             {
-                var path = SplitPath(method.Name);
-                Debug.WriteLine(string.Join("->", path));
+                var path = SplitPath(method.Name);                
                 AddItem(items, path, method);                
             }
 
@@ -37,7 +36,7 @@ namespace FlipnoteDotNet.App.Menus
             }            
             if(path.Length==1)
             {
-                item.Click += new EventHandler(MethodInvoker(method));
+                AddClickEvent(item, method);                
             }
             else
             {
@@ -56,12 +55,17 @@ namespace FlipnoteDotNet.App.Menus
 
             if (index == path.Length - 1) 
             {
-                it.Click += new EventHandler(MethodInvoker(method));
+                AddClickEvent(it, method);                
             }
             else
             {
                 AddSubItem(it, path, index + 1, method);
             }           
+        }
+
+        private static void AddClickEvent(ToolStripItem it, MethodInfo mi)
+        {
+            it.Click += new EventHandler(MethodInvoker(mi));
         }
 
         private static Action<object, EventArgs> MethodInvoker(MethodInfo mi) => (o, e) =>

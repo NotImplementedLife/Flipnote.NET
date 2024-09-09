@@ -1,4 +1,5 @@
-﻿using FlipnoteDotNet.Drawing;
+﻿using FlipnoteDotNet.App.Storage;
+using FlipnoteDotNet.Drawing;
 
 namespace FlipnoteDotNet.App.Data
 {
@@ -6,7 +7,7 @@ namespace FlipnoteDotNet.App.Data
     {
         public readonly Palette Palette = Palettes.FlipnotePalette;
         public readonly int ColorsPerFrame = 0;
-        public readonly int[] PresetColorIndices;
+        public readonly int[] PresetColorIndices;        
 
         public PaletteConfig(Palette palette, int colorsPerFrame = 0, int[] colorIndices = null)
         {
@@ -14,5 +15,7 @@ namespace FlipnoteDotNet.App.Data
             ColorsPerFrame = colorsPerFrame;
             PresetColorIndices = colorIndices;
         }
+
+        public PaletteConfigDTO ToDTO() => new PaletteConfigDTO(Palette, ColorsPerFrame, PresetColorIndices);        
     }
 }

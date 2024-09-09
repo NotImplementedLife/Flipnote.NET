@@ -1,10 +1,25 @@
-﻿namespace FlipnoteDotNet.App.Storage
+﻿using FlipnoteDotNet.App.Data;
+using FlipnoteDotNet.App.Storage.Assets;
+using System.Xml.Serialization;
+
+namespace FlipnoteDotNet.App.Storage
 {
+    [XmlInclude(typeof(StaticBitmapDTO))]
     public abstract class AssetDTO
     {
-        public int Id { get; private set; }
-        public string Name { get; private set; }
-        public byte[] ThumbnailBytes { get; private set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public string ThumbnailBytesRef { get; set; }
+
+        [XmlIgnore]
+        public byte[] ThumbnailBytes
+        {
+            get => BytesContainer.Get(ThumbnailBytesRef);
+            set => ThumbnailBytesRef = BytesContainer.Put(value);
+        }
+
+        protected AssetDTO() { }
 
         protected AssetDTO(int id, string name, byte[] thumbnailBytes)
         {
@@ -12,5 +27,7 @@
             Name = name;
             ThumbnailBytes = thumbnailBytes;
         }
+
+        public abstract Asset ToAsset();
     }
 }

@@ -1,9 +1,11 @@
-﻿using FlipnoteDotNet.Utils.GUI;
+﻿using FlipnoteDotNet.Utils;
+using FlipnoteDotNet.Utils.GUI;
+using System.Diagnostics;
 
 namespace FlipnoteDotNet.App.Forms
 {
     public partial class FlipnoteEditorForm : Form
-    {
+    {        
         private AppState AppState;
         public FlipnoteEditorForm(AppState appState)
         {
@@ -11,7 +13,7 @@ namespace FlipnoteDotNet.App.Forms
             AppState = appState;
             FlipnoteEditorContainer.Initialize(appState);
             UndoLinker.Connect(AppState.UndoStack, UndoButton, RedoButton);
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = menuStrip1;              
         }
 
         private void NewFrameButton_Click(object sender, EventArgs e)

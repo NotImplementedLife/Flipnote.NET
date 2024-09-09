@@ -1,4 +1,6 @@
-﻿using FlipnoteDotNet.Utils;
+﻿using FlipnoteDotNet.App.Storage;
+using FlipnoteDotNet.Utils;
+using System.Diagnostics;
 
 namespace FlipnoteDotNet.App.Forms
 {
@@ -20,6 +22,31 @@ namespace FlipnoteDotNet.App.Forms
         public void MenuⰭFileⰭNewⰭVGA16_Project()
         {
             ChangeState(AppState.CreateVGA16Instance(AppState.UndoStack));
+        }
+
+        [Order]
+        public void MenuⰭFileⰭOpen()
+        {
+            BytesContainer.Clear();
+            var ser = new Serializer();
+            var f = File.OpenRead("proj.zip");
+            var project = ser.Deserialize<Project>(f);
+            f.Close();
+            var appState = Storage.Codecs.V1.DecodeProject(project, AppState);
+            ChangeState(appState);            
+        }
+
+
+        [Order]
+        public void MenuⰭFileⰭSave()
+        {
+            BytesContainer.Clear();
+            var project = Storage.Codecs.V1.EncodeProject(AppState);
+            var ser = new Serializer();
+            var f = File.Create("proj.zip");
+            ser.Serialize(f, project);
+            f.Close();
+            Environment.Exit(0);            
         }
 
         [Order]

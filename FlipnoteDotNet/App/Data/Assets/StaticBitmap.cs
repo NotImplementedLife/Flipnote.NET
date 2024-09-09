@@ -8,7 +8,13 @@ namespace FlipnoteDotNet.App.Data.Assets
 {
     public class StaticBitmap : Asset
     {
-        private readonly byte[] ImageBytes;        
+        private readonly byte[] ImageBytes;
+
+        public StaticBitmap(byte[] imageBytes, byte[] thumbnailBytes, string name = "") 
+            : base(Bytes2Bitmap(thumbnailBytes), name)
+        {
+            ImageBytes = imageBytes;
+        }
 
         public StaticBitmap(Bitmap bitmap, string name = "", bool disposeBitmap=false) : base(bitmap.CreateThumbnail(64, 64), name)
         {

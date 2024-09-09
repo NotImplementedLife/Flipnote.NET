@@ -50,5 +50,12 @@ namespace FlipnoteDotNet.App.Data
         {
             Dispose(false);
         }
+
+
+        protected static Bitmap Bytes2Bitmap(byte[] bytes)
+        {
+            using (var ms = new MemoryStream(bytes))
+                return new Bitmap(ms);
+        }
     }
 }
