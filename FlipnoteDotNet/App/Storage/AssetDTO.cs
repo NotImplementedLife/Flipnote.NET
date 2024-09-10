@@ -7,6 +7,9 @@ namespace FlipnoteDotNet.App.Storage
     [XmlInclude(typeof(StaticBitmapDTO))]
     public abstract class AssetDTO
     {
+        [XmlIgnore]
+        public object Original { get; set; }
+
         public int Id { get; set; }
         public string Name { get; set; }
 

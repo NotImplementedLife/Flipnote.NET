@@ -12,9 +12,10 @@ namespace FlipnoteDotNet.App.Controls
 
         private readonly TabControl LeftTabControl = new TabControl();
 
-        public FlipnoteEditorControl()
-        {
+        public CanvasModel CanvasModel => CanvasControl.CanvasModel;
 
+        public FlipnoteEditorControl()
+        {            
         }
 
         public void Initialize(AppState appState)
@@ -61,6 +62,13 @@ namespace FlipnoteDotNet.App.Controls
             FramesManager.RequestThumbnailRedraw(FramesManager.GetCurrentFrame());
 
             GC.Collect();
+
+            Task.Run(async () =>
+            {
+                var fm = appState.FramesManager;
+                foreach (var f in fm.Frames)
+                    await fm.RedrawThumbnailAsync(f);
+            });
         }
 
         private void FramesManager_CurrentFrameChanged(object sender, EventArgs e)

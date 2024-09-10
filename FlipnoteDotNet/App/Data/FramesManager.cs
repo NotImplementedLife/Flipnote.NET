@@ -32,7 +32,7 @@ namespace FlipnoteDotNet.App.Data
                 {
                     fCanvasModel = null;
                     fThumbnailCanvasModel.Dispose();
-                    fThumbnailCanvasModel=null;
+                    fThumbnailCanvasModel=null;                    
                     return;
                 }
 
@@ -140,7 +140,13 @@ namespace FlipnoteDotNet.App.Data
             {
                 var thumbnail = await frame.RenderThumbnail(fThumbnailCanvasModel);                
                 FrameThumbnailChanged?.Invoke(this, frame, thumbnail);
-            });
+            });            
+        }
+
+        public async Task RedrawThumbnailAsync(Frame frame)
+        {
+            var thumbnail = await frame.RenderThumbnail(fThumbnailCanvasModel);
+            FrameThumbnailChanged?.Invoke(this, frame, thumbnail);
         }
 
         public delegate void OnFrameThumbnailChanged(object sender, Frame frame, Bitmap thumbnail);

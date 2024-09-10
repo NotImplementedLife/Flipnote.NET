@@ -1,4 +1,5 @@
 ﻿using FlipnoteDotNet.App.Canvas.Components;
+using FlipnoteDotNet.App.Storage;
 using FlipnoteDotNet.Canvas;
 using FlipnoteDotNet.Canvas.Components;
 using System.ComponentModel;
@@ -136,6 +137,15 @@ namespace FlipnoteDotNet.App.Data
                 }
             }
             return result;
-        });        
+        });
+
+        public FrameDTO ToDTO()
+        {
+            return new FrameDTO
+            {
+                ColorIndices = FrameConfig.ColorIndices.ToArray(),
+                PaperColorIndex = FrameConfig.PaperColorIndex
+            };
+        }
     }
 }

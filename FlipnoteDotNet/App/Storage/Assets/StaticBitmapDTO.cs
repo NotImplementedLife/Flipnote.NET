@@ -5,8 +5,7 @@ using System.Xml.Serialization;
 namespace FlipnoteDotNet.App.Storage.Assets
 {
     public class StaticBitmapDTO : AssetDTO
-    {
-
+    {        
         public string ImageBytesRef { get; set; }        
 
         [XmlIgnore]
@@ -18,7 +17,7 @@ namespace FlipnoteDotNet.App.Storage.Assets
 
         public StaticBitmapDTO() { }
 
-        public StaticBitmapDTO(int id, string name, byte[] thumbnailBytes, byte[] imageBytes) : base(id, name, thumbnailBytes)
+        public StaticBitmapDTO(object original, int id, string name, byte[] thumbnailBytes, byte[] imageBytes) : base(id, name, thumbnailBytes)
         {
             ImageBytes = imageBytes;
         }

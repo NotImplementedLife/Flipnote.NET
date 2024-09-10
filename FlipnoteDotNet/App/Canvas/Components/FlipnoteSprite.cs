@@ -11,7 +11,7 @@ namespace FlipnoteDotNet.App.Canvas.Components
         private Bitmap CachedTransformedImage = null;
         private Rectangle CachedTransformedBounds;
         private Bitmap CachedDitheredImage = null;
-        private Palette CachedPalette;   
+        private Palette CachedPalette;
 
         private bool NeedsCacheUpdate = true;
         private bool NeedsDitheringUpdate;
@@ -19,7 +19,7 @@ namespace FlipnoteDotNet.App.Canvas.Components
         public FlipnoteSprite(Asset asset, Bitmap bitmap, string name = "")
             : base(name, bitmap.Width, bitmap.Height, ignoreTransform: false, ignoreGraphicsTransform: true, asset)
         {
-            fSource = bitmap;            
+            fSource = bitmap;
         }
 
         protected override void OnAttachedToFrame(Frame frame)

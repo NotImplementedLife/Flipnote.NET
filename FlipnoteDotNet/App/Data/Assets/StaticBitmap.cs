@@ -38,7 +38,7 @@ namespace FlipnoteDotNet.App.Data.Assets
 
         public override AssetDTO ToDTO()
         {
-            return new StaticBitmapDTO(Id, Name, GetThumbnailBytes(), ImageBytes);
+            return new StaticBitmapDTO(this, Id, Name, GetThumbnailBytes(), ImageBytes);
         }
     }
 }

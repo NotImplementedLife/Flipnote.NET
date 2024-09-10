@@ -85,7 +85,7 @@ namespace FlipnoteDotNet.App.Forms
             var f = File.OpenRead(path);
             var project = ser.Deserialize<Project>(f);
             f.Close();
-            var appState = Storage.Codecs.V1.DecodeProject(project, AppState);
+            var appState = Storage.Codecs.V1.DecodeProject(project, AppState, FlipnoteEditorContainer.CanvasModel);
             appState.Filename = path;
             ChangeState(appState);
         }
