@@ -164,7 +164,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "FlipnoteEditorForm";
-            Text = "FlipnoteEditorForm";
+            Text = "Flipnote.NET";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ToolStripContainer.ContentPanel.ResumeLayout(false);

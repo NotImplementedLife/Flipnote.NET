@@ -13,7 +13,7 @@ namespace FlipnoteDotNet.App.Menus
             menuName += Delim;
             var methods = from m in type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                           where m.Name.StartsWith(menuName)
-                          orderby m.GetCustomAttribute<OrderAttribute>()?.Order ?? 0
+                          orderby m.GetCustomAttribute<MenuActionAttribute>()?.Order ?? 0
                           select m;
             var items = new List<ToolStripMenuItem>();
 

@@ -1,4 +1,5 @@
-﻿using FlipnoteDotNet.Utils;
+﻿using FlipnoteDotNet.App.Storage;
+using FlipnoteDotNet.Utils;
 using FlipnoteDotNet.Utils.GUI;
 using System.Diagnostics;
 
@@ -42,12 +43,21 @@ namespace FlipnoteDotNet.App.Forms
             }
         }
 
+        private void AdjustFormTitle(string filename)
+        {
+            if (string.IsNullOrEmpty(filename))
+                Text = $"Flipnote.NET";
+            else
+                Text = $"Flipnote.NET - {Path.GetFileNameWithoutExtension(filename)}";
+        }
+
         private void ChangeState(AppState state)
         {
             if (!AppState.Changed) 
             {
                 FlipnoteEditorContainer.ChangeState(state);
                 AppState = state;
+                AdjustFormTitle(AppState.Filename);
                 return;
             }            
             switch(Prompts.SaveBeforeLoadNew())
@@ -60,11 +70,37 @@ namespace FlipnoteDotNet.App.Forms
                     // do
                     FlipnoteEditorContainer.ChangeState(state);
                     AppState = state;
+                    AdjustFormTitle(AppState.Filename);
                     //FlipnoteEditorContainer
                     break;
 
                 default: break;
             }            
         }
+
+        private void LoadProject(string path)
+        {
+            BytesContainer.Clear();
+            var ser = new Serializer();
+            var f = File.OpenRead(path);
+            var project = ser.Deserialize<Project>(f);
+            f.Close();
+            var appState = Storage.Codecs.V1.DecodeProject(project, AppState);
+            appState.Filename = path;
+            ChangeState(appState);
+        }
+
+        private void SaveProject(string path)
+        {
+            BytesContainer.Clear();
+            var project = Storage.Codecs.V1.EncodeProject(AppState);
+            var ser = new Serializer();
+            var f = File.Create(path);
+            ser.Serialize(f, project);
+            f.Close();
+            AppState.Filename = path;
+        }
+
+        
     }
 }

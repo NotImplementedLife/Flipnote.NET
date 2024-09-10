@@ -12,6 +12,8 @@ namespace FlipnoteDotNet.App
         public readonly AssetsService AssetsService;
         public readonly FlipnoteEditorService FlipnoteEditorService;
 
+        public string Filename { get; set; } = null;
+
         private bool fChanged = false;
         public bool Changed => fChanged;
 
