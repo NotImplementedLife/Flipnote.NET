@@ -28,11 +28,10 @@ namespace FlipnoteDotNet.App.Storage.Codecs
             
             var paletteConfig = projv1.PaletteConfig.ToPaletteConfig();
 
-            var appState = new AppState(paletteConfig, baseState.UndoStack);            
+            var appState = new AppState(paletteConfig, baseState.UndoStack);
 
-            foreach (var a in projv1.Assets)
-                appState.AssetsService.Assets.Add(a.ToAsset());
-
+            appState.AssetsService.LoadSavedAssets(projv1.Assets.Select(_ => _.ToAsset()).ToArray());
+            
             Func<int, Asset> findAssetById = (id) => appState.AssetsService.Assets.Where(a => a.Id == id).FirstOrDefault();
 
             foreach (var f in projv1.Frames)

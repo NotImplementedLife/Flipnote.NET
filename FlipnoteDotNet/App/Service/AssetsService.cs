@@ -27,6 +27,15 @@ namespace FlipnoteDotNet.App.Service
             BindingAssets = new BindingList<Asset>(fAssets);
         }
 
+        public void LoadSavedAssets(Asset[] assets)
+        {
+            foreach (Asset asset in assets)
+            {
+                Assets.Add(asset);
+                IdCounter = Math.Max(IdCounter, asset.Id + 1);
+            }
+        }
+
         public void AddAsset(Asset asset)
         {
             if(asset.Id==0)
