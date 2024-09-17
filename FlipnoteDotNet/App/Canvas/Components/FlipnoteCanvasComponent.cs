@@ -16,6 +16,8 @@ namespace FlipnoteDotNet.App.Canvas.Components
             Asset = asset;
         }
 
+        public Asset SourceAsset => Asset;
+
         public void AttachToFrame(Frame frame)
         {
             if(frame==null)

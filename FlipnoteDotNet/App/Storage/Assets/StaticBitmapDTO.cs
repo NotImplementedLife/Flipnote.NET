@@ -22,6 +22,6 @@ namespace FlipnoteDotNet.App.Storage.Assets
             ImageBytes = imageBytes;
         }
 
-        public override Asset ToAsset() => new StaticBitmap(ImageBytes, ThumbnailBytes, Name);
+        public override Asset ToAsset() => new StaticBitmap(ImageBytes, ThumbnailBytes, Name) { Id = Id };
     }
 }

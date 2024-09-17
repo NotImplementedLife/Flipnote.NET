@@ -3,7 +3,6 @@ using FlipnoteDotNet.App.Storage;
 using FlipnoteDotNet.Canvas;
 using FlipnoteDotNet.Canvas.Components;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
 
@@ -141,10 +140,15 @@ namespace FlipnoteDotNet.App.Data
 
         public FrameDTO ToDTO()
         {
+            var components = from c in Components
+                             where c is FlipnoteCanvasComponent
+                             let fc = c as FlipnoteCanvasComponent
+                             select new FlipComponentDTO { CanvasTransform = fc.Transform, AssetId = fc.SourceAsset.Id };
             return new FrameDTO
             {
                 ColorIndices = FrameConfig.ColorIndices.ToArray(),
-                PaperColorIndex = FrameConfig.PaperColorIndex
+                PaperColorIndex = FrameConfig.PaperColorIndex,
+                Components = components.ToArray()
             };
         }
     }

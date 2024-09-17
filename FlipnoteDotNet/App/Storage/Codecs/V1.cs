@@ -1,4 +1,5 @@
-﻿using FlipnoteDotNet.Canvas;
+﻿using FlipnoteDotNet.App.Data;
+using FlipnoteDotNet.Canvas;
 
 namespace FlipnoteDotNet.App.Storage.Codecs
 {
@@ -31,10 +32,11 @@ namespace FlipnoteDotNet.App.Storage.Codecs
 
             foreach (var a in projv1.Assets)
                 appState.AssetsService.Assets.Add(a.ToAsset());
-            foreach (var f in projv1.Frames)            
-                appState.FramesManager.AddFrame(f.ToFrame(canvasModel, paletteConfig));                                                     
 
+            Func<int, Asset> findAssetById = (id) => appState.AssetsService.Assets.Where(a => a.Id == id).FirstOrDefault();
 
+            foreach (var f in projv1.Frames)
+                appState.FramesManager.AddFrame(f.ToFrame(canvasModel, paletteConfig, findAssetById));
 
             return appState;
         }
